@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabsome – Smarter New Tabs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: linear-gradient(90deg, #4a6cf7, #b14cf7, #ff8a3d);
+      --text: #f2f2f2;
+      --bg: #0d1117;
+      --accent: #ff8a3d;
+    }
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;background:rgba(255,255,255,0.02);
+      position:sticky;top:0;backdrop-filter:blur(8px);
+    }
+    header img {height:40px;}
+    nav a {margin-left:1.5rem;color:var(--text);text-decoration:none;font-weight:500;}
+    nav a:hover {color:#ff8a3d;}
+    .hero {
+      text-align:center;padding:6rem 2rem;
+      background: var(--primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .hero h1 {font-size:3rem;font-weight:800;margin-bottom:1rem;background:var(--primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hero p {font-size:1.2rem;color:#ccc;margin-bottom:2rem;}
+    .cta-btn {
+      padding:0.8rem 2rem;border:none;border-radius:25px;
+      background:var(--primary);color:#fff;font-weight:600;
+      cursor:pointer;transition:0.3s;
+    }
+    .cta-btn:hover {opacity:0.85;}
+    section {
+      max-width:1000px;margin:4rem auto;padding:0 2rem;
+    }
+    .features {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:2rem;
+    }
+    .feature {
+      background:rgba(255,255,255,0.03);padding:2rem;border-radius:16px;text-align:center;
+      transition:transform 0.3s;
+    }
+    .feature:hover {transform:translateY(-6px);}
+    .feature i {font-size:2rem;margin-bottom:1rem;background:var(--primary);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .screenshot {
+      text-align:center;
+    }
+    .screenshot img {
+      max-width:100%;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    }
+    footer {
+      text-align:center;padding:2rem;font-size:0.9rem;color:#777;
+    }
+    footer a {color:var(--accent);}
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="Tabsome Logo">
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#screenshot">Preview</a>
+    <a href="#github">GitHub</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Tabsome</h1>
+  <p>Your browser’s new tab—reinvented. Speed dials, search customization, and stunning wallpapers, all in one place.</p>
+  <button class="cta-btn" onclick="location.href='https://github.com/YourUser/Tabsome'">Get Started</button>
+</section>
+
+<section id="features">
+  <h2 style="text-align:center;margin-bottom:2rem;">Why Tabsome?</h2>
+  <div class="features">
+    <div class="feature">
+      <i class="fas fa-bolt"></i>
+      <h3>Speed Dials</h3>
+      <p>Organize and access your favorite sites lightning fast with beautiful, drag-and-drop speed dials.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-palette"></i>
+      <h3>Custom Themes</h3>
+      <p>Switch wallpapers, search bar styles, and color themes to match your vibe.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-search"></i>
+      <h3>Search Engine Choice</h3>
+      <p>Pick your go-to search engine on the fly—no more defaults locking you in.</p>
+    </div>
+  </div>
+</section>
+
+<section id="screenshot" class="screenshot">
+  <h2 style="margin-bottom:2rem;">Preview</h2>
+  <img src="screenshot.png" alt="Tabsome Screenshot">
+</section>
+
+<footer id="github">
+  <p>Made with ❤️ by <a href="https://github.com/YourUser/Tabsome">YourUser</a>. Hosted on GitHub Pages.</p>
+</footer>
+
+</body>
+</html>
