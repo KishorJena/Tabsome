@@ -43,17 +43,23 @@
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 antialiased leading-relaxed">
+    <!-- Top Navigation Bar -->
+    <nav class="bg-gray-800 fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="assets/logo-128.png" alt="Tabsome Logo" class="h-8 w-8">
+                    <span class="ml-3 text-xl font-semibold">Tabsome</span>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <main class="container mx-auto px-4 py-16">
+    <main class="container mx-auto px-4 pt-24 pb-16">
 
         <!-- Hero Section -->
         <section class="text-center space-y-8 mb-24">
             <div class="flex flex-col items-center">
-                <div class="logo-placeholder mb-4">
-                    <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </div>
                 <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight">
                     <span class="gradient-text bg-gradient-to-r from-purple-400 to-pink-600">Tabsome</span>
                     <br class="hidden sm:block">
@@ -161,6 +167,14 @@
         </section>
 
     </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-4 py-8 border-t border-gray-800">
+        <div class="flex justify-center items-center space-x-4 text-sm text-gray-400">
+            <a href="privacy.html" class="hover:text-gray-100 transition-colors">Privacy Policy</a>
+            <span>&copy; 2025 Tabsome. All rights reserved.</span>
+        </div>
+    </footer>
 
 </body>
 </html>
