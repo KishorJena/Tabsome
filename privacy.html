@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabsome Privacy Policy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, Arial, sans-serif;
+            background: #f9f9fb;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 2rem;
+        }
+        h1, h2, h3 {
+            color: #2a4d8f;
+        }
+        ul {
+            margin-left: 1.5rem;
+        }
+        code {
+            background: #eef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .last-updated {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        a {
+            color: #2a4d8f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tabsome Privacy Policy</h1>
+        <div class="last-updated">Last updated: September 24, 2025</div>
+
+        <p>Tabsome transforms your new tab into a customizable dashboard. We design Tabsome to work locally in your browser with minimal data collection. This policy explains what data is handled, why, and how you stay in control.</p>
+
+        <h2>Overview</h2>
+        <ul>
+            <li><strong>No tracking</strong>: We do not track your browsing history or sell your data.</li>
+            <li><strong>Sync</strong>: Settings and Speed Dials are stored using <code>chrome.storage.sync</code> to keep them across your devices.</li>
+            <li><strong>Optional features</strong>: Top Sites and Clipboard import/export only run when you enable or use them.</li>
+            <li><strong>AI queries</strong>: Queries you type are sent to the AI API provider to generate responses.</li>
+        </ul>
+
+        <h2>What data we store</h2>
+        <ul>
+            <li><strong>Extension settings</strong> (theme, layout, background, toggles) via <code>chrome.storage.sync</code>.</li>
+            <li><strong>Speed Dials</strong> you create (title, URL, optional image/color/folder) via <code>chrome.storage.sync</code>.</li>
+            <li><strong>Optional AI chat history</strong> (local) to provide chat context so you can continue conversations without repeating previous prompts.</li>
+        </ul>
+        <p>We do not collect or store personal information.</p>
+
+        <h2>What data we do not collect</h2>
+        <ul>
+            <li><strong>No analytics</strong>, tracking pixels, or advertising identifiers.</li>
+            <li><strong>No background collection</strong> of your browsing history or page content.</li>
+            <li><strong>No cookies</strong> are set by the extension.</li>
+        </ul>
+
+        <h2>Permissions and why we need them</h2>
+        <ul>
+            <li><strong>storage</strong>: Save and sync your preferences and Speed Dials across sessions/devices.</li>
+            <li><strong>tabs</strong>: Send live updates (e.g., changed settings or Speed Dials) to open Tabsome New Tab pages by identifying those tabs.</li>
+            <li><strong>activeTab</strong>: When you click the popup to add the current site, read the active tab’s URL/title/icon to prefill the form.</li>
+            <li><strong>topSites</strong> (optional): If enabled, show your frequently visited sites on the New Tab page. Requested only when toggled on.</li>
+            <li><strong>clipboardRead / clipboardWrite</strong> (optional): On your explicit action, import/export Speed Dials via the clipboard.</li>
+        </ul>
+
+        <h2>Host permissions and external services</h2>
+        <ul>
+            <li><code>https://api.openweathermap.org/*</code>: Retrieve weather data for the weather widget. May send your chosen city/coordinates.</li>
+            <li><code>https://suggestqueries.google.com/*</code>: Fetch search suggestions as you type. Sends your query terms to Google Suggest.</li>
+            <li><strong>AI API</strong>: When you use the AI feature, your prompt and recent chat context are sent to the AI provider to generate a response.</li>
+        </ul>
+        <p>We do not send your browsing history to these services. Requests are limited to the features you use.</p>
+
+        <h2>Clipboard handling</h2>
+        <p>Clipboard access is strictly user-initiated. Tabsome reads from or writes to the clipboard only when you click Import/Export. No background clipboard access occurs.</p>
+
+        <h2>Top Sites</h2>
+        <p>If you enable Top Sites, Chrome provides a list of your frequently visited sites via <code>chrome.topSites</code> for display on the New Tab page. Tabsome does not transmit this list to any server.</p>
+
+        <h2>Remote code and sandboxing</h2>
+        <p>Tabsome’s core pages (New Tab, Options, Popup, Service Worker) do not execute remote scripts. An optional Spotlight widget area runs user-provided HTML/CSS/JS inside a browser sandboxed page that is isolated from extension privileges. Sandboxed content cannot access extension APIs or storage.</p>
+        <p>If you prefer not to use Spotlight’s custom code capability, simply don’t ask it from AI.</p>
+
+        <h2>Data retention and deletion</h2>
+        <ul>
+            <li><strong>Your device</strong>: Remove all data by uninstalling the extension or using in-app reset options. You can also clear specific settings and Speed Dials in the UI.</li>
+            <li><strong>Sync</strong>: If Chrome Sync is enabled, items in <code>chrome.storage.sync</code> are associated with your Google account per Chrome’s sync behavior. You can clear them via Chrome settings.</li>
+            <li><strong>AI provider</strong>: Requests sent to the AI API are transmitted to generate responses. Refer to the AI provider’s retention policy.</li>
+        </ul>
+
+        <h2>Security</h2>
+        <ul>
+            <li>Runs primarily client-side within the browser’s extension sandbox.</li>
+            <li>Minimal host permissions and optional permissions requested only when needed.</li>
+            <li>Sanitization is applied to AI-rendered content to reduce XSS risk in UI rendering contexts.</li>
+        </ul>
+
+
+        <h2>Changes to this policy</h2>
+        <p>We may update this policy to reflect improvements or new features. Material changes will be noted by updating the “Last updated” date above.</p>
+
+        <h2>Contact</h2>
+        <p>If you have questions or requests related to privacy, data access, or deletion, contact: <a href="mailto:ksr.jena@gmail.com">ksr.jena@gmail.com</a></p>
+    <p><a href="index.html">&larr; Back to Tabsome Home</a></p>
+    </div>
+</body>
+</html>
