@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- GSAP CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -294,15 +296,24 @@
       <div class="grid md:grid-cols-3 gap-10">
         <!-- Material Design blue-gray cards -->
         <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);" data-aos="fade-up">
-          <h4 class="font-semibold text-xl mb-2">🚀 Speed Dials</h4>
+          <h4 class="font-semibold text-xl mb-2 flex items-center">
+            <i class="fas fa-rocket text-blue-400 mr-3"></i>
+            Speed Dials
+          </h4>
           <p class="text-gray-300">Access your favorite sites instantly with customizable, beautiful tiles inspired by Opera's Speed Dial.</p>
         </div>
         <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);" data-aos="fade-up" data-aos-delay="100">
-          <h4 class="font-semibold text-xl mb-2">🧠 AI Spotlight</h4>
+          <h4 class="font-semibold text-xl mb-2 flex items-center">
+            <i class="fas fa-brain text-purple-400 mr-3"></i>
+            AI Spotlight
+          </h4>
           <p class="text-gray-300">AI-generated widgets that persist and evolve—your mini command center for quick info and insights.</p>
         </div>
         <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);" data-aos="fade-up" data-aos-delay="200">
-          <h4 class="font-semibold text-xl mb-2">🔎 Omnisearch</h4>
+          <h4 class="font-semibold text-xl mb-2 flex items-center">
+            <i class="fas fa-search text-green-400 mr-3"></i>
+            Omnisearch
+          </h4>
           <p class="text-gray-300">Search with any engine using shortcuts like /g, /b, /d, or /ai—all from one search bar.</p>
         </div>
       </div>
@@ -359,7 +370,7 @@
 
   <!-- Footer -->
   <footer class="py-10 text-center text-gray-300 text-sm">
-    © 2025 Tabsome. Crafted with ♥ by Kishor.
+    © 2025 Tabsome. <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a>
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
