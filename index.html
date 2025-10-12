@@ -17,48 +17,119 @@
         font-family: 'Inter', sans-serif;
         background-color: #9333ea; /* Fallback color */
         /* Applying the Aura primary gradient */
-        background-image: linear-gradient(to right, #f87171, #9333ea);
+        background-image: linear-gradient(to right, #ff5757, #8c52ff);
         overflow-x: hidden;
     }
-    /* Updated gradient-text to use Aura's color scheme */
+    /* Updated gradient-text to solid white */
     .gradient-text {
-      background: linear-gradient(to right, #f5a0a0, #d9b8ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: white;
     }
-    /* Glass effect from the Aura style guide */
+    /* Dark matte rubber glass effect with muted colors */
     .glass-effect {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(8px) saturate(0.7);
+        -webkit-backdrop-filter: blur(8px) saturate(0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 
+            inset 0 1px 0 rgba(255, 255, 255, 0.05),
+            0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    /* Background shapes from the Aura style guide */
-    .shape-container::before,
-    .shape-container::after {
-        content: '';
+
+    /* Background shapes with clear visibility */
+    .bg-shape {
         position: absolute;
-        background-color: rgba(255, 255, 255, 0.08);
-        border-radius: 1.5rem;
-        z-index: -1;
+        opacity: 0.35;
+        pointer-events: none;
+        z-index: 1;
+        /* Remove any blur effects */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
     }
-    .shape-container::before {
-        width: 30vw;
-        height: 50vh;
-        top: 10%;
-        left: -15vw;
-        transform: rotate(-35deg);
+
+    /* Diagonal overlapping shapes - pure white with 35% opacity */
+    .bg-shape-diagonal-left {
+        width: 200px;
+        height: 80px;
+        background: white;
+        opacity: 0.35;
+        transform: rotate(-15deg);
+        border-radius: 8px;
+        /* Ensure no blur or effects */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
     }
-    .shape-container::after {
-        width: 35vw;
-        height: 60vh;
-        bottom: 5%;
-        right: -18vw;
-        transform: rotate(25deg);
+
+    .bg-shape-diagonal-left-overlay {
+        width: 150px;
+        height: 60px;
+        background: white;
+        opacity: 0.25;
+        transform: rotate(-15deg);
+        border-radius: 6px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
     }
+
+    .bg-shape-diagonal-right {
+        width: 200px;
+        height: 80px;
+        background: white;
+        opacity: 0.35;
+        transform: rotate(15deg);
+        border-radius: 8px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
+    }
+
+    .bg-shape-diagonal-right-overlay {
+        width: 150px;
+        height: 60px;
+        background: white;
+        opacity: 0.25;
+        transform: rotate(15deg);
+        border-radius: 6px;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
+    }
+
+    /* Additional accent shapes - pure white */
+    .bg-shape-accent-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: white;
+        opacity: 0.3;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
+    }
+
+    .bg-shape-accent-blob {
+        width: 80px;
+        height: 40px;
+        border-radius: 50px;
+        background: white;
+        opacity: 0.3;
+        transform: rotate(45deg);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        filter: none;
+    }
+
+    /* Section positioning */
+    .section-container {
+        position: relative;
+        overflow: hidden;
+    }
+
   </style>
 </head>
-<body class="bg-gray-50 text-white font-sans relative shape-container">
+<body class="bg-gray-50 text-white font-sans relative">
 
   <!-- Navbar -->
   <header class="fixed w-full glass-effect z-50">
@@ -75,10 +146,18 @@
   </header>
 
   <!-- Hero -->
-  <section class="pt-40 pb-20 text-center" id="hero">
-    <div class="max-w-4xl mx-auto px-6" data-aos="fade-up">
+  <section class="pt-40 pb-20 text-center section-container" id="hero">
+    <!-- Background shapes - diagonal overlapping -->
+    <div class="bg-shape bg-shape-diagonal-left top-20 left-0"></div>
+    <div class="bg-shape bg-shape-diagonal-left-overlay top-32 left-8"></div>
+    <div class="bg-shape bg-shape-diagonal-right top-40 right-0"></div>
+    <div class="bg-shape bg-shape-diagonal-right-overlay top-52 right-8"></div>
+    <div class="bg-shape bg-shape-accent-circle top-60 left-16"></div>
+    <div class="bg-shape bg-shape-accent-blob top-80 right-20"></div>
+    
+    <div class="max-w-4xl mx-auto px-6 relative z-10" data-aos="fade-up">
       <h2 class="text-4xl md:text-6xl font-bold mb-4 gradient-text">Make Your New Tab Awesome</h2>
-      <p class="text-lg md:text-xl text-gray-200 mb-8">
+      <p class="text-lg md:text-xl text-white mb-8">
         Transform your boring Chrome tab into a sleek, smart dashboard with AI-powered features and stunning speed dials.
       </p>
       <!-- Primary button style from Aura -->
@@ -87,14 +166,22 @@
   </section>
 
   <!-- Features -->
-  <section id="features" class="py-20">
-    <div class="max-w-6xl mx-auto px-6 text-center">
+  <section id="features" class="py-20 section-container">
+    <!-- Background shapes - diagonal overlapping -->
+    <div class="bg-shape bg-shape-diagonal-left top-10 left-0"></div>
+    <div class="bg-shape bg-shape-diagonal-left-overlay top-20 left-6"></div>
+    <div class="bg-shape bg-shape-diagonal-right top-30 right-0"></div>
+    <div class="bg-shape bg-shape-diagonal-right-overlay top-40 right-6"></div>
+    <div class="bg-shape bg-shape-accent-circle top-60 left-12"></div>
+    <div class="bg-shape bg-shape-accent-blob top-80 right-16"></div>
+    
+    <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
       <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Why You'll Love Tabsome</h3>
       <div class="grid md:grid-cols-3 gap-10">
         <!-- Applying glass effect to feature cards -->
         <div class="p-8 glass-effect rounded-2xl" data-aos="fade-up">
           <h4 class="font-semibold text-xl mb-2">🚀 Speed Dials</h4>
-          <p class="text-gray-300">Access your favorite sites instantly with customizable, beautiful tiles inspired by Opera’s Speed Dial.</p>
+          <p class="text-gray-300">Access your favorite sites instantly with customizable, beautiful tiles inspired by Opera's Speed Dial.</p>
         </div>
         <div class="p-8 glass-effect rounded-2xl" data-aos="fade-up" data-aos-delay="100">
           <h4 class="font-semibold text-xl mb-2">🧠 AI Spotlight</h4>
@@ -109,18 +196,34 @@
   </section>
 
   <!-- Preview -->
-  <section id="preview" class="py-20">
-    <div class="max-w-6xl mx-auto px-6 text-center">
+  <section id="preview" class="py-20 section-container">
+    <!-- Background shapes - diagonal overlapping -->
+    <div class="bg-shape bg-shape-diagonal-left top-16 left-0"></div>
+    <div class="bg-shape bg-shape-diagonal-left-overlay top-24 left-4"></div>
+    <div class="bg-shape bg-shape-diagonal-right top-32 right-0"></div>
+    <div class="bg-shape bg-shape-diagonal-right-overlay top-40 right-4"></div>
+    <div class="bg-shape bg-shape-accent-circle top-60 left-8"></div>
+    <div class="bg-shape bg-shape-accent-blob top-80 right-12"></div>
+    
+    <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
       <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Your New Tab, Upgraded</h3>
       <img src="assets/screenshots/new-tab.png" alt="Tabsome Preview" class="rounded-3xl shadow-lg mx-auto border border-gray-700/50" data-aos="zoom-in">
     </div>
   </section>
 
   <!-- CTA -->
-  <section id="download" class="py-20 text-center">
-    <div data-aos="fade-up">
+  <section id="download" class="py-20 text-center section-container">
+    <!-- Background shapes - diagonal overlapping -->
+    <div class="bg-shape bg-shape-diagonal-left top-12 left-0"></div>
+    <div class="bg-shape bg-shape-diagonal-left-overlay top-20 left-6"></div>
+    <div class="bg-shape bg-shape-diagonal-right top-28 right-0"></div>
+    <div class="bg-shape bg-shape-diagonal-right-overlay top-36 right-6"></div>
+    <div class="bg-shape bg-shape-accent-circle top-50 left-10"></div>
+    <div class="bg-shape bg-shape-accent-blob top-70 right-14"></div>
+    
+    <div class="relative z-10" data-aos="fade-up">
         <h3 class="text-3xl font-bold mb-6 gradient-text">Ready to Make Chrome Awesome?</h3>
-        <p class="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">
+        <p class="text-lg text-white mb-8 max-w-2xl mx-auto">
         Add Tabsome to your browser and turn every new tab into something truly personal.
         </p>
         <!-- Primary button style from Aura -->
