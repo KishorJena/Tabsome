@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     html { 
         scroll-behavior: smooth; 
@@ -19,11 +22,14 @@
         /* Applying the Aura primary gradient */
         background-image: linear-gradient(to right, #ff5757, #8c52ff);
         overflow-x: hidden;
+        position: relative;
     }
+    
     /* Updated gradient-text to solid white */
     .gradient-text {
       color: white;
     }
+    
     /* Dark matte rubber glass effect with muted colors */
     .glass-effect {
         background: rgba(0, 0, 0, 0.25);
@@ -35,101 +41,225 @@
             0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    /* Background shapes with clear visibility */
-    .bg-shape {
-        position: absolute;
-        opacity: 0.35;
+    /* Parallax Container */
+    .parallax-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
         pointer-events: none;
         z-index: 1;
-        /* Remove any blur effects */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+    }
+
+    /* Layer System - 4 distinct layers for depth */
+    .parallax-layer {
+        position: absolute;
+        width: 100%;
+        height: 200vh; /* Extra height for parallax movement */
+        pointer-events: none;
+    }
+
+    /* Layer 1 - Front Layer (Crystal Clear) */
+    .layer-front {
+        z-index: 4;
         filter: none;
     }
 
-    /* Diagonal overlapping shapes - pure white with 35% opacity */
-    .bg-shape-diagonal-left {
+    /* Layer 2 - Mid-Front Layer (Slight Blur) */
+    .layer-mid-front {
+        z-index: 3;
+        filter: blur(0.5px);
+    }
+
+    /* Layer 3 - Mid-Back Layer (Medium Blur) */
+    .layer-mid-back {
+        z-index: 2;
+        filter: blur(1.5px);
+    }
+
+    /* Layer 4 - Back Layer (Heavy Blur) */
+    .layer-back {
+        z-index: 1;
+        filter: blur(3px);
+    }
+
+    /* Enhanced Shape System */
+    .parallax-shape {
+        position: absolute;
+        pointer-events: none;
+        border-radius: 12px;
+        transition: transform 0.1s ease-out;
+    }
+
+    /* Front Layer Shapes - Crystal Clear */
+    .shape-front {
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Mid-Front Layer Shapes */
+    .shape-mid-front {
+        background: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 24px rgba(255, 255, 255, 0.08);
+    }
+
+    /* Mid-Back Layer Shapes */
+    .shape-mid-back {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 4px 16px rgba(255, 255, 255, 0.06);
+    }
+
+    /* Back Layer Shapes */
+    .shape-back {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.04);
+    }
+
+    /* Shape Variants */
+    .shape-rectangle {
         width: 200px;
         height: 80px;
-        background: white;
-        opacity: 0.35;
-        transform: rotate(-15deg);
-        border-radius: 8px;
-        /* Ensure no blur or effects */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
     }
 
-    .bg-shape-diagonal-left-overlay {
-        width: 150px;
-        height: 60px;
-        background: white;
-        opacity: 0.25;
-        transform: rotate(-15deg);
-        border-radius: 6px;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
+    .shape-rectangle-large {
+        width: 280px;
+        height: 120px;
     }
 
-    .bg-shape-diagonal-right {
-        width: 200px;
+    .shape-rectangle-small {
+        width: 120px;
+        height: 50px;
+    }
+
+    .shape-circle {
+        width: 80px;
         height: 80px;
-        background: white;
-        opacity: 0.35;
-        transform: rotate(15deg);
-        border-radius: 8px;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
+        border-radius: 50%;
     }
 
-    .bg-shape-diagonal-right-overlay {
-        width: 150px;
+    .shape-circle-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+    }
+
+    .shape-circle-small {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .shape-blob {
+        width: 100px;
         height: 60px;
-        background: white;
-        opacity: 0.25;
-        transform: rotate(15deg);
-        border-radius: 6px;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
+        border-radius: 50px;
     }
 
-    /* Additional accent shapes - pure white */
-    .bg-shape-accent-circle {
+    .shape-triangle {
+        width: 0;
+        height: 0;
+        border-left: 40px solid transparent;
+        border-right: 40px solid transparent;
+        border-bottom: 70px solid rgba(255, 255, 255, 0.3);
+        background: none;
+    }
+
+    .shape-diamond {
         width: 60px;
         height: 60px;
-        border-radius: 50%;
-        background: white;
-        opacity: 0.3;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
+        transform: rotate(45deg);
     }
 
-    .bg-shape-accent-blob {
-        width: 80px;
-        height: 40px;
-        border-radius: 50px;
-        background: white;
-        opacity: 0.3;
-        transform: rotate(45deg);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
-    }
+    /* Rotation Classes */
+    .rotate-15 { transform: rotate(15deg); }
+    .rotate-30 { transform: rotate(30deg); }
+    .rotate-45 { transform: rotate(45deg); }
+    .rotate-60 { transform: rotate(60deg); }
+    .rotate-neg15 { transform: rotate(-15deg); }
+    .rotate-neg30 { transform: rotate(-30deg); }
+    .rotate-neg45 { transform: rotate(-45deg); }
+    .rotate-neg60 { transform: rotate(-60deg); }
 
     /* Section positioning */
     .section-container {
         position: relative;
         overflow: hidden;
+        z-index: 10;
+    }
+
+    /* Content positioning */
+    .content-layer {
+        position: relative;
+        z-index: 20;
     }
 
   </style>
 </head>
 <body class="bg-gray-50 text-white font-sans relative">
+
+  <!-- Parallax Background System -->
+  <div class="parallax-container">
+    <!-- Layer 1 - Front Layer (Crystal Clear) -->
+    <div class="parallax-layer layer-front">
+      <div class="parallax-shape shape-front shape-rectangle rotate-neg15" style="top: 10%; left: 5%;"></div>
+      <div class="parallax-shape shape-front shape-circle rotate-30" style="top: 20%; right: 8%;"></div>
+      <div class="parallax-shape shape-front shape-rectangle-small rotate-45" style="top: 35%; left: 12%;"></div>
+      <div class="parallax-shape shape-front shape-blob rotate-neg30" style="top: 50%; right: 15%;"></div>
+      <div class="parallax-shape shape-front shape-diamond rotate-60" style="top: 65%; left: 8%;"></div>
+      <div class="parallax-shape shape-front shape-circle-large rotate-neg45" style="top: 80%; right: 10%;"></div>
+      
+      <div class="parallax-shape shape-front shape-rectangle-large rotate-15" style="top: 120%; left: 3%;"></div>
+      <div class="parallax-shape shape-front shape-triangle rotate-neg60" style="top: 140%; right: 5%;"></div>
+      <div class="parallax-shape shape-front shape-blob rotate-30" style="top: 160%; left: 15%;"></div>
+      <div class="parallax-shape shape-front shape-circle-small rotate-neg15" style="top: 180%; right: 12%;"></div>
+    </div>
+
+    <!-- Layer 2 - Mid-Front Layer (Slight Blur) -->
+    <div class="parallax-layer layer-mid-front">
+      <div class="parallax-shape shape-mid-front shape-rectangle rotate-30" style="top: 15%; left: 8%;"></div>
+      <div class="parallax-shape shape-mid-front shape-circle-large rotate-neg15" style="top: 25%; right: 5%;"></div>
+      <div class="parallax-shape shape-mid-front shape-blob rotate-45" style="top: 40%; left: 15%;"></div>
+      <div class="parallax-shape shape-mid-front shape-rectangle-small rotate-neg30" style="top: 55%; right: 12%;"></div>
+      <div class="parallax-shape shape-mid-front shape-diamond rotate-60" style="top: 70%; left: 5%;"></div>
+      <div class="parallax-shape shape-mid-front shape-circle rotate-neg45" style="top: 85%; right: 18%;"></div>
+      
+      <div class="parallax-shape shape-mid-front shape-triangle rotate-15" style="top: 125%; left: 10%;"></div>
+      <div class="parallax-shape shape-mid-front shape-rectangle-large rotate-neg60" style="top: 145%; right: 8%;"></div>
+      <div class="parallax-shape shape-mid-front shape-blob rotate-30" style="top: 165%; left: 20%;"></div>
+      <div class="parallax-shape shape-mid-front shape-circle-small rotate-neg15" style="top: 185%; right: 15%;"></div>
+    </div>
+
+    <!-- Layer 3 - Mid-Back Layer (Medium Blur) -->
+    <div class="parallax-layer layer-mid-back">
+      <div class="parallax-shape shape-mid-back shape-circle rotate-45" style="top: 8%; left: 12%;"></div>
+      <div class="parallax-shape shape-mid-back shape-rectangle rotate-neg30" style="top: 18%; right: 10%;"></div>
+      <div class="parallax-shape shape-mid-back shape-blob rotate-15" style="top: 32%; left: 5%;"></div>
+      <div class="parallax-shape shape-mid-back shape-circle-large rotate-neg45" style="top: 48%; right: 6%;"></div>
+      <div class="parallax-shape shape-mid-back shape-rectangle-small rotate-60" style="top: 62%; left: 18%;"></div>
+      <div class="parallax-shape shape-mid-back shape-diamond rotate-neg15" style="top: 78%; right: 20%;"></div>
+      
+      <div class="parallax-shape shape-mid-back shape-triangle rotate-30" style="top: 118%; left: 7%;"></div>
+      <div class="parallax-shape shape-mid-back shape-blob rotate-neg60" style="top: 138%; right: 12%;"></div>
+      <div class="parallax-shape shape-mid-back shape-circle rotate-15" style="top: 158%; left: 25%;"></div>
+      <div class="parallax-shape shape-mid-back shape-rectangle-large rotate-neg30" style="top: 178%; right: 5%;"></div>
+    </div>
+
+    <!-- Layer 4 - Back Layer (Heavy Blur) -->
+    <div class="parallax-layer layer-back">
+      <div class="parallax-shape shape-back shape-rectangle-large rotate-neg45" style="top: 5%; left: 2%;"></div>
+      <div class="parallax-shape shape-back shape-circle rotate-30" style="top: 22%; right: 3%;"></div>
+      <div class="parallax-shape shape-back shape-blob rotate-neg15" style="top: 38%; left: 8%;"></div>
+      <div class="parallax-shape shape-back shape-triangle rotate-60" style="top: 52%; right: 15%;"></div>
+      <div class="parallax-shape shape-back shape-circle-large rotate-neg30" style="top: 68%; left: 3%;"></div>
+      <div class="parallax-shape shape-back shape-rectangle rotate-45" style="top: 82%; right: 8%;"></div>
+      
+      <div class="parallax-shape shape-back shape-diamond rotate-neg60" style="top: 115%; left: 12%;"></div>
+      <div class="parallax-shape shape-back shape-blob rotate-15" style="top: 135%; right: 18%;"></div>
+      <div class="parallax-shape shape-back shape-circle-small rotate-neg30" style="top: 155%; left: 5%;"></div>
+      <div class="parallax-shape shape-back shape-rectangle-large rotate-45" style="top: 175%; right: 3%;"></div>
+    </div>
+  </div>
 
   <!-- Navbar -->
   <header class="fixed w-full backdrop-blur-sm z-50" style="background-color: rgba(55, 71, 79, 0.9);">
@@ -147,15 +277,7 @@
 
   <!-- Hero -->
   <section class="pt-40 pb-20 text-center section-container" id="hero">
-    <!-- Background shapes - diagonal overlapping -->
-    <div class="bg-shape bg-shape-diagonal-left top-20 left-0"></div>
-    <div class="bg-shape bg-shape-diagonal-left-overlay top-32 left-8"></div>
-    <div class="bg-shape bg-shape-diagonal-right top-40 right-0"></div>
-    <div class="bg-shape bg-shape-diagonal-right-overlay top-52 right-8"></div>
-    <div class="bg-shape bg-shape-accent-circle top-60 left-16"></div>
-    <div class="bg-shape bg-shape-accent-blob top-80 right-20"></div>
-    
-    <div class="max-w-4xl mx-auto px-6 relative z-10" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto px-6 content-layer" data-aos="fade-up">
       <h2 class="text-4xl md:text-6xl font-bold mb-4 gradient-text">Make Your New Tab Awesome</h2>
       <p class="text-lg md:text-xl text-white mb-8">
         Transform your boring Chrome tab into a sleek, smart dashboard with AI-powered features and stunning speed dials.
@@ -167,15 +289,7 @@
 
   <!-- Features -->
   <section id="features" class="py-20 section-container">
-    <!-- Background shapes - diagonal overlapping -->
-    <div class="bg-shape bg-shape-diagonal-left top-10 left-0"></div>
-    <div class="bg-shape bg-shape-diagonal-left-overlay top-20 left-6"></div>
-    <div class="bg-shape bg-shape-diagonal-right top-30 right-0"></div>
-    <div class="bg-shape bg-shape-diagonal-right-overlay top-40 right-6"></div>
-    <div class="bg-shape bg-shape-accent-circle top-60 left-12"></div>
-    <div class="bg-shape bg-shape-accent-blob top-80 right-16"></div>
-    
-    <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+    <div class="max-w-6xl mx-auto px-6 text-center content-layer">
       <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Why You'll Love Tabsome</h3>
       <div class="grid md:grid-cols-3 gap-10">
         <!-- Material Design blue-gray cards -->
@@ -197,15 +311,7 @@
 
   <!-- Preview -->
   <section id="preview" class="py-20 section-container">
-    <!-- Background shapes - diagonal overlapping -->
-    <div class="bg-shape bg-shape-diagonal-left top-16 left-0"></div>
-    <div class="bg-shape bg-shape-diagonal-left-overlay top-24 left-4"></div>
-    <div class="bg-shape bg-shape-diagonal-right top-32 right-0"></div>
-    <div class="bg-shape bg-shape-diagonal-right-overlay top-40 right-4"></div>
-    <div class="bg-shape bg-shape-accent-circle top-60 left-8"></div>
-    <div class="bg-shape bg-shape-accent-blob top-80 right-12"></div>
-    
-    <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
+    <div class="max-w-6xl mx-auto px-6 text-center content-layer">
       <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Your New Tab, Upgraded</h3>
       <img src="assets/screenshots/new-tab.png" alt="Tabsome Preview" class="rounded-3xl shadow-lg mx-auto border border-gray-700/50" data-aos="zoom-in">
     </div>
@@ -213,15 +319,7 @@
 
   <!-- CTA -->
   <section id="download" class="py-20 text-center section-container">
-    <!-- Background shapes - diagonal overlapping -->
-    <div class="bg-shape bg-shape-diagonal-left top-12 left-0"></div>
-    <div class="bg-shape bg-shape-diagonal-left-overlay top-20 left-6"></div>
-    <div class="bg-shape bg-shape-diagonal-right top-28 right-0"></div>
-    <div class="bg-shape bg-shape-diagonal-right-overlay top-36 right-6"></div>
-    <div class="bg-shape bg-shape-accent-circle top-50 left-10"></div>
-    <div class="bg-shape bg-shape-accent-blob top-70 right-14"></div>
-    
-    <div class="relative z-10" data-aos="fade-up">
+    <div class="content-layer" data-aos="fade-up">
         <h3 class="text-3xl font-bold mb-6 gradient-text">Ready to Make Chrome Awesome?</h3>
         <p class="text-lg text-white mb-8 max-w-2xl mx-auto">
         Add Tabsome to your browser and turn every new tab into something truly personal.
@@ -240,7 +338,127 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
+    // Initialize AOS
     AOS.init({ duration: 800, once: true });
+
+    // Register ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Parallax Animation Setup
+    function initParallax() {
+      // Get all parallax shapes
+      const frontShapes = document.querySelectorAll('.layer-front .parallax-shape');
+      const midFrontShapes = document.querySelectorAll('.layer-mid-front .parallax-shape');
+      const midBackShapes = document.querySelectorAll('.layer-mid-back .parallax-shape');
+      const backShapes = document.querySelectorAll('.layer-back .parallax-shape');
+
+      // Front layer - fastest movement (most parallax effect)
+      frontShapes.forEach((shape, index) => {
+        gsap.to(shape, {
+          y: () => window.innerHeight * 0.8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+
+      // Mid-front layer - medium-fast movement
+      midFrontShapes.forEach((shape, index) => {
+        gsap.to(shape, {
+          y: () => window.innerHeight * 0.6,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.2,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+
+      // Mid-back layer - medium-slow movement
+      midBackShapes.forEach((shape, index) => {
+        gsap.to(shape, {
+          y: () => window.innerHeight * 0.4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.5,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+
+      // Back layer - slowest movement (least parallax effect)
+      backShapes.forEach((shape, index) => {
+        gsap.to(shape, {
+          y: () => window.innerHeight * 0.2,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 2,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+
+      // Add subtle rotation animation on scroll
+      const allShapes = document.querySelectorAll('.parallax-shape');
+      allShapes.forEach((shape, index) => {
+        const rotationAmount = (index % 2 === 0) ? 360 : -360;
+        gsap.to(shape, {
+          rotation: `+=${rotationAmount}`,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 3,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+
+      // Add horizontal movement for more dynamic effect
+      allShapes.forEach((shape, index) => {
+        const horizontalAmount = (index % 3 === 0) ? 100 : (index % 3 === 1) ? -100 : 50;
+        gsap.to(shape, {
+          x: horizontalAmount,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 2.5,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+    }
+
+    // Initialize parallax when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initParallax);
+
+    // Refresh ScrollTrigger on window resize
+    window.addEventListener('resize', () => {
+      ScrollTrigger.refresh();
+    });
+
+    // Performance optimization - reduce motion for users who prefer it
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Disable parallax for users who prefer reduced motion
+      gsap.globalTimeline.clear();
+    }
   </script>
 </body>
 </html>
