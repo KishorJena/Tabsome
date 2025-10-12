@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome! Your New Tab is Ready</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top left, #4a00e0, #1e0033 60%);
+            overflow: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .shine-effect {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            transform: rotate(0deg);
+            transition: transform 0.5s ease-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-white flex items-center justify-center min-h-screen p-4">
+
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1520034475321-cbe63696469a?q=80&w=2070&auto=format&fit=crop'); opacity: 0.2;"></div>
+    
+    <div class="relative w-full max-w-2xl text-center overflow-hidden">
+        <div class="glass-card rounded-2xl shadow-2xl p-8 md:p-12 relative">
+            <!-- Shine effect for mouse movement -->
+            <div id="shine" class="shine-effect"></div>
+
+            <!-- Header -->
+            <div class="mb-6">
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-3">Installation Successful!</h1>
+                <p class="text-lg text-gray-300">Your new tab page has been beautifully upgraded.</p>
+            </div>
+
+            <!-- Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-10 text-left">
+                <!-- Feature 1 -->
+                <div class="flex items-start space-x-4 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-md">Stunning Dashboard</h3>
+                        <p class="text-sm text-gray-400">A clean, modern look for every new tab you open.</p>
+                    </div>
+                </div>
+                <!-- Feature 2 -->
+                <div class="flex items-start space-x-4 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-md">At-a-Glance Info</h3>
+                        <p class="text-sm text-gray-400">Instantly see weather, date, and time.</p>
+                    </div>
+                </div>
+                 <!-- Feature 3 -->
+                 <div class="flex items-start space-x-4 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-md">Quick Search</h3>
+                        <p class="text-sm text-gray-400">Search the web directly from your new tab.</p>
+                    </div>
+                </div>
+                <!-- Feature 4 -->
+                <div class="flex items-start space-x-4 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
+                    <div class="flex-shrink-0">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-md">Organized Shortcuts</h3>
+                        <p class="text-sm text-gray-400">Easy access to all your favorite websites.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="mt-8">
+                <button id="openNewTab" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-lg transform hover:scale-105">
+                    See it in Action
+                </button>
+            </div>
+        </div>
+        
+        <footer class="mt-8 text-center text-sm text-gray-400">
+            <p>Thank you for choosing our extension!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Open a new tab when the button is clicked
+        document.getElementById('openNewTab').addEventListener('click', () => {
+            // In a real extension, you might use chrome.tabs.create({});
+            // For this standalone page, we'll just show an alert and close the window.
+            alert("To see the new tab, simply open a new tab in your browser (Ctrl+T or Cmd+T).");
+            window.close();
+        });
+
+        // Fun shine effect on mouse move
+        const card = document.querySelector('.glass-card');
+        const shine = document.getElementById('shine');
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = (y / rect.height - 0.5) * -15; // Invert and reduce angle
+            const rotateY = (x / rect.width - 0.5) * 15;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            shine.style.transform = `translateX(${x - rect.width/2}px) translateY(${y - rect.height/2}px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        });
+    </script>
+
+</body>
+</html>

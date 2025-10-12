@@ -1,203 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="yThrk1ilFoIvgBzpUJ57lPfCzVxZ9omPTi6aj2Iwlls" />
-    <title>Tabsome - AI-Powered Speed Dial and Smart New Tab for Chrome</title>
-    <meta name="description" content="Transform your Chrome new tab into a powerful speed dial with AI assistance. Opera-style quick access, omnisearch, and smart features to make browsing faster and more efficient.">
-    <meta name="keywords" content="opera speed dial chrome, chrome speed dial extension, opera like new tab, chrome ai extension, smart new tab chrome, chrome omnisearch, artificial intelligence chrome extension, quick dial chrome, browser productivity, chrome ai assistant">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Tabsome - AI-Powered Speed Dial for Chrome">
-    <meta property="og:description" content="Transform your Chrome new tab into a powerful speed dial with AI assistance. Opera-style quick access and smart features.">
-    <meta property="og:image" content="assets/logo-128.png">
-    <meta property="og:type" content="website">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Tabsome - Smart New Tab for Chrome">
-    <meta name="twitter:description" content="AI-powered new tab page with Opera-style speed dial and smart omnisearch for Chrome">
-    <meta name="twitter:image" content="assets/logo-128.png">
-    
-    <!-- Additional SEO Meta Tags -->
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="Tabsome">
-    <link rel="canonical" href="https://tabsome.com/">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
-            color: #f3f4f6;
-        }
-        .container {
-            max-width: 1200px;
-        }
-        .gradient-text {
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .logo-placeholder {
-            background-color: #374151;
-            border-radius: 9999px;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .icon-placeholder {
-            background-color: #374151;
-            border-radius: 12px;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tabsome – Make Your New Tab Awesome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html { 
+        scroll-behavior: smooth; 
+    }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #9333ea; /* Fallback color */
+        /* Applying the Aura primary gradient */
+        background-image: linear-gradient(to right, #f87171, #9333ea);
+        overflow-x: hidden;
+    }
+    /* Updated gradient-text to use Aura's color scheme */
+    .gradient-text {
+      background: linear-gradient(to right, #f5a0a0, #d9b8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Glass effect from the Aura style guide */
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    /* Background shapes from the Aura style guide */
+    .shape-container::before,
+    .shape-container::after {
+        content: '';
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.08);
+        border-radius: 1.5rem;
+        z-index: -1;
+    }
+    .shape-container::before {
+        width: 30vw;
+        height: 50vh;
+        top: 10%;
+        left: -15vw;
+        transform: rotate(-35deg);
+    }
+    .shape-container::after {
+        width: 35vw;
+        height: 60vh;
+        bottom: 5%;
+        right: -18vw;
+        transform: rotate(25deg);
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-gray-100 antialiased leading-relaxed">
-    <!-- Top Navigation Bar -->
-    <nav class="bg-gray-800 fixed w-full top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <img src="assets/logo-128.png" alt="Tabsome Logo" class="h-8 w-8">
-                    <span class="ml-3 text-xl font-semibold">Tabsome</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="support.html" class="text-gray-300 hover:text-white">Support</a>
-                </div>
-            </div>
+<body class="bg-gray-50 text-white font-sans relative shape-container">
+
+  <!-- Navbar -->
+  <header class="fixed w-full glass-effect z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold gradient-text">Tabsome</h1>
+      <nav class="space-x-8 hidden md:block">
+        <a href="#features" class="hover:text-gray-200 transition">Features</a>
+        <a href="#preview" class="hover:text-gray-200 transition">Preview</a>
+        <a href="#download" class="hover:text-gray-200 transition">Download</a>
+      </nav>
+      <!-- Primary button style from Aura -->
+      <a href="#download" class="bg-white text-purple-600 font-semibold px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105">Get Tabsome</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="pt-40 pb-20 text-center" id="hero">
+    <div class="max-w-4xl mx-auto px-6" data-aos="fade-up">
+      <h2 class="text-4xl md:text-6xl font-bold mb-4 gradient-text">Make Your New Tab Awesome</h2>
+      <p class="text-lg md:text-xl text-gray-200 mb-8">
+        Transform your boring Chrome tab into a sleek, smart dashboard with AI-powered features and stunning speed dials.
+      </p>
+      <!-- Primary button style from Aura -->
+      <a href="#download" class="bg-white text-purple-600 font-semibold px-8 py-4 rounded-lg text-lg hover:bg-opacity-90 transition transform hover:scale-105 inline-block">Add to Chrome</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Why You'll Love Tabsome</h3>
+      <div class="grid md:grid-cols-3 gap-10">
+        <!-- Applying glass effect to feature cards -->
+        <div class="p-8 glass-effect rounded-2xl" data-aos="fade-up">
+          <h4 class="font-semibold text-xl mb-2">🚀 Speed Dials</h4>
+          <p class="text-gray-300">Access your favorite sites instantly with customizable, beautiful tiles inspired by Opera’s Speed Dial.</p>
         </div>
-    </nav>
-
-    <main class="container mx-auto px-4 pt-24 pb-16">
-
-        <!-- Hero Section -->
-        <section class="text-center space-y-8 mb-24">
-            <div class="flex flex-col items-center">
-                <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight">
-                    <span class="gradient-text bg-gradient-to-r from-purple-400 to-pink-600">Tabsome</span>
-                    <br class="hidden sm:block">
-                    <span class="text-gray-100">Make Your New Tab Awesome</span>
-                </h1>
-            </div>
-            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
-                Ditch the bland default tab. Tabsome turns every new tab into a sleek, personalized dashboard that makes browsing faster and more fun.
-            </p>
-            <a href="https://chromewebstore.google.com/detail/tabsome-new-tab-with-ai/cibcnchlbnblalcpgjaccapodkmjookf" class="inline-block py-3 px-8 text-lg font-semibold rounded-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">
-                Get Tabsome - It's Free!
-            </a>
-        </section>
-
-        <!-- Features Section -->
-        <section class="py-16">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Feature 1 -->
-                <div class="bg-gray-800 p-6 rounded-3xl shadow-xl flex flex-col items-center text-center space-y-4">
-                    <div class="icon-placeholder">
-                         <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h.01L6 20" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-100">Customizable Start Page</h3>
-                    <p class="text-gray-400">Personalize your new tab with stunning wallpapers and big, organized tiles for your favorite sites.</p>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="bg-gray-800 p-6 rounded-3xl shadow-xl flex flex-col items-center text-center space-y-4">
-                    <div class="icon-placeholder">
-                         <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-100">Powerful Omnisearch</h3>
-                    <p class="text-gray-400">Use smart shortcuts for instant searches across your favorite engines or get quick AI assistance.</p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="bg-gray-800 p-6 rounded-3xl shadow-xl flex flex-col items-center text-center space-y-4">
-                    <div class="icon-placeholder">
-                         <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.976A4 4 0 003 15z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-100">Handy Widgets</h3>
-                    <p class="text-gray-400">Keep track of the weather and time with elegant, functional widgets right on your new tab.</p>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="bg-gray-800 p-6 rounded-3xl shadow-xl flex flex-col items-center text-center space-y-4">
-                    <div class="icon-placeholder">
-                         <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path d="M12 14c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm-4.72 6.5c-2.73 0-5.28-1.74-6.28-4.5.6-2.14 2.68-3.5 5.5-3.5h.02c2.72 0 5.28 1.74 6.28 4.5-.6 2.14-2.68 3.5-5.5 3.5h-.02z" fill="currentColor"/>
-                            <path d="M12 14c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm-4.72 6.5c-2.73 0-5.28-1.74-6.28-4.5.6-2.14 2.68-3.5 5.5-3.5h.02c2.72 0 5.28 1.74 6.28 4.5-.6 2.14-2.68 3.5-5.5 3.5h-.02z" fill="#f3f4f6" fill-opacity="0.1"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-100">Built-in AI Assistant</h3>
-                    <p class="text-gray-400">Get quick answers and control your settings on the fly with a smart, integrated AI.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Omnisearch Guide Section -->
-        <section class="py-16">
-            <div class="bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl flex flex-col md:flex-row items-center gap-8">
-                <div class="w-full md:w-1/2">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                        <span class="gradient-text bg-gradient-to-r from-purple-500 to-pink-600">Omnisearch</span> <span class="text-gray-100">Guide</span>
-                    </h2>
-                    <p class="text-lg text-gray-400 mb-6">
-                        Access any search engine without changing your default. Just type the shortcut and your query.
-                    </p>
-                    <ul class="text-lg text-gray-300 space-y-2">
-                        <li>**`/g`** – Google</li>
-                        <li>**`/b`** – Bing</li>
-                        <li>**`/y`** – Yandex</li>
-                        <li>**`/d`** – DuckDuckGo</li>
-                        <li>**`/ai`** – Instant AI assistant</li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-1/2 icon-placeholder rounded-3xl h-64 md:h-80">
-                    <svg class="h-24 w-24 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
-        </section>
-
-        <!-- Call to Action Section -->
-        <section class="text-center py-16">
-            <div class="bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
-                <h2 class="text-3xl md:text-4xl font-bold">
-                    <span class="gradient-text bg-gradient-to-r from-pink-600 to-purple-500">Your browser. Your rules.</span>
-                </h2>
-                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-                    Tabsome is lightweight, free, and built to make Chrome feel personal and powerful again.
-                </p>
-                <a href="https://chromewebstore.google.com/detail/tabsome-new-tab-with-ai/cibcnchlbnblalcpgjaccapodkmjookf" class="inline-block py-4 px-10 text-xl font-semibold rounded-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 transition-all transform hover:scale-105 shadow-xl">
-                    Add to Chrome
-                </a>
-                <p class="text-sm text-gray-500 pt-4">Got ideas or features you’d love to see? Let’s make Tabsome even better.</p>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="container mx-auto px-4 py-8 border-t border-gray-800">
-        <div class="flex justify-center items-center space-x-4 text-sm text-gray-400">
-            <a href="privacy.html" class="hover:text-gray-100 transition-colors">Privacy Policy</a>
-            <span>&copy; 2025 Tabsome. All rights reserved.</span>
+        <div class="p-8 glass-effect rounded-2xl" data-aos="fade-up" data-aos-delay="100">
+          <h4 class="font-semibold text-xl mb-2">🧠 AI Spotlight</h4>
+          <p class="text-gray-300">AI-generated widgets that persist and evolve—your mini command center for quick info and insights.</p>
         </div>
-    </footer>
+        <div class="p-8 glass-effect rounded-2xl" data-aos="fade-up" data-aos-delay="200">
+          <h4 class="font-semibold text-xl mb-2">🔎 Omnisearch</h4>
+          <p class="text-gray-300">Search with any engine using shortcuts like /g, /b, /d, or /ai—all from one search bar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- Preview -->
+  <section id="preview" class="py-20">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Your New Tab, Upgraded</h3>
+      <img src="https://placehold.co/1200x600/2d3748/ffffff?text=Tabsome+Dashboard+Preview" alt="Tabsome Preview" class="rounded-2xl shadow-lg mx-auto border border-gray-700/50" data-aos="zoom-in">
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="download" class="py-20 text-center">
+    <div data-aos="fade-up">
+        <h3 class="text-3xl font-bold mb-6 gradient-text">Ready to Make Chrome Awesome?</h3>
+        <p class="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">
+        Add Tabsome to your browser and turn every new tab into something truly personal.
+        </p>
+        <!-- Primary button style from Aura -->
+        <a href="#" class="bg-white text-purple-600 font-semibold px-8 py-4 rounded-lg text-lg hover:bg-opacity-90 transition transform hover:scale-105 inline-block" data-aos="zoom-in">
+        ➕ Add to Chrome
+        </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 text-center text-gray-300 text-sm">
+    © 2025 Tabsome. Crafted with ❤️ by Kishor.
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
 </body>
 </html>
+
