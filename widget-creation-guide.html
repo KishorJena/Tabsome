@@ -412,6 +412,80 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
+        .secondary-cta {
+            display: inline-block;
+            background: transparent;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .secondary-cta:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.28);
+        }
+
+        .cta-columns {
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .cta-column {
+            flex: 1 1 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .cta-column .cta-button,
+        .cta-column .secondary-cta {
+            width: auto;
+            align-self: flex-start;
+        }
+
+        .cta-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        .cta-desc {
+            color: rgba(255,255,255,0.85);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .ai-helper-note {
+            color: rgba(255,255,255,0.75);
+            margin-top: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .cta-columns {
+                flex-direction: column;
+            }
+            .cta-column {
+                text-align: center;
+                align-items: center;
+            }
+            .cta-column .cta-button,
+            .cta-column .secondary-cta {
+                width: 100%;
+                align-self: center;
+            }
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -511,12 +585,22 @@
         <!-- AI Widget Generator - Minimal -->
         <div class="card ai-hero">
             <h2 class="card-title">✨ Skip It! Use AI to Build Your Widget</h2>
-            <p>Don't want to code? Just describe your widget in the search bar, and our AI generates it instantly—ready
-                to use and share!</p>
-            <button class="cta-button ai-cta-button"
-                onclick="alert('Open a new tab and type your widget idea in the search bar!')">
-                Try AI Widget Generator
-            </button>
+
+            <div class="cta-columns">
+                <div class="cta-column">
+                    <h3 class="cta-title">Generate with Tabsome AI (in-extension)</h3>
+                    <p class="cta-desc">Use the built-in Tabsome AI inside the extension to generate widget code instantly — outputs ready-to-import Tabsome widget JSON and can be added directly into your dashboard.</p>
+                    <button class="cta-button ai-cta-button" onclick="alert('Open a new tab and type your widget idea in the search bar!')" aria-label="Try Tabsome AI widget generator">Try Tabsome AI</button>
+                </div>
+
+                <div class="cta-column">
+                    <h3 class="cta-title">Copy Markdown for External AI</h3>
+                    <p class="cta-desc">Copy a full markdown version of this guide to paste into external AI assistants (ChatGPT, Gemini, Claude). Ask the assistant to return a Tabsome widget JSON object with escaped HTML/CSS/JS so it can be imported directly.</p>
+                    <button class="secondary-cta" onclick="copyMarkdown(this)" aria-label="Copy markdown for external AI">Copy Markdown</button>
+                </div>
+            </div>
+
+            <p class="ai-helper-note">Tip: Use the left action to run Tabsome's in-extension AI (fast, integrated). Use the right action to copy markdown and paste into an external AI assistant — request a Tabsome widget JSON object with escaped HTML/CSS/JS for direct import.</p>
         </div>
 
         <div style="text-align: center; margin: 24px 0;">
@@ -949,6 +1033,68 @@ setInterval(updateCountdown, 1000);</code></pre>
                 console.error('Failed to copy:', err);
                 alert('Failed to copy code. Please try again.');
             });
+        }
+
+        // Create and copy markdown version of the page content
+        function copyMarkdown(button) {
+            try {
+                let md = `# ${document.querySelector('.logo').textContent.trim()}\n\n`;
+                const subtitle = document.querySelector('.subtitle');
+                if (subtitle) md += `${subtitle.textContent.trim()}\n\n`;
+
+                document.querySelectorAll('.card').forEach(card => {
+                    const titleEl = card.querySelector('.card-title');
+                    if (titleEl) md += `## ${titleEl.textContent.trim()}\n\n`;
+
+                    // Paragraphs
+                    card.querySelectorAll('p').forEach(p => {
+                        // skip small helper notes inside cards (like inline notes)
+                        if (p.classList.contains('ai-helper-note')) return;
+                        md += `${p.textContent.trim()}\n\n`;
+                    });
+
+                    // Lists (ol/ul)
+                    card.querySelectorAll('ul, ol').forEach(list => {
+                        const isOrdered = list.tagName.toLowerCase() === 'ol';
+                        list.querySelectorAll('li').forEach((li, idx) => {
+                            if (isOrdered) md += `${idx + 1}. ${li.textContent.trim()}\n`;
+                            else md += `- ${li.textContent.trim()}\n`;
+                        });
+                        md += '\n';
+                    });
+
+                    // Code blocks
+                    card.querySelectorAll('.code-block').forEach(cb => {
+                        const labelEl = cb.querySelector('.code-label');
+                        const label = labelEl ? labelEl.textContent.trim().toLowerCase() : '';
+                        const codeEl = cb.querySelector('pre code');
+                        if (codeEl) {
+                            const codeText = codeEl.textContent.replace(/```/g, '`\u200b``');
+                            const lang = (label.includes('html')) ? 'html' : (label.includes('css')) ? 'css' : (label.includes('javascript')||label.includes('js')) ? 'js' : '';
+                            md += `\n\n\`\`\`${lang}\n${codeText}\n\`\`\`\n\n`;
+                        }
+                    });
+                });
+
+                md += '---\n*Use this markdown with any AI assistant (ChatGPT, Gemini, Claude, etc.) to generate widget code or convert it into the Tabsome widget JSON structure.*\n';
+
+                navigator.clipboard.writeText(md).then(() => {
+                    const originalText = button.textContent;
+                    button.textContent = '✓ Markdown Copied!';
+                    button.classList.add('copied');
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2200);
+                }).catch(err => {
+                    console.error('Failed to copy markdown:', err);
+                    alert('Failed to copy markdown. Please try again.');
+                });
+            } catch (err) {
+                console.error('Error generating markdown:', err);
+                alert('Unable to generate markdown.');
+            }
         }
 
         // Template switching
