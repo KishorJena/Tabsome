@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widget Marketplace – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Discover and install beautiful widgets for your Tabsome new tab. Browse our curated collection of AI-generated widgets.">
+    <meta name="keywords"
+        content="widgets, tabsome, chrome extension, new tab widgets, dashboard widgets, custom widgets, AI widgets">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://kishorjena.github.io/Tabsome/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Widget Marketplace – Tabsome">
+    <meta property="og:description" content="Discover and install beautiful widgets for your Tabsome new tab.">
+    <meta property="og:image" content="https://kishorjena.github.io/Tabsome/assets/social-preview.png">
+    <meta property="og:url" content="https://kishorjena.github.io/Tabsome/marketplace.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Widget Marketplace – Tabsome">
+    <meta name="twitter:description" content="Discover and install beautiful widgets for your Tabsome new tab.">
+    <meta name="twitter:image" content="https://kishorjena.github.io/Tabsome/assets/social-preview.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image: linear-gradient(to right, #ff5757, #8c52ff);
+            min-height: 100vh;
+        }
+
+        .gradient-text {
+            color: white;
+        }
+
+        .glass-card {
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px) saturate(0.8);
+            -webkit-backdrop-filter: blur(12px) saturate(0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .widget-preview-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .widget-preview-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+
+        .widget-preview-placeholder::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .widget-preview-container.loaded .widget-preview-placeholder {
+            display: none;
+        }
+
+        .widget-preview-container iframe {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .widget-preview-container.loaded iframe {
+            opacity: 1;
+        }
+
+        .label-pill {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .label-pill:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .featured-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1a1a2e;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: #8c52ff;
+            border-color: white;
+        }
+
+        .search-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 16px;
+            padding-left: 44px;
+            border-radius: 12px;
+            font-size: 14px;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #8c52ff, #ff5757);
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(140, 82, 255, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans">
+
+    <!-- Navbar -->
+    <header class="fixed w-full backdrop-blur-sm z-50" style="background-color: rgba(55, 71, 79, 0.9);">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
+                    <h1 class="text-2xl font-bold gradient-text">Tabsome</h1>
+                </a>
+            </div>
+            <nav class="space-x-8 hidden md:block">
+                <a href="index.html#features" class="hover:text-gray-200 transition">Features</a>
+                <a href="index.html#preview" class="hover:text-gray-200 transition">Preview</a>
+                <a href="index.html#download" class="hover:text-gray-200 transition">Download</a>
+                <a href="marketplace.html" class="text-yellow-300 font-medium">Marketplace</a>
+                <a href="widget-creation-guide.html" class="hover:text-gray-200 transition">Widget Guide</a>
+                <a href="changelog.html" class="hover:text-gray-200 transition">Changelog</a>
+            </nav>
+            <a href="index.html#download"
+                class="bg-white text-purple-600 font-semibold px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105">Get
+                Tabsome</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-16 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <!-- Hero Section -->
+            <section class="text-center mb-12" data-aos="fade-up">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Widget Marketplace</h1>
+                <p class="text-lg text-white/80 max-w-2xl mx-auto">
+                    Discover beautiful, AI-generated widgets to personalize your Tabsome new tab experience.
+                </p>
+            </section>
+
+            <!-- Filter Bar -->
+            <section class="mb-8" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <!-- Search -->
+                    <div class="relative flex-1 max-w-md">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50"></i>
+                        <input type="text" id="search-input" placeholder="Search widgets..." class="search-input">
+                    </div>
+
+                    <!-- Filter Buttons -->
+                    <div class="flex gap-3">
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="fas fa-th-large mr-2"></i>All
+                        </button>
+                        <button class="filter-btn" data-filter="featured">
+                            <i class="fas fa-star mr-2"></i>Featured
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section id="loading-state" class="text-center py-20">
+                <div class="loading-spinner mb-4"></div>
+                <p class="text-white/60">Loading widgets...</p>
+            </section>
+
+            <!-- Empty State -->
+            <section id="empty-state" class="empty-state hidden">
+                <i class="fas fa-box-open"></i>
+                <h3 class="text-xl font-semibold mb-2">No widgets found</h3>
+                <p>Try adjusting your search or filters.</p>
+            </section>
+
+            <!-- Widget Grid -->
+            <section id="widget-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+                <!-- Widget cards will be dynamically inserted here -->
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Widget Detail Modal -->
+    <div id="widget-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="p-6">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
+                        <p id="modal-description" class="text-white/70"></p>
+                    </div>
+                    <button id="modal-close" class="text-white/50 hover:text-white text-2xl transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Widget Preview -->
+                <div class="mb-6">
+                    <div id="modal-preview" class="widget-preview-container rounded-lg overflow-hidden"
+                        style="height: 120px;">
+                    </div>
+                </div>
+
+                <!-- Widget Info -->
+                <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+                    <div>
+                        <span class="text-white/50">Created by:</span>
+                        <span id="modal-author" class="ml-2"></span>
+                    </div>
+                    <div>
+                        <span class="text-white/50">Type:</span>
+                        <span id="modal-type" class="ml-2"></span>
+                    </div>
+                </div>
+
+                <!-- Labels -->
+                <div id="modal-labels" class="flex flex-wrap gap-2 mb-6"></div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button id="modal-copy" class="action-btn action-btn-primary flex-1">
+                        <i class="fas fa-copy mr-2"></i>Copy JSON
+                    </button>
+                    <button id="modal-download" class="action-btn action-btn-secondary flex-1">
+                        <i class="fas fa-download mr-2"></i>Download
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center text-white/60 text-sm">
+        © 2025 Tabsome. <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // API Configuration - tries local first, then production
+        const API_ENDPOINTS = [
+            'http://localhost:3000',           // Local development
+            'https://tabsome-backend.vercel.app' // Production
+        ];
+        let currentApiUrl = API_ENDPOINTS[0];
+
+        // State
+        let allWidgets = [];
+        let filteredWidgets = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let selectedWidget = null;
+
+        // DOM Elements
+        const widgetGrid = document.getElementById('widget-grid');
+        const loadingState = document.getElementById('loading-state');
+        const emptyState = document.getElementById('empty-state');
+        const searchInput = document.getElementById('search-input');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const modal = document.getElementById('widget-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalCopy = document.getElementById('modal-copy');
+        const modalDownload = document.getElementById('modal-download');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 600, once: true });
+            fetchWidgets();
+            setupEventListeners();
+        });
+
+        // Fetch widgets from API - tries multiple endpoints
+        async function fetchWidgets() {
+            let lastError = null;
+
+            for (const apiUrl of API_ENDPOINTS) {
+                try {
+                    console.log(`Trying API: ${apiUrl}/api/widgets`);
+                    const response = await fetch(`${apiUrl}/api/widgets`, {
+                        mode: 'cors',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        currentApiUrl = apiUrl;
+                        console.log(`Connected to: ${apiUrl}`);
+                        allWidgets = data.data;
+                        applyFilters();
+                        return;
+                    } else {
+                        throw new Error(data.error || 'API returned failure');
+                    }
+                } catch (error) {
+                    console.warn(`Failed to connect to ${apiUrl}:`, error.message);
+                    lastError = error;
+                }
+            }
+
+            // All endpoints failed
+            showError(`Unable to connect to widget server.<br><br>
+                <span class="text-sm text-white/50">
+                    If testing locally, run the backend:<br>
+                    <code class="bg-black/30 px-2 py-1 rounded">cd tabsome-backend && npm run dev</code><br><br>
+                    If deploying, redeploy the backend to apply CORS headers.
+                </span>`);
+        }
+
+        // Apply filters and search
+        function applyFilters() {
+            filteredWidgets = allWidgets.filter(widget => {
+                // Filter check
+                if (currentFilter === 'featured' && !widget.is_featured) {
+                    return false;
+                }
+
+                // Search check
+                if (searchQuery) {
+                    const query = searchQuery.toLowerCase();
+                    const matchesTitle = widget.title?.toLowerCase().includes(query);
+                    const matchesDesc = widget.description?.toLowerCase().includes(query);
+                    const matchesLabels = widget.labels?.some(l => l.toLowerCase().includes(query));
+                    if (!matchesTitle && !matchesDesc && !matchesLabels) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            renderWidgets();
+        }
+
+        // Render widget cards
+        function renderWidgets() {
+            loadingState.classList.add('hidden');
+
+            if (filteredWidgets.length === 0) {
+                widgetGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            widgetGrid.classList.remove('hidden');
+            widgetGrid.innerHTML = '';
+
+            filteredWidgets.forEach((widget, index) => {
+                const card = createWidgetCard(widget, index);
+                widgetGrid.appendChild(card);
+            });
+
+            // Setup lazy loading for previews
+            setupLazyLoading();
+        }
+
+        // Create widget card element
+        function createWidgetCard(widget, index) {
+            const card = document.createElement('div');
+            card.className = 'glass-card rounded-xl overflow-hidden';
+            card.setAttribute('data-aos', 'fade-up');
+            card.setAttribute('data-aos-delay', (index % 6) * 50);
+
+            const isFeatured = widget.is_featured;
+            const labels = widget.labels || [];
+
+            card.innerHTML = `
+        <!-- Preview Container -->
+        <div class="widget-preview-container p-4" data-widget-id="${widget.id}" style="height: 140px;">
+          <div class="widget-preview-placeholder h-full flex items-center justify-center">
+            <span>Loading preview...</span>
+          </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div class="p-4 pt-0">
+          <!-- Title Row -->
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h3 class="font-semibold text-lg truncate flex-1" title="${widget.title || 'Untitled'}">
+              ${widget.title || 'Untitled Widget'}
+            </h3>
+            ${isFeatured ? '<span class="featured-badge">★ Featured</span>' : ''}
+          </div>
+          
+          <!-- Description -->
+          <p class="text-white/60 text-sm mb-3 line-clamp-2">
+            ${widget.description || 'No description available'}
+          </p>
+          
+          <!-- Labels -->
+          <div class="flex flex-wrap gap-1 mb-4">
+            ${labels.slice(0, 3).map(label => `<span class="label-pill">${label}</span>`).join('')}
+            ${labels.length > 3 ? `<span class="label-pill">+${labels.length - 3}</span>` : ''}
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex gap-2">
+            <button class="action-btn action-btn-primary flex-1" onclick="openWidgetModal('${widget.id}')">
+              <i class="fas fa-download mr-1"></i> Get Widget
+            </button>
+            <button class="action-btn action-btn-secondary" onclick="openWidgetModal('${widget.id}')">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+      `;
+
+            return card;
+        }
+
+        // Setup lazy loading with Intersection Observer
+        function setupLazyLoading() {
+            const previewContainers = document.querySelectorAll('.widget-preview-container[data-widget-id]');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const container = entry.target;
+                        const widgetId = container.dataset.widgetId;
+
+                        if (!container.classList.contains('loaded')) {
+                            loadWidgetPreview(container, widgetId);
+                        }
+
+                        observer.unobserve(container);
+                    }
+                });
+            }, {
+                rootMargin: '100px',
+                threshold: 0.1
+            });
+
+            previewContainers.forEach(container => observer.observe(container));
+        }
+
+        // Load widget preview into iframe
+        function loadWidgetPreview(container, widgetId) {
+            const widget = allWidgets.find(w => w.id === widgetId);
+            if (!widget) return;
+
+            const iframe = document.createElement('iframe');
+            iframe.sandbox = 'allow-scripts';
+            iframe.style.cssText = 'width: 100%; height: 100%; border: none; pointer-events: none;';
+            iframe.title = `Widget: ${widget.title}`;
+
+            iframe.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100%;
+              }
+              ${widget.widget.css}
+            </style>
+          </head>
+          <body>
+            ${widget.widget.html}
+            <script>${widget.widget.js}<\/script>
+          </body>
+        </html>
+      `;
+
+            iframe.onload = () => {
+                container.classList.add('loaded');
+            };
+
+            container.appendChild(iframe);
+        }
+
+        // Open widget detail modal
+        function openWidgetModal(widgetId) {
+            selectedWidget = allWidgets.find(w => w.id === widgetId);
+            if (!selectedWidget) return;
+
+            document.getElementById('modal-title').textContent = selectedWidget.title || 'Untitled Widget';
+            document.getElementById('modal-description').textContent = selectedWidget.description || 'No description';
+            document.getElementById('modal-author').textContent = selectedWidget.created_by || 'Unknown';
+            document.getElementById('modal-type').textContent = selectedWidget.type || 'Widget';
+
+            // Labels
+            const labelsContainer = document.getElementById('modal-labels');
+            labelsContainer.innerHTML = (selectedWidget.labels || [])
+                .map(label => `<span class="label-pill">${label}</span>`)
+                .join('');
+
+            // Preview
+            const previewContainer = document.getElementById('modal-preview');
+            previewContainer.innerHTML = '';
+
+            const iframe = document.createElement('iframe');
+            iframe.sandbox = 'allow-scripts';
+            iframe.style.cssText = 'width: 100%; height: 120px; border: none;';
+            iframe.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body { margin: 0; padding: 0; overflow: hidden; background: transparent; }
+              ${selectedWidget.widget.css}
+            </style>
+          </head>
+          <body>
+            ${selectedWidget.widget.html}
+            <script>${selectedWidget.widget.js}<\/script>
+          </body>
+        </html>
+      `;
+            previewContainer.appendChild(iframe);
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            selectedWidget = null;
+        }
+
+        // Copy widget JSON to clipboard
+        function copyWidgetJson() {
+            if (!selectedWidget) return;
+
+            const json = JSON.stringify(selectedWidget, null, 2);
+            navigator.clipboard.writeText(json).then(() => {
+                const btn = document.getElementById('modal-copy');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        // Download widget as JSON file
+        function downloadWidget() {
+            if (!selectedWidget) return;
+
+            const json = JSON.stringify(selectedWidget, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const filename = `${(selectedWidget.title || 'widget').replace(/[^a-z0-9]/gi, '_').toLowerCase()}.json`;
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Show error message
+        function showError(message) {
+            loadingState.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            emptyState.innerHTML = `
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3 class="text-xl font-semibold mb-2">Error</h3>
+        <p>${message}</p>
+        <button onclick="fetchWidgets()" class="action-btn action-btn-secondary mt-4">
+          <i class="fas fa-refresh mr-2"></i>Retry
+        </button>
+      `;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    searchQuery = e.target.value.trim();
+                    applyFilters();
+                }, 300);
+            });
+
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    applyFilters();
+                });
+            });
+
+            // Modal
+            modalClose.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            modalCopy.addEventListener('click', copyWidgetJson);
+            modalDownload.addEventListener('click', downloadWidget);
+
+            // Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
