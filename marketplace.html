@@ -660,6 +660,13 @@
                 return true;
             });
 
+            // Sort to show featured widgets first
+            filteredWidgets.sort((a, b) => {
+                if (a.is_featured && !b.is_featured) return -1;
+                if (!a.is_featured && b.is_featured) return 1;
+                return 0;
+            });
+
             renderWidgets();
         }
 
