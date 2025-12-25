@@ -628,21 +628,33 @@
         <html>
           <head>
             <style>
-              body {
+              html, body {
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
                 background: transparent;
+                width: 100%;
+                height: 100%;
+              }
+              body {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                min-height: 100%;
+              }
+              .widget-scale-wrapper {
+                transform: scale(0.65);
+                transform-origin: center center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
               }
               ${widget.widget.css}
             </style>
           </head>
           <body>
-            ${widget.widget.html}
+            <div class="widget-scale-wrapper">
+              ${widget.widget.html}
+            </div>
             <script>${widget.widget.js}<\/script>
           </body>
         </html>
