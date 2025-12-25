@@ -619,8 +619,8 @@
             if (!widget) return;
 
             const iframe = document.createElement('iframe');
-            iframe.sandbox = 'allow-scripts';
-            iframe.style.cssText = 'width: 100%; height: 100%; border: none; pointer-events: none;';
+            iframe.sandbox = 'allow-scripts allow-pointer-lock';
+            iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
             iframe.title = `Widget: ${widget.title}`;
 
             iframe.srcdoc = `
