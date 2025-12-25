@@ -279,11 +279,11 @@
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
-            padding: 12px 16px;
+            padding: 8px 12px;
             font-family: 'Courier New', monospace;
             font-size: 13px;
             color: rgba(255, 255, 255, 0.8);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 12px;
             transition: all 0.2s ease;
@@ -295,7 +295,6 @@
         }
 
         .widget-id-display code {
-            flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -483,14 +482,10 @@
                 </div>
 
                 <!-- Widget Info -->
-                <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                <div class="mb-4 text-sm">
                     <div>
                         <span class="text-white/50">Created by:</span>
                         <span id="modal-author" class="ml-2"></span>
-                    </div>
-                    <div>
-                        <span class="text-white/50">Type:</span>
-                        <span id="modal-type" class="ml-2"></span>
                     </div>
                 </div>
 
@@ -498,8 +493,8 @@
                 <div id="modal-labels" class="flex flex-wrap gap-2 mb-4"></div>
 
                 <!-- Widget ID -->
-                <div class="mb-6">
-                    <label class="text-white/50 text-xs uppercase tracking-wide mb-2 block">Widget ID</label>
+                <div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <span class="text-white/50 text-sm font-medium">ID:</span>
                     <div class="widget-id-display">
                         <code id="modal-widget-id"></code>
                     </div>
@@ -804,7 +799,6 @@
             document.getElementById('modal-title').textContent = selectedWidget.title || 'Untitled Widget';
             document.getElementById('modal-description').textContent = selectedWidget.description || 'No description';
             document.getElementById('modal-author').textContent = selectedWidget.created_by || 'Unknown';
-            document.getElementById('modal-type').textContent = selectedWidget.type || 'Widget';
 
             // Labels
             const labelsContainer = document.getElementById('modal-labels');
