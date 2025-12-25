@@ -273,6 +273,111 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Widget ID Display */
+        .widget-id-display {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .widget-id-display:hover {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .widget-id-display code {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Kebab Menu */
+        .kebab-menu-container {
+            position: relative;
+        }
+
+        .kebab-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .kebab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .kebab-dropdown {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 8px;
+            background: rgba(20, 20, 35, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            min-width: 160px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .kebab-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .kebab-dropdown button {
+            width: 100%;
+            padding: 10px 14px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.15s ease;
+        }
+
+        .kebab-dropdown button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .kebab-dropdown button:first-child {
+            border-radius: 7px 7px 0 0;
+        }
+
+        .kebab-dropdown button:last-child {
+            border-radius: 0 0 7px 7px;
+        }
+
+        .kebab-dropdown button i {
+            width: 16px;
+            opacity: 0.6;
+        }
     </style>
 </head>
 
@@ -378,7 +483,7 @@
                 </div>
 
                 <!-- Widget Info -->
-                <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+                <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
                     <div>
                         <span class="text-white/50">Created by:</span>
                         <span id="modal-author" class="ml-2"></span>
@@ -390,16 +495,39 @@
                 </div>
 
                 <!-- Labels -->
-                <div id="modal-labels" class="flex flex-wrap gap-2 mb-6"></div>
+                <div id="modal-labels" class="flex flex-wrap gap-2 mb-4"></div>
+
+                <!-- Widget ID -->
+                <div class="mb-6">
+                    <label class="text-white/50 text-xs uppercase tracking-wide mb-2 block">Widget ID</label>
+                    <div class="widget-id-display">
+                        <code id="modal-widget-id"></code>
+                    </div>
+                </div>
 
                 <!-- Action Buttons -->
-                <div class="flex gap-3">
-                    <button id="modal-copy" class="action-btn action-btn-primary flex-1">
-                        <i class="fas fa-copy mr-2"></i>Copy JSON
+                <div class="flex gap-3 items-center">
+                    <button id="modal-copy-id-main" class="action-btn action-btn-primary flex-1">
+                        <i class="fas fa-copy mr-2"></i>Copy Widget ID
                     </button>
-                    <button id="modal-download" class="action-btn action-btn-secondary flex-1">
-                        <i class="fas fa-download mr-2"></i>Download
-                    </button>
+
+                    <!-- Kebab Menu for Advanced Options -->
+                    <div class="kebab-menu-container">
+                        <button id="kebab-btn" class="kebab-btn" title="More options">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div id="kebab-dropdown" class="kebab-dropdown">
+                            <button id="modal-view-json">
+                                <i class="fas fa-code"></i>View JSON
+                            </button>
+                            <button id="modal-copy-json">
+                                <i class="fas fa-copy"></i>Copy JSON
+                            </button>
+                            <button id="modal-download">
+                                <i class="fas fa-download"></i>Download JSON
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -434,8 +562,9 @@
         const filterBtns = document.querySelectorAll('.filter-btn');
         const modal = document.getElementById('widget-modal');
         const modalClose = document.getElementById('modal-close');
-        const modalCopy = document.getElementById('modal-copy');
         const modalDownload = document.getElementById('modal-download');
+        const kebabBtn = document.getElementById('kebab-btn');
+        const kebabDropdown = document.getElementById('kebab-dropdown');
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -683,6 +812,9 @@
                 .map(label => `<span class="label-pill">${label}</span>`)
                 .join('');
 
+            // Widget ID
+            document.getElementById('modal-widget-id').textContent = selectedWidget.id;
+
             // Preview
             const previewContainer = document.getElementById('modal-preview');
             previewContainer.innerHTML = '';
@@ -724,13 +856,36 @@
 
             const json = JSON.stringify(selectedWidget, null, 2);
             navigator.clipboard.writeText(json).then(() => {
-                const btn = document.getElementById('modal-copy');
+                const btn = document.getElementById('modal-copy-json');
                 const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                btn.innerHTML = '<i class="fas fa-check"></i>Copied!';
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                 }, 2000);
             });
+        }
+
+        // Copy widget ID to clipboard
+        function copyWidgetId(btn) {
+            if (!selectedWidget) return;
+
+            navigator.clipboard.writeText(selectedWidget.id).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        // View JSON in new tab
+        function viewWidgetJson() {
+            if (!selectedWidget) return;
+
+            const json = JSON.stringify(selectedWidget, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
         }
 
         // Download widget as JSON file
@@ -785,18 +940,41 @@
                 });
             });
 
-            // Modal
+            // Modal close
             modalClose.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) closeModal();
             });
-            modalCopy.addEventListener('click', copyWidgetJson);
+
+            // Copy Widget ID button
+            document.getElementById('modal-copy-id-main').addEventListener('click', function () {
+                copyWidgetId(this);
+            });
+
+            // Kebab menu toggle
+            kebabBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                kebabDropdown.classList.toggle('active');
+            });
+
+            // Close kebab menu when clicking outside
+            document.addEventListener('click', () => {
+                kebabDropdown.classList.remove('active');
+            });
+
+            // Kebab menu options
+            document.getElementById('modal-view-json').addEventListener('click', viewWidgetJson);
+            document.getElementById('modal-copy-json').addEventListener('click', copyWidgetJson);
             modalDownload.addEventListener('click', downloadWidget);
 
             // Escape key
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
+                if (e.key === 'Escape') {
+                    if (kebabDropdown.classList.contains('active')) {
+                        kebabDropdown.classList.remove('active');
+                    } else if (modal.classList.contains('active')) {
+                        closeModal();
+                    }
                 }
             });
         }
