@@ -809,29 +809,11 @@
             // Widget ID
             document.getElementById('modal-widget-id').textContent = selectedWidget.id;
 
-            // Preview
+            // Preview - reuse the same function as card grid
             const previewContainer = document.getElementById('modal-preview');
             previewContainer.innerHTML = '';
-
-            const iframe = document.createElement('iframe');
-            iframe.sandbox = 'allow-scripts';
-            iframe.style.cssText = 'width: 100%; height: 120px; border: none;';
-            iframe.srcdoc = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <style>
-              body { margin: 0; padding: 0; overflow: hidden; background: transparent; }
-              ${selectedWidget.widget.css}
-            </style>
-          </head>
-          <body>
-            ${selectedWidget.widget.html}
-            <script>${selectedWidget.widget.js}<\/script>
-          </body>
-        </html>
-      `;
-            previewContainer.appendChild(iframe);
+            previewContainer.classList.remove('loaded');
+            loadWidgetPreview(previewContainer, selectedWidget.id);
 
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
