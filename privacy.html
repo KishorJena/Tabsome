@@ -45,7 +45,7 @@
 <body>
     <div class="container">
         <h1>Tabsome Privacy Policy</h1>
-        <div class="last-updated">Last updated: September 24, 2025</div>
+        <div class="last-updated">Last updated: December 28, 2025</div>
 
         <p>Tabsome transforms your new tab into a customizable dashboard. We design Tabsome to work locally in your browser with minimal data collection. This policy explains what data is handled, why, and how you stay in control.</p>
 
@@ -53,8 +53,8 @@
         <ul>
             <li><strong>No tracking</strong>: We do not track your browsing history or sell your data.</li>
             <li><strong>Sync</strong>: Settings and Speed Dials are stored using <code>chrome.storage.sync</code> to keep them across your devices.</li>
-            <li><strong>Optional features</strong>: Top Sites and Clipboard import/export only run when you enable or use them.</li>
-            <li><strong>AI queries</strong>: Queries you type are sent to the AI API provider to generate responses.</li>
+            <li><strong>Optional features</strong>: Clipboard import/export only run when you enable or use them.</li>
+            <li><strong>AI queries</strong>: When you use the AI feature, your prompt and recent chat context are sent to the AI provider (Mistral) to generate responses. Tabsome does not read or transmit your browsing data.</li>
         </ul>
 
         <h2>What data we store</h2>
@@ -77,7 +77,7 @@
             <li><strong>storage</strong>: Save and sync your preferences and Speed Dials across sessions/devices.</li>
             <li><strong>tabs</strong>: Send live updates (e.g., changed settings or Speed Dials) to open Tabsome New Tab pages by identifying those tabs.</li>
             <li><strong>activeTab</strong>: When you click the popup to add the current site, read the active tab’s URL/title/icon to prefill the form.</li>
-            <li><strong>topSites</strong> (optional): If enabled, show your frequently visited sites on the New Tab page. Requested only when toggled on.</li>
+            <li><strong>alarms</strong>: Schedule periodic background tasks (for example, polling a backend service or checking for updates). This permission does not provide access to browsing history or personal page content.</li>
             <li><strong>clipboardRead / clipboardWrite</strong> (optional): On your explicit action, import/export Speed Dials via the clipboard.</li>
         </ul>
 
@@ -85,7 +85,8 @@
         <ul>
             <li><code>https://api.openweathermap.org/*</code>: Retrieve weather data for the weather widget. May send your chosen city/coordinates.</li>
             <li><code>https://suggestqueries.google.com/*</code>: Fetch search suggestions as you type. Sends your query terms to Google Suggest.</li>
-            <li><strong>AI API</strong>: When you use the AI feature, your prompt and recent chat context are sent to the AI provider to generate a response.</li>
+            <li><code>https://tabsome-backend.vercel.app/*</code>: Serve resources (images, Speed Dials, and widget data) hosted on our backend to keep the extension lightweight. These resources are fetched on demand when needed by the features you use.</li>
+            <li><strong>AI provider (Mistral)</strong>: When you use the AI feature, your prompt and recent chat context are sent to Mistral to generate a response. Tabsome does not read or transmit your browsing history—only the content you explicitly provide via the AI UI is sent to the provider.</li>
         </ul>
         <p>We do not send your browsing history to these services. Requests are limited to the features you use.</p>
 
@@ -93,7 +94,7 @@
         <p>Clipboard access is strictly user-initiated. Tabsome reads from or writes to the clipboard only when you click Import/Export. No background clipboard access occurs.</p>
 
         <h2>Top Sites</h2>
-        <p>If you enable Top Sites, Chrome provides a list of your frequently visited sites via <code>chrome.topSites</code> for display on the New Tab page. Tabsome does not transmit this list to any server.</p>
+        <p>Tabsome no longer includes a Top Sites feature and does not request or use the <code>chrome.topSites</code> permission. We do not access or display your frequently visited sites.</p>
 
         <h2>Remote code and sandboxing</h2>
         <p>Tabsome’s core pages (New Tab, Options, Popup, Service Worker) do not execute remote scripts. An optional Spotlight widget area runs user-provided HTML/CSS/JS inside a browser sandboxed page that is isolated from extension privileges. Sandboxed content cannot access extension APIs or storage.</p>
