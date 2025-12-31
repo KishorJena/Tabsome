@@ -1,0 +1,7 @@
+# robots.txt for Tabsome
+# Allow all crawlers and point them to the sitemap
+
+User-agent: *
+Allow: /
+
+Sitemap: https://tabsome.github.io/sitemap.xml
