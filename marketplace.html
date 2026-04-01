@@ -562,10 +562,9 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // API Configuration - tries local first, then production
+        // API Configuration
         const API_ENDPOINTS = [
-            'https://tabsome-widgets.vercel.app', // Production
-            'http://localhost:3000',           // Local development
+            'https://tabsome-widgets.vercel.app' // Production
         ];
         let currentApiUrl = API_ENDPOINTS[0];
 
@@ -629,12 +628,7 @@
             }
 
             // All endpoints failed
-            showError(`Unable to connect to widget server.<br><br>
-                <span class="text-sm text-white/50">
-                    If testing locally, run the backend:<br>
-                    <code class="bg-black/30 px-2 py-1 rounded">cd tabsome-backend && npm run dev</code><br><br>
-                    If deploying, redeploy the backend to apply CORS headers.
-                </span>`);
+            showError(`Unable to connect to widget server. Please try again later.`);
         }
 
         // Apply filters and search
