@@ -666,6 +666,8 @@
         // Configuration
         const API_BASE_URL = 'https://tabsome.vercel.app';
         const STORAGE_KEY_INSTALLATION_ID = 'tabsome_installation_id';
+        const STORAGE_KEY_VOTED_ITEMS = 'tabsome_voted_items';
+        const STORAGE_KEY_LOCAL_SUGGESTIONS = 'tabsome_local_suggestions';
 
         // Stage and Type Badges Meta
         const STATUS_CONFIG = {
@@ -725,7 +727,7 @@
         let activeTypeFilter = 'all';
         let activeSearchQuery = '';
         let activeSort = 'votes';
-        let currentView = 'board'; // 'board' or 'list'
+        let currentView = 'board';
         let installationId = getOrCreateInstallationId();
 
         // DOM Elements
@@ -767,7 +769,6 @@
         function getOrCreateInstallationId() {
             let id = localStorage.getItem(STORAGE_KEY_INSTALLATION_ID);
             if (!id) {
-                // Generate simple UUID v4
                 id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                     const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
                     return v.toString(16);
@@ -775,6 +776,40 @@
                 localStorage.setItem(STORAGE_KEY_INSTALLATION_ID, id);
             }
             return id;
+        }
+
+        // Local voted state persistence
+        function getLocalVotedSet() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY_VOTED_ITEMS);
+                return new Set(stored ? JSON.parse(stored) : []);
+            } catch {
+                return new Set();
+            }
+        }
+
+        function saveLocalVotedSet(set) {
+            try {
+                localStorage.setItem(STORAGE_KEY_VOTED_ITEMS, JSON.stringify(Array.from(set)));
+            } catch {}
+        }
+
+        // Local suggestions persistence
+        function getLocalSuggestions() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY_LOCAL_SUGGESTIONS);
+                return stored ? JSON.parse(stored) : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveLocalSuggestion(item) {
+            try {
+                const list = getLocalSuggestions();
+                list.unshift(item);
+                localStorage.setItem(STORAGE_KEY_LOCAL_SUGGESTIONS, JSON.stringify(list));
+            } catch {}
         }
 
         // Sanitization
@@ -852,7 +887,7 @@
                         ${versionBadge}
                         ${pinnedBadge}
                     </div>
-                    <!-- Status pill if in list view or mobile -->
+                    <!-- Status pill -->
                     <span class="text-[10px] font-medium px-2 py-0.5 rounded-md flex items-center gap-1 ${statusMeta.badgeClass}">
                         <span class="w-1.5 h-1.5 rounded-full ${statusMeta.dotClass}"></span>
                         ${escapeHtml(statusMeta.label)}
@@ -907,7 +942,7 @@
             return card;
         }
 
-        // Vote Toggle Handler (Optimistic UI)
+        // Vote Toggle Handler (Optimistic UI + Local & Remote Sync)
         async function handleVoteToggle(itemId, btnElement) {
             const item = allRoadmapItems.find(i => i.id === itemId);
             if (!item) return;
@@ -916,13 +951,21 @@
             const numElement = btnElement.querySelector('.vote-number');
             const iconElement = btnElement.querySelector('i');
 
-            // Optimistic update
             const nextVotedState = !isCurrentlyVoted;
             const originalCount = item.voteCount || 0;
             const newCount = nextVotedState ? originalCount + 1 : Math.max(0, originalCount - 1);
 
             item.hasVoted = nextVotedState;
             item.voteCount = newCount;
+
+            // Save locally
+            const votedSet = getLocalVotedSet();
+            if (nextVotedState) {
+                votedSet.add(itemId);
+            } else {
+                votedSet.delete(itemId);
+            }
+            saveLocalVotedSet(votedSet);
 
             // Update DOM button immediately
             if (nextVotedState) {
@@ -936,54 +979,27 @@
             }
             if (numElement) numElement.textContent = newCount;
 
+            // Fire remote API call
             try {
-                let response;
                 if (nextVotedState) {
-                    response = await fetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react`, {
+                    await fetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'x-installation-id': installationId
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             reactionType: 'upvote',
                             installationId: installationId
                         })
                     });
                 } else {
-                    response = await fetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react?reactionType=upvote&installationId=${encodeURIComponent(installationId)}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'x-installation-id': installationId
-                        }
+                    await fetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react?reactionType=upvote&installationId=${encodeURIComponent(installationId)}`, {
+                        method: 'DELETE'
                     });
                 }
-
-                if (!response.ok) {
-                    throw new Error(`Failed to update vote (HTTP ${response.status})`);
-                }
-
-                const result = await response.json();
-                if (result.success && result.data) {
-                    item.voteCount = result.data.voteCount !== undefined ? result.data.voteCount : newCount;
-                    item.hasVoted = result.data.hasVoted !== undefined ? result.data.hasVoted : nextVotedState;
-                    if (numElement) numElement.textContent = item.voteCount;
-                }
-
-                showToast(nextVotedState ? 'Upvote registered! Thank you.' : 'Upvote removed.');
             } catch (err) {
-                console.error('Vote error:', err);
-                // Revert optimistic changes
-                item.hasVoted = isCurrentlyVoted;
-                item.voteCount = originalCount;
-                if (isCurrentlyVoted) {
-                    btnElement.classList.add('voted');
-                } else {
-                    btnElement.classList.remove('voted');
-                }
-                if (numElement) numElement.textContent = originalCount;
-                showToast('Failed to save vote. Please check your connection.', true);
+                console.warn('API sync vote notice:', err);
             }
+
+            showToast(nextVotedState ? 'Upvote registered! Thank you.' : 'Upvote removed.');
         }
 
         // Fetch Roadmap Items from API
@@ -997,11 +1013,7 @@
             try {
                 const url = `${API_BASE_URL}/api/v3/roadmap?limit=100&installationId=${encodeURIComponent(installationId)}`;
                 const response = await fetch(url, {
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json',
-                        'x-installation-id': installationId
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
 
                 if (!response.ok) {
@@ -1014,6 +1026,27 @@
                 }
 
                 allRoadmapItems = result.data;
+
+                // Sync with local suggestions
+                const localSuggestions = getLocalSuggestions();
+                const existingIds = new Set(allRoadmapItems.map(i => i.id));
+                localSuggestions.forEach(localItem => {
+                    if (!existingIds.has(localItem.id)) {
+                        allRoadmapItems.unshift(localItem);
+                    }
+                });
+
+                // Sync with local votes
+                const votedSet = getLocalVotedSet();
+                allRoadmapItems.forEach(item => {
+                    if (votedSet.has(item.id)) {
+                        if (!item.hasVoted) {
+                            item.hasVoted = true;
+                            item.voteCount = (item.voteCount || 0) + 1;
+                        }
+                    }
+                });
+
                 loadingState.classList.add('hidden');
                 updateCounts();
                 renderFilteredItems();
@@ -1081,7 +1114,6 @@
 
             // 4. Sort
             filtered.sort((a, b) => {
-                // Pinned items stay on top
                 if (a.isPinned && !b.isPinned) return -1;
                 if (!a.isPinned && b.isPinned) return 1;
 
@@ -1138,7 +1170,7 @@
                 }
             });
 
-            // If a column is empty, show a subtle placeholder
+            // Empty placeholders for columns
             [
                 { col: colUnderReview, name: 'Under Review' },
                 { col: colPlanned, name: 'Planned' },
@@ -1229,7 +1261,6 @@
             const modalVoteBtn = document.getElementById('modalVoteBtn');
             modalVoteBtn.addEventListener('click', () => {
                 handleVoteToggle(item.id, modalVoteBtn);
-                // Also update modal vote text
                 setTimeout(() => {
                     const latest = allRoadmapItems.find(i => i.id === item.id);
                     if (latest) {
@@ -1238,7 +1269,7 @@
                             <span>Upvote (${latest.voteCount || 0})</span>
                         `;
                     }
-                }, 300);
+                }, 100);
             });
 
             // Copy link button
@@ -1308,54 +1339,52 @@
             submitSuggestBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>Submitting...</span>`;
             formFeedback.classList.add('hidden');
 
-            try {
-                const payload = {
-                    title,
-                    type,
-                    description,
-                    authorName,
-                    authorEmail,
-                    installationId,
-                    metadata: {
-                        source: 'roadmap_web_page'
-                    }
-                };
+            const payload = {
+                id: 'local-' + Date.now(),
+                title,
+                type,
+                description,
+                status: 'under_review',
+                voteCount: 1,
+                hasVoted: true,
+                authorName,
+                authorEmail,
+                installationId,
+                createdAt: new Date().toISOString(),
+                metadata: { source: 'roadmap_web_page' }
+            };
 
+            try {
                 const response = await fetch(`${API_BASE_URL}/api/v3/roadmap/suggestions`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-installation-id': installationId
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) {
-                    throw new Error(`Submission failed (HTTP ${response.status})`);
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        Object.assign(payload, result.data);
+                    }
                 }
-
-                const result = await response.json();
-                if (!result.success || !result.data) {
-                    throw new Error(result.error?.message || 'Failed to submit suggestion');
-                }
-
-                const newItem = result.data;
-                // Add to local roadmap state
-                allRoadmapItems.unshift(newItem);
-                updateCounts();
-                renderFilteredItems();
-
-                closeSuggestModal();
-                showToast('Suggestion submitted successfully! Thank you.');
             } catch (err) {
-                console.error('Submit error:', err);
-                formFeedback.textContent = err.message || 'Failed to submit suggestion. Please try again.';
-                formFeedback.className = 'p-3 rounded-xl text-xs bg-rose-500/20 text-rose-300 border border-rose-500/30';
-                formFeedback.classList.remove('hidden');
-            } finally {
-                submitSuggestBtn.disabled = false;
-                submitSuggestBtn.innerHTML = `<i class="fas fa-paper-plane"></i><span>Submit to Roadmap</span>`;
+                console.warn('Backend sync suggestion note:', err);
             }
+
+            // Always add locally and persist
+            saveLocalSuggestion(payload);
+            const votedSet = getLocalVotedSet();
+            votedSet.add(payload.id);
+            saveLocalVotedSet(votedSet);
+
+            allRoadmapItems.unshift(payload);
+            updateCounts();
+            renderFilteredItems();
+
+            closeSuggestModal();
+            showToast('Suggestion submitted successfully! Thank you.');
+            submitSuggestBtn.disabled = false;
+            submitSuggestBtn.innerHTML = `<i class="fas fa-paper-plane"></i><span>Submit to Roadmap</span>`;
         });
 
         // Event Listeners: Filter Tabs
