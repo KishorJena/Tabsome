@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speed Dials – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="View and access your synced Tabsome speed dials and bookmarks from anywhere on the web.">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="noindex, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+
+    <!-- Tailwind & Fonts & Icons & Supabase Auth -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image: linear-gradient(to right, #ff5757, #8c52ff);
+            min-height: 100vh;
+        }
+
+        .glass-header {
+            background: rgba(55, 71, 79, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(55, 71, 79, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(55, 71, 79, 0.95);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+        }
+
+        .folder-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .folder-card:hover {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+        }
+
+        .breadcrumb-item {
+            transition: all 0.2s ease;
+        }
+
+        .breadcrumb-item:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.25; }
+        }
+
+        .skeleton-pulse {
+            animation: pulse-subtle 1.8s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <header class="fixed w-full glass-header z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
+                <span class="text-2xl font-bold">Tabsome</span>
+            </a>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="index.html#features" class="hover:text-gray-200 transition text-sm">Features</a>
+                <a href="marketplace.html" class="hover:text-gray-200 transition text-sm">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+                <a href="index.html#download"
+                    class="bg-white text-purple-600 font-bold text-sm px-4 sm:px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105 shadow-md">
+                    Get Tabsome
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header / Hero Section -->
+    <section class="pt-28 pb-4 flex-shrink-0">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 mb-2">
+                        <i class="fas fa-th-large text-pink-300"></i>
+                        <span>Synced Speed Dials</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                        My Speed Dials
+                    </h1>
+                </div>
+
+                <!-- Collection Switcher & Search Bar -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div id="collectionSelectorContainer" class="hidden">
+                        <select id="collectionSelect"
+                            class="bg-slate-900/80 border border-white/20 text-white text-xs sm:text-sm font-semibold rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="relative min-w-[200px] sm:min-w-[240px]">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="dialSearchInput" placeholder="Filter dials..."
+                            class="w-full bg-slate-900/60 border border-white/20 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Breadcrumbs Bar -->
+            <div class="pt-4 flex items-center justify-between">
+                <nav id="breadcrumbsContainer" class="flex items-center flex-wrap gap-2 text-xs sm:text-sm font-medium text-gray-300">
+                    <!-- Populated dynamically -->
+                </nav>
+                <div id="itemCountBadge" class="text-xs text-gray-300 font-semibold hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Grid Section -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-6">
+
+        <!-- Unauthenticated Prompt -->
+        <div id="unauthPrompt" class="hidden text-center py-16 px-4">
+            <div class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl">
+                <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-2xl text-yellow-300 mb-5">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3 class="text-2xl font-extrabold text-white mb-2">Sign in to view your Speed Dials</h3>
+                <p class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+                    Connect your Tabsome account to view and access your synced bookmarks, folders, and speed dials from anywhere.
+                </p>
+                <button id="unauthSignInBtn"
+                    class="bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 text-sm">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    </svg>
+                    <span>Sign in with Google</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Skeleton -->
+        <div id="loadingDials" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
+            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
+            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
+            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
+            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyDials" class="hidden text-center py-16">
+            <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-2xl text-gray-300 mb-4">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">No speed dials found</h3>
+            <p class="text-xs sm:text-sm text-gray-300 max-w-sm mx-auto">
+                This folder or collection is currently empty. Add speed dials in your Tabsome browser extension and they will sync here automatically!
+            </p>
+        </div>
+
+        <!-- Dials Grid Container -->
+        <div id="dialsGrid" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+            <!-- Rendered dynamically -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-header py-6 text-center text-xs text-white/70 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>&copy; 2025 Tabsome. All rights reserved.</p>
+            <div class="flex items-center gap-4">
+                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                <a href="support.html" class="hover:text-white transition">Support</a>
+                <a href="roadmap.html" class="hover:text-white transition">Roadmap</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+
+        const API_BASE_URL = 'https://tabsome.vercel.app';
+
+        // State
+        let collectionsList = [];
+        let activeCollectionId = null;
+        let activeCollectionData = null;
+        let allItems = [];
+        let currentFolderId = null;
+        let folderHistory = []; // [{ id: null, title: 'All Dials' }, { id: '...', title: 'Social' }]
+        let searchQuery = '';
+
+        // DOM
+        const unauthPrompt = document.getElementById('unauthPrompt');
+        const unauthSignInBtn = document.getElementById('unauthSignInBtn');
+        const loadingDials = document.getElementById('loadingDials');
+        const emptyDials = document.getElementById('emptyDials');
+        const dialsGrid = document.getElementById('dialsGrid');
+        const collectionSelectorContainer = document.getElementById('collectionSelectorContainer');
+        const collectionSelect = document.getElementById('collectionSelect');
+        const dialSearchInput = document.getElementById('dialSearchInput');
+        const breadcrumbsContainer = document.getElementById('breadcrumbsContainer');
+        const itemCountBadge = document.getElementById('itemCountBadge');
+
+        if (unauthSignInBtn) {
+            unauthSignInBtn.addEventListener('click', () => {
+                if (window.TabsomeAuth) TabsomeAuth.signInWithGoogle();
+            });
+        }
+
+        dialSearchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            renderCurrentView();
+        });
+
+        collectionSelect.addEventListener('change', async (e) => {
+            activeCollectionId = e.target.value;
+            await loadCollectionDetails(activeCollectionId);
+        });
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function extractDomain(urlStr) {
+            if (!urlStr) return '';
+            try {
+                const u = new URL(urlStr);
+                return u.hostname.replace(/^www\./, '');
+            } catch {
+                return urlStr;
+            }
+        }
+
+        // Parse collection items from content field (array or object)
+        function extractItemsFromCollection(collection) {
+            if (!collection) return [];
+            const content = collection.content;
+            if (Array.isArray(content)) return content;
+            if (content && Array.isArray(content.speedDials)) return content.speedDials;
+            if (content && Array.isArray(content.items)) return content.items;
+            return [];
+        }
+
+        // Initialize and check auth
+        async function initSpeedDials() {
+            if (!window.TabsomeAuth) return;
+
+            const user = await TabsomeAuth.getUser();
+            if (!user) {
+                loadingDials.classList.add('hidden');
+                dialsGrid.classList.add('hidden');
+                emptyDials.classList.add('hidden');
+                unauthPrompt.classList.remove('hidden');
+                return;
+            }
+
+            unauthPrompt.classList.add('hidden');
+            loadingDials.classList.remove('hidden');
+
+            try {
+                // 1. Fetch user's collections
+                const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections`);
+                if (res.ok) {
+                    const result = await res.json();
+                    if (result.success && Array.isArray(result.data) && result.data.length > 0) {
+                        collectionsList = result.data;
+                    }
+                }
+            } catch (err) {
+                console.warn('Could not list collections:', err);
+            }
+
+            // 2. Fetch default collection or first collection
+            try {
+                const defaultRes = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections/default`);
+                if (defaultRes.ok) {
+                    const defaultResult = await defaultRes.json();
+                    if (defaultResult.success && defaultResult.data) {
+                        activeCollectionData = defaultResult.data;
+                        activeCollectionId = activeCollectionData.id;
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load default collection:', err);
+            }
+
+            // Populate collection dropdown if multiple collections exist
+            if (collectionsList.length > 1) {
+                collectionSelect.innerHTML = collectionsList.map(c =>
+                    `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Collection')}</option>`
+                ).join('');
+                collectionSelectorContainer.classList.remove('hidden');
+            } else {
+                collectionSelectorContainer.classList.add('hidden');
+            }
+
+            // If we have collection data, extract items
+            if (activeCollectionData) {
+                allItems = extractItemsFromCollection(activeCollectionData);
+            }
+
+            // Reset navigation
+            folderHistory = [{ id: null, title: activeCollectionData?.name || 'All Dials' }];
+            currentFolderId = null;
+
+            loadingDials.classList.add('hidden');
+            renderCurrentView();
+        }
+
+        async function loadCollectionDetails(collectionId) {
+            loadingDials.classList.remove('hidden');
+            dialsGrid.classList.add('hidden');
+            emptyDials.classList.add('hidden');
+
+            try {
+                const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections/${collectionId}`);
+                if (res.ok) {
+                    const result = await res.json();
+                    if (result.success && result.data) {
+                        activeCollectionData = result.data;
+                        allItems = extractItemsFromCollection(activeCollectionData);
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load collection:', err);
+            }
+
+            folderHistory = [{ id: null, title: activeCollectionData?.name || 'All Dials' }];
+            currentFolderId = null;
+
+            loadingDials.classList.add('hidden');
+            renderCurrentView();
+        }
+
+        function renderBreadcrumbs() {
+            if (folderHistory.length <= 1) {
+                breadcrumbsContainer.innerHTML = `
+                    <span class="text-white font-bold flex items-center gap-1.5">
+                        <i class="fas fa-home text-pink-300 text-xs"></i>
+                        <span>${escapeHtml(folderHistory[0].title)}</span>
+                    </span>
+                `;
+                return;
+            }
+
+            let html = '';
+            folderHistory.forEach((f, idx) => {
+                const isLast = idx === folderHistory.length - 1;
+                if (!isLast) {
+                    html += `
+                        <button type="button" class="breadcrumb-item text-gray-300 hover:text-white font-medium flex items-center gap-1 cursor-pointer" data-idx="${idx}">
+                            ${idx === 0 ? '<i class="fas fa-home text-pink-300 text-xs"></i>' : ''}
+                            <span>${escapeHtml(f.title)}</span>
+                        </button>
+                        <span class="text-gray-500 text-xs"><i class="fas fa-chevron-right text-[10px]"></i></span>
+                    `;
+                } else {
+                    html += `
+                        <span class="text-white font-bold">${escapeHtml(f.title)}</span>
+                    `;
+                }
+            });
+
+            breadcrumbsContainer.innerHTML = html;
+
+            breadcrumbsContainer.querySelectorAll('.breadcrumb-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.getAttribute('data-idx'), 10);
+                    folderHistory = folderHistory.slice(0, idx + 1);
+                    currentFolderId = folderHistory[folderHistory.length - 1].id;
+                    renderCurrentView();
+                });
+            });
+        }
+
+        function renderCurrentView() {
+            renderBreadcrumbs();
+
+            // Filter items by current folder level
+            let visibleItems = allItems.filter(item => {
+                const itemFolderId = item.folderId || null;
+                return itemFolderId === currentFolderId;
+            });
+
+            // Apply search query across visible items (or search globally if user typed something)
+            if (searchQuery) {
+                visibleItems = allItems.filter(item => {
+                    const title = (item.title || '').toLowerCase();
+                    const url = (item.url || '').toLowerCase();
+                    return title.includes(searchQuery) || url.includes(searchQuery);
+                });
+            }
+
+            if (visibleItems.length === 0) {
+                dialsGrid.classList.add('hidden');
+                emptyDials.classList.remove('hidden');
+                itemCountBadge.classList.add('hidden');
+                return;
+            }
+
+            emptyDials.classList.add('hidden');
+            dialsGrid.classList.remove('hidden');
+            itemCountBadge.textContent = `${visibleItems.length} dial${visibleItems.length === 1 ? '' : 's'}`;
+            itemCountBadge.classList.remove('hidden');
+
+            dialsGrid.innerHTML = '';
+
+            visibleItems.forEach(item => {
+                const isFolder = item.type === 'folder';
+
+                if (isFolder) {
+                    // Count nested dials in folder
+                    const subItemCount = allItems.filter(i => (i.folderId || null) === item.id).length;
+
+                    const folderEl = document.createElement('div');
+                    folderEl.className = 'folder-card rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer relative group h-36';
+                    folderEl.innerHTML = `
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-300 border border-pink-500/30 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition transform">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-white truncate max-w-full group-hover:text-pink-200 transition">
+                            ${escapeHtml(item.title || 'Folder')}
+                        </h4>
+                        <span class="text-[11px] text-gray-300 mt-0.5">
+                            ${subItemCount} item${subItemCount === 1 ? '' : 's'}
+                        </span>
+                    `;
+
+                    folderEl.addEventListener('click', () => {
+                        currentFolderId = item.id;
+                        folderHistory.push({ id: item.id, title: item.title || 'Folder' });
+                        dialSearchInput.value = '';
+                        searchQuery = '';
+                        renderCurrentView();
+                    });
+
+                    dialsGrid.appendChild(folderEl);
+                } else {
+                    // Speed Dial Link Card
+                    const dialEl = document.createElement('a');
+                    dialEl.href = item.url || '#';
+                    dialEl.target = '_blank';
+                    dialEl.rel = 'noopener noreferrer';
+                    dialEl.className = 'glass-card rounded-2xl p-3.5 flex flex-col justify-between group h-36 relative overflow-hidden';
+
+                    const domain = extractDomain(item.url);
+                    const title = item.title || domain || 'Speed Dial';
+                    const initial = (title[0] || 'D').toUpperCase();
+
+                    let imageHtml = '';
+                    if (item.image && typeof item.image === 'string' && item.image.trim()) {
+                        imageHtml = `<img src="${item.image}" alt="${escapeHtml(title)}" class="w-8 h-8 rounded-lg object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 hidden items-center justify-center text-white font-bold text-sm shadow">${initial}</div>`;
+                    } else {
+                        imageHtml = `<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-sm shadow">${initial}</div>`;
+                    }
+
+                    dialEl.innerHTML = `
+                        <!-- Header with icon and open arrow -->
+                        <div class="flex items-start justify-between gap-2">
+                            ${imageHtml}
+                            <i class="fas fa-arrow-up-right-from-square text-[11px] text-gray-400 group-hover:text-white transition"></i>
+                        </div>
+
+                        <!-- Title and Domain footer -->
+                        <div class="mt-auto pt-2">
+                            <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
+                                ${escapeHtml(title)}
+                            </h4>
+                            <p class="text-[11px] text-gray-400 truncate mt-0.5 font-mono">
+                                ${escapeHtml(domain)}
+                            </p>
+                        </div>
+                    `;
+
+                    dialsGrid.appendChild(dialEl);
+                }
+            });
+        }
+
+        // Init on DOMContentLoaded & Auth State Change
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+                TabsomeAuth.onAuthStateChange(() => {
+                    initSpeedDials();
+                });
+            }
+            initSpeedDials();
+        });
+    </script>
+</body>
+
+</html>

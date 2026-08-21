@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloud Library – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Tabsome Cloud Library - Manage and sync your speed dials, widget collections, and dashboard presets across devices.">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="noindex, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+
+    <!-- Tailwind & Fonts & Icons & Supabase Auth -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image: linear-gradient(to right, #ff5757, #8c52ff);
+            min-height: 100vh;
+        }
+
+        .glass-header {
+            background: rgba(55, 71, 79, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(55, 71, 79, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+        }
+
+        .gradient-badge {
+            background: linear-gradient(135deg, rgba(255, 87, 87, 0.3), rgba(140, 82, 255, 0.3));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <header class="fixed w-full glass-header z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
+                <span class="text-2xl font-bold">Tabsome</span>
+            </a>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="index.html#features" class="hover:text-gray-200 transition text-sm">Features</a>
+                <a href="marketplace.html" class="hover:text-gray-200 transition text-sm">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+                <a href="index.html#download"
+                    class="bg-white text-purple-600 font-bold text-sm px-4 sm:px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105 shadow-md">
+                    Get Tabsome
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center pt-28 pb-16 px-6">
+        <div class="max-w-2xl w-full text-center" data-aos="zoom-in" data-aos-duration="600">
+            <div class="glass-card rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+                <!-- Decorative background glow -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <!-- Icon Badge -->
+                <div class="w-20 h-20 rounded-3xl gradient-badge mx-auto flex items-center justify-center text-3xl text-pink-300 mb-6 shadow-inner">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+
+                <!-- Tag -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-widest text-pink-200 mb-4">
+                    <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+                    <span>Cloud Library</span>
+                </div>
+
+                <!-- Typography Title -->
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4 text-white">
+                    Coming Soon
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-sm sm:text-base text-gray-200/90 leading-relaxed mb-8 max-w-lg mx-auto">
+                    We are crafting a centralized hub to store, organize, and sync your favorite widget presets, wallpapers, and speed dial collections across all your devices.
+                </p>
+
+                <!-- Navigation CTAs -->
+                <div class="flex flex-wrap justify-center items-center gap-3">
+                    <a href="speed-dials.html"
+                        class="bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 text-sm">
+                        <i class="fas fa-th-large text-purple-600"></i>
+                        <span>View Speed Dials</span>
+                    </a>
+                    <a href="roadmap.html"
+                        class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 transition transform hover:scale-105 inline-flex items-center gap-2 text-sm">
+                        <i class="fas fa-compass text-yellow-300"></i>
+                        <span>View Roadmap</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-header py-6 text-center text-xs text-white/70">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>&copy; 2025 Tabsome. All rights reserved.</p>
+            <div class="flex items-center gap-4">
+                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                <a href="support.html" class="hover:text-white transition">Support</a>
+                <a href="roadmap.html" class="hover:text-white transition">Roadmap</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Init Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+            }
+        });
+    </script>
+</body>
+
+</html>

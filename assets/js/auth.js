@@ -239,13 +239,13 @@
                                     <p class="text-[11px] text-gray-300 truncate mt-0.5">${email}</p>
                                 </div>
                                 <div class="py-1">
-                                    <a href="roadmap.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
-                                        <i class="fas fa-map-marked-alt text-purple-400 w-4 text-center"></i>
-                                        <span>Product Roadmap</span>
+                                    <a href="speed-dials.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
+                                        <i class="fas fa-th-large text-purple-400 w-4 text-center"></i>
+                                        <span>Speed Dials</span>
                                     </a>
-                                    <a href="marketplace.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
-                                        <i class="fas fa-store text-pink-400 w-4 text-center"></i>
-                                        <span>Marketplace</span>
+                                    <a href="library.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
+                                        <i class="fas fa-bookmark text-pink-400 w-4 text-center"></i>
+                                        <span>Library</span>
                                     </a>
                                 </div>
                                 <div class="pt-1 border-t border-white/10">
