@@ -8,7 +8,7 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="View and access your synced Tabsome speed dials and bookmarks from anywhere on the web.">
+        content="View and access your synced Tabsome speed dials, bookmarks, and folders from anywhere on the web.">
     <meta name="author" content="Kishor Jena">
     <meta name="robots" content="noindex, follow">
 
@@ -22,7 +22,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/auth.js"></script>
@@ -39,48 +39,70 @@
             min-height: 100vh;
         }
 
+        /* Glassmorphism Header */
         .glass-header {
             background: rgba(55, 71, 79, 0.92);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .glass-card {
-            background: rgba(55, 71, 79, 0.85);
-            backdrop-filter: blur(12px);
+        /* Base Speed Dial Tile */
+        .dial-card {
+            background: rgba(45, 55, 72, 0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .glass-card:hover {
-            background: rgba(55, 71, 79, 0.95);
-            border-color: rgba(255, 255, 255, 0.3);
+        .dial-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.28);
         }
 
+        /* Folder Specific Tile */
         .folder-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .folder-card:hover {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08));
+            border-color: rgba(255, 215, 0, 0.45);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 193, 7, 0.15);
         }
 
-        .breadcrumb-item {
+        /* Breadcrumb items */
+        .breadcrumb-link {
             transition: all 0.2s ease;
         }
 
-        .breadcrumb-item:hover {
+        .breadcrumb-link:hover {
             color: #ffffff;
             text-decoration: underline;
+            text-underline-offset: 3px;
         }
 
+        /* Cover Image zoom on card hover */
+        .cover-img-wrapper img {
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dial-card:hover .cover-img-wrapper img {
+            transform: scale(1.06);
+        }
+
+        /* Skeleton pulse animation */
         @keyframes pulse-subtle {
             0%, 100% { opacity: 0.6; }
             50% { opacity: 0.25; }
@@ -88,6 +110,22 @@
 
         .skeleton-pulse {
             animation: pulse-subtle 1.8s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
     </style>
 </head>
@@ -97,9 +135,9 @@
     <!-- Navbar -->
     <header class="fixed w-full glass-header z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-3">
-                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
-                <span class="text-2xl font-bold">Tabsome</span>
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8 group-hover:scale-105 transition transform">
+                <span class="text-2xl font-bold tracking-tight">Tabsome</span>
             </a>
             <nav class="space-x-8 hidden md:flex items-center">
                 <a href="index.html#features" class="hover:text-gray-200 transition text-sm">Features</a>
@@ -117,43 +155,67 @@
         </div>
     </header>
 
-    <!-- Header / Hero Section -->
+    <!-- Header & Dashboard Controls -->
     <section class="pt-28 pb-4 flex-shrink-0">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 mb-2">
                         <i class="fas fa-th-large text-pink-300"></i>
                         <span>Synced Speed Dials</span>
                     </div>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-                        My Speed Dials
+                    <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
+                        <span>Speed Dials</span>
+                        <span id="collectionBadge" class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-white/15 border border-white/20 text-gray-200"></span>
                     </h1>
                 </div>
 
                 <!-- Collection Switcher & Search Bar -->
                 <div class="flex flex-wrap items-center gap-3">
+                    <!-- Collection Selector -->
                     <div id="collectionSelectorContainer" class="hidden">
-                        <select id="collectionSelect"
-                            class="bg-slate-900/80 border border-white/20 text-white text-xs sm:text-sm font-semibold rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400">
-                            <!-- Populated dynamically -->
-                        </select>
+                        <div class="relative">
+                            <i class="fas fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300 text-xs pointer-events-none"></i>
+                            <select id="collectionSelect"
+                                class="bg-slate-900/80 hover:bg-slate-900 border border-white/20 text-white text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400 appearance-none cursor-pointer transition">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
+                        </div>
                     </div>
 
-                    <div class="relative min-w-[200px] sm:min-w-[240px]">
+                    <!-- Search Input -->
+                    <div class="relative min-w-[220px] sm:min-w-[280px]">
                         <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="text" id="dialSearchInput" placeholder="Filter dials..."
-                            class="w-full bg-slate-900/60 border border-white/20 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400" />
+                        <input type="text" id="dialSearchInput" placeholder="Search speed dials or folders..."
+                            class="w-full bg-slate-900/60 hover:bg-slate-900/80 border border-white/20 rounded-xl pl-9 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
+                        <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Breadcrumbs Bar -->
-            <div class="pt-4 flex items-center justify-between">
-                <nav id="breadcrumbsContainer" class="flex items-center flex-wrap gap-2 text-xs sm:text-sm font-medium text-gray-300">
-                    <!-- Populated dynamically -->
-                </nav>
-                <div id="itemCountBadge" class="text-xs text-gray-300 font-semibold hidden"></div>
+            <!-- Breadcrumbs Bar & Stats -->
+            <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <!-- Back Button when inside a subfolder -->
+                    <button id="backFolderBtn" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-semibold text-white transition transform active:scale-95 cursor-pointer">
+                        <i class="fas fa-arrow-left text-[11px] text-pink-300"></i>
+                        <span>Back</span>
+                    </button>
+
+                    <!-- Breadcrumbs Trail -->
+                    <nav id="breadcrumbsContainer" class="flex items-center flex-wrap gap-2 text-xs sm:text-sm font-medium text-gray-300">
+                        <!-- Populated dynamically -->
+                    </nav>
+                </div>
+
+                <!-- Stats Badges -->
+                <div class="flex items-center gap-2">
+                    <span id="searchResultNote" class="text-xs text-yellow-200 font-medium hidden"></span>
+                    <div id="itemCountBadge" class="text-xs text-gray-300 font-semibold px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 hidden"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -163,8 +225,8 @@
 
         <!-- Unauthenticated Prompt -->
         <div id="unauthPrompt" class="hidden text-center py-16 px-4">
-            <div class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl">
-                <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-2xl text-yellow-300 mb-5">
+            <div class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl border border-white/20 bg-slate-900/80 backdrop-blur-xl">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 border border-pink-400/30 mx-auto flex items-center justify-center text-2xl text-pink-300 mb-5 shadow-inner">
                     <i class="fas fa-lock"></i>
                 </div>
                 <h3 class="text-2xl font-extrabold text-white mb-2">Sign in to view your Speed Dials</h3>
@@ -172,7 +234,7 @@
                     Connect your Tabsome account to view and access your synced bookmarks, folders, and speed dials from anywhere.
                 </p>
                 <button id="unauthSignInBtn"
-                    class="bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 text-sm">
+                    class="w-full justify-center bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-[1.02] shadow-lg inline-flex items-center gap-3 text-sm cursor-pointer">
                     <svg class="w-4 h-4" viewBox="0 0 24 24">
                         <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -185,40 +247,128 @@
         </div>
 
         <!-- Loading Skeleton -->
-        <div id="loadingDials" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
-            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
-            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
-            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
-            <div class="glass-card rounded-2xl p-4 skeleton-pulse h-36"></div>
+        <div id="loadingDials" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
+            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
+            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
+            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
+            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
+            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
+            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
         </div>
 
         <!-- Empty State -->
-        <div id="emptyDials" class="hidden text-center py-16">
-            <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-2xl text-gray-300 mb-4">
-                <i class="fas fa-folder-open"></i>
+        <div id="emptyDials" class="hidden text-center py-20 px-4">
+            <div class="w-20 h-20 rounded-3xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-3xl text-gray-300 mb-4 shadow-inner">
+                <i class="fas fa-folder-open text-pink-300"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-2">No speed dials found</h3>
-            <p class="text-xs sm:text-sm text-gray-300 max-w-sm mx-auto">
+            <h3 id="emptyTitle" class="text-xl font-bold text-white mb-2">No speed dials found</h3>
+            <p id="emptyDescription" class="text-xs sm:text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
                 This folder or collection is currently empty. Add speed dials in your Tabsome browser extension and they will sync here automatically!
             </p>
         </div>
 
         <!-- Dials Grid Container -->
-        <div id="dialsGrid" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div id="dialsGrid" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
             <!-- Rendered dynamically -->
         </div>
 
     </main>
 
+    <!-- Floating Debug Button -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <button id="toggleDebugBtn"
+            class="bg-slate-900/90 hover:bg-slate-900 border border-white/20 text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-2 transition transform hover:scale-105 active:scale-95 cursor-pointer">
+            <i class="fas fa-bug text-pink-400"></i>
+            <span>Debug Info</span>
+            <span id="debugCountBadge" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </button>
+    </div>
+
+    <!-- Debug Modal / Panel Drawer -->
+    <div id="debugModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-white/20 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-slate-950/60">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 flex items-center justify-center text-xs">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Speed Dials Debugger & State Inspector</h3>
+                        <p class="text-[11px] text-gray-400">Live API response, auth session, and data extraction state</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="refreshDataBtn" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+                        <i class="fas fa-rotate text-xs text-pink-300"></i>
+                        <span>Re-fetch</span>
+                    </button>
+                    <button id="closeDebugBtn" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center text-xs transition cursor-pointer">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div class="p-4 overflow-y-auto space-y-4 text-xs font-mono">
+                <!-- Status Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
+                        <span class="text-[10px] text-gray-400 block uppercase font-sans">Auth Status</span>
+                        <span id="debugAuthStatus" class="font-bold text-yellow-300 text-xs">Checking...</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
+                        <span class="text-[10px] text-gray-400 block uppercase font-sans">API Endpoint</span>
+                        <span id="debugApiUrl" class="font-bold text-gray-200 text-[11px] truncate block" title="">-</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
+                        <span class="text-[10px] text-gray-400 block uppercase font-sans">Active Collection</span>
+                        <span id="debugActiveCol" class="font-bold text-pink-300 text-xs truncate block">-</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
+                        <span class="text-[10px] text-gray-400 block uppercase font-sans">Extracted Items</span>
+                        <span id="debugItemsCount" class="font-bold text-emerald-300 text-xs">0 items</span>
+                    </div>
+                </div>
+
+                <!-- Event Logs Stream -->
+                <div class="bg-slate-950/90 rounded-xl border border-white/10 p-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-2">
+                        <span class="text-[11px] font-sans font-bold text-gray-300 flex items-center gap-1.5">
+                            <i class="fas fa-list-ul text-pink-400 text-xs"></i>
+                            <span>Activity & API Logs</span>
+                        </span>
+                        <button id="clearLogsBtn" class="text-[10px] text-gray-400 hover:text-white underline">Clear</button>
+                    </div>
+                    <div id="debugLogContainer" class="space-y-1 max-h-36 overflow-y-auto text-[11px] font-mono text-gray-300 select-text">
+                        <!-- Dynamic logs -->
+                    </div>
+                </div>
+
+                <!-- Raw JSON Inspection Area -->
+                <div class="bg-slate-950/90 rounded-xl border border-white/10 p-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-white/10 mb-2">
+                        <span class="text-[11px] font-sans font-bold text-gray-300 flex items-center gap-1.5">
+                            <i class="fas fa-code text-indigo-400 text-xs"></i>
+                            <span>Raw Collection Data Payload</span>
+                        </span>
+                        <button id="copyJsonBtn" class="text-[10px] text-gray-400 hover:text-white underline">Copy JSON</button>
+                    </div>
+                    <pre id="debugRawJson" class="max-h-48 overflow-y-auto text-[11px] text-gray-300 bg-black/40 p-2.5 rounded-lg select-text overflow-x-auto leading-tight"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="glass-header py-6 text-center text-xs text-white/70 mt-auto">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-3">
             <p>&copy; 2025 Tabsome. All rights reserved.</p>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-5">
                 <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
                 <a href="support.html" class="hover:text-white transition">Support</a>
                 <a href="roadmap.html" class="hover:text-white transition">Roadmap</a>
+                <a href="marketplace.html" class="hover:text-white transition">Marketplace</a>
             </div>
         </div>
     </footer>
@@ -236,36 +386,104 @@
         let activeCollectionData = null;
         let allItems = [];
         let currentFolderId = null;
-        let folderHistory = []; // [{ id: null, title: 'All Dials' }, { id: '...', title: 'Social' }]
+        let folderHistory = []; // [{ id: null, name: 'Main Collection' }, { id: 'folder_uuid', name: 'Work' }]
         let searchQuery = '';
+        let debugLogs = [];
+        let isFetchingDials = false;
+        let initialLoadCompleted = false;
+        let currentAuthUserId = null;
 
-        // DOM
+        // DOM Elements
         const unauthPrompt = document.getElementById('unauthPrompt');
         const unauthSignInBtn = document.getElementById('unauthSignInBtn');
         const loadingDials = document.getElementById('loadingDials');
         const emptyDials = document.getElementById('emptyDials');
+        const emptyTitle = document.getElementById('emptyTitle');
+        const emptyDescription = document.getElementById('emptyDescription');
         const dialsGrid = document.getElementById('dialsGrid');
         const collectionSelectorContainer = document.getElementById('collectionSelectorContainer');
         const collectionSelect = document.getElementById('collectionSelect');
+        const collectionBadge = document.getElementById('collectionBadge');
         const dialSearchInput = document.getElementById('dialSearchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
         const breadcrumbsContainer = document.getElementById('breadcrumbsContainer');
+        const backFolderBtn = document.getElementById('backFolderBtn');
         const itemCountBadge = document.getElementById('itemCountBadge');
+        const searchResultNote = document.getElementById('searchResultNote');
 
-        if (unauthSignInBtn) {
-            unauthSignInBtn.addEventListener('click', () => {
-                if (window.TabsomeAuth) TabsomeAuth.signInWithGoogle();
-            });
+        // Debug DOM Elements
+        const toggleDebugBtn = document.getElementById('toggleDebugBtn');
+        const debugModal = document.getElementById('debugModal');
+        const closeDebugBtn = document.getElementById('closeDebugBtn');
+        const refreshDataBtn = document.getElementById('refreshDataBtn');
+        const clearLogsBtn = document.getElementById('clearLogsBtn');
+        const copyJsonBtn = document.getElementById('copyJsonBtn');
+        const debugAuthStatus = document.getElementById('debugAuthStatus');
+        const debugApiUrl = document.getElementById('debugApiUrl');
+        const debugActiveCol = document.getElementById('debugActiveCol');
+        const debugItemsCount = document.getElementById('debugItemsCount');
+        const debugLogContainer = document.getElementById('debugLogContainer');
+        const debugRawJson = document.getElementById('debugRawJson');
+        const debugCountBadge = document.getElementById('debugCountBadge');
+
+        // Debug Logger
+        function logDebug(type, message, data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = { timestamp, type, message, data };
+            debugLogs.unshift(logEntry);
+
+            console.log(`[SpeedDials ${type.toUpperCase()}] ${message}`, data || '');
+
+            if (debugLogContainer) {
+                const colorClass = type === 'error' ? 'text-rose-400' :
+                                   type === 'warn' ? 'text-amber-400' :
+                                   type === 'success' ? 'text-emerald-400' : 'text-cyan-300';
+                
+                const itemEl = document.createElement('div');
+                itemEl.className = 'py-0.5 border-b border-white/5 font-mono';
+                itemEl.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> <span class="${colorClass} font-bold">${escapeHtml(type.toUpperCase())}:</span> ${escapeHtml(message)}`;
+                debugLogContainer.prepend(itemEl);
+            }
         }
 
-        dialSearchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value.toLowerCase().trim();
-            renderCurrentView();
-        });
+        function updateDebugUI() {
+            if (debugApiUrl) {
+                debugApiUrl.textContent = API_BASE_URL;
+                debugApiUrl.title = API_BASE_URL;
+            }
+            if (debugActiveCol) {
+                debugActiveCol.textContent = activeCollectionData ? (activeCollectionData.name || activeCollectionData.id) : 'None';
+            }
+            if (debugItemsCount) {
+                const rootCount = allItems.filter(i => (i.parentId || null) === null).length;
+                debugItemsCount.textContent = `${allItems.length} total (${rootCount} root)`;
+            }
+            if (debugRawJson) {
+                debugRawJson.textContent = activeCollectionData ? JSON.stringify(activeCollectionData, null, 2) : '// No active collection loaded yet';
+            }
+        }
 
-        collectionSelect.addEventListener('change', async (e) => {
-            activeCollectionId = e.target.value;
-            await loadCollectionDetails(activeCollectionId);
-        });
+        // Color palettes for initials & fallbacks
+        const GRADIENT_PALETTES = [
+            'from-purple-600 to-indigo-600',
+            'from-pink-600 to-rose-600',
+            'from-blue-600 to-cyan-600',
+            'from-emerald-600 to-teal-600',
+            'from-amber-600 to-orange-600',
+            'from-violet-600 to-fuchsia-600',
+            'from-rose-600 to-orange-500',
+            'from-teal-600 to-emerald-500'
+        ];
+
+        function getDeterministicGradient(str) {
+            if (!str) return GRADIENT_PALETTES[0];
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % GRADIENT_PALETTES.length;
+            return GRADIENT_PALETTES[index];
+        }
 
         function escapeHtml(str) {
             if (!str) return '';
@@ -287,143 +505,401 @@
             }
         }
 
-        // Parse collection items from content field (array or object)
-        function extractItemsFromCollection(collection) {
-            if (!collection) return [];
-            const content = collection.content;
-            if (Array.isArray(content)) return content;
-            if (content && Array.isArray(content.speedDials)) return content.speedDials;
-            if (content && Array.isArray(content.items)) return content.items;
-            return [];
+        function getInitials(name) {
+            if (!name) return 'SD';
+            const clean = name.trim();
+            const words = clean.split(/\s+/);
+            if (words.length >= 2) {
+                return (words[0][0] + words[1][0]).toUpperCase();
+            }
+            return clean.substring(0, 2).toUpperCase();
         }
 
-        // Initialize and check auth
-        async function initSpeedDials() {
-            if (!window.TabsomeAuth) return;
+        // Resilient Helper to extract and normalize items from API payload
+        function extractItemsFromCollection(collection) {
+            if (!collection) {
+                logDebug('warn', 'extractItemsFromCollection received empty collection');
+                return [];
+            }
 
-            const user = await TabsomeAuth.getUser();
-            if (!user) {
-                loadingDials.classList.add('hidden');
-                dialsGrid.classList.add('hidden');
-                emptyDials.classList.add('hidden');
-                unauthPrompt.classList.remove('hidden');
+            let rawList = null;
+
+            if (Array.isArray(collection)) {
+                rawList = collection;
+            } else if (Array.isArray(collection.content)) {
+                rawList = collection.content;
+            } else if (typeof collection.content === 'string') {
+                try {
+                    const parsed = JSON.parse(collection.content);
+                    if (Array.isArray(parsed)) rawList = parsed;
+                    else if (parsed && Array.isArray(parsed.speedDials)) rawList = parsed.speedDials;
+                    else if (parsed && Array.isArray(parsed.items)) rawList = parsed.items;
+                } catch (e) {
+                    logDebug('error', 'Failed to JSON.parse collection.content string', e);
+                }
+            } else if (collection.content && typeof collection.content === 'object') {
+                if (Array.isArray(collection.content.speedDials)) rawList = collection.content.speedDials;
+                else if (Array.isArray(collection.content.items)) rawList = collection.content.items;
+                else if (Array.isArray(collection.content.links)) rawList = collection.content.links;
+            } else if (Array.isArray(collection.speedDials)) {
+                rawList = collection.speedDials;
+            } else if (Array.isArray(collection.items)) {
+                rawList = collection.items;
+            } else if (Array.isArray(collection.data)) {
+                rawList = collection.data;
+            }
+
+            if (!rawList || !Array.isArray(rawList)) {
+                logDebug('warn', 'No array items could be extracted from collection payload', collection);
+                return [];
+            }
+
+            // Normalize fields across items
+            const normalized = rawList.map((item, idx) => {
+                const isFolder = item.type === 'folder' || Boolean(item.isFolder);
+                const rawParentId = item.parentId !== undefined ? item.parentId : (item.folderId !== undefined ? item.folderId : (item.parent_id || null));
+                const cleanParentId = (!rawParentId || rawParentId === 'root' || rawParentId === '') ? null : String(rawParentId);
+
+                return {
+                    id: String(item.id || item._id || `item_${idx}`),
+                    type: isFolder ? 'folder' : 'link',
+                    name: item.name || item.title || item.label || (isFolder ? 'Untitled Folder' : 'Untitled Bookmark'),
+                    url: item.url || item.link || item.href || '',
+                    parentId: cleanParentId,
+                    image: item.image || item.icon || item.favicon || item.imageUrl || null,
+                    thumbnailType: (item.thumbnailType || item.thumbnail_type || (item.image ? 'cover' : 'custom')).toLowerCase(),
+                    imageType: item.imageType || item.image_type || 'cloud',
+                    bgColor: item.bgColor || item.bg_color || item.color || null,
+                    isSystem: Boolean(item.isSystem)
+                };
+            });
+
+            logDebug('success', `Extracted ${normalized.length} items (${normalized.filter(i => i.type === 'folder').length} folders, ${normalized.filter(i => i.type === 'link').length} links)`);
+            return normalized;
+        }
+
+        // Debug Modal Event Listeners
+        if (toggleDebugBtn) {
+            toggleDebugBtn.addEventListener('click', () => {
+                debugModal.classList.remove('hidden');
+                updateDebugUI();
+            });
+        }
+        if (closeDebugBtn) {
+            closeDebugBtn.addEventListener('click', () => {
+                debugModal.classList.add('hidden');
+            });
+        }
+        if (debugModal) {
+            debugModal.addEventListener('click', (e) => {
+                if (e.target === debugModal) debugModal.classList.add('hidden');
+            });
+        }
+        if (refreshDataBtn) {
+            refreshDataBtn.addEventListener('click', async () => {
+                logDebug('info', 'Manual refresh triggered');
+                await initSpeedDials();
+            });
+        }
+        if (clearLogsBtn) {
+            clearLogsBtn.addEventListener('click', () => {
+                debugLogs = [];
+                if (debugLogContainer) debugLogContainer.innerHTML = '';
+            });
+        }
+        if (copyJsonBtn) {
+            copyJsonBtn.addEventListener('click', () => {
+                if (activeCollectionData) {
+                    navigator.clipboard.writeText(JSON.stringify(activeCollectionData, null, 2))
+                        .then(() => alert('Collection JSON copied to clipboard!'))
+                        .catch(err => alert('Failed to copy: ' + err));
+                }
+            });
+        }
+
+        // Search and Input Event Listeners
+        if (unauthSignInBtn) {
+            unauthSignInBtn.addEventListener('click', () => {
+                if (window.TabsomeAuth) TabsomeAuth.signInWithGoogle();
+            });
+        }
+
+        dialSearchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            if (searchQuery) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderCurrentView();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            dialSearchInput.value = '';
+            searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            renderCurrentView();
+            dialSearchInput.focus();
+        });
+
+        collectionSelect.addEventListener('change', async (e) => {
+            activeCollectionId = e.target.value;
+            logDebug('info', `Collection switched to: ${activeCollectionId}`);
+            await loadCollectionDetails(activeCollectionId);
+        });
+
+        backFolderBtn.addEventListener('click', () => {
+            if (folderHistory.length > 1) {
+                folderHistory.pop();
+                const parent = folderHistory[folderHistory.length - 1];
+                currentFolderId = parent.id;
+                logDebug('info', `Navigated back to: ${parent.name} (id: ${parent.id})`);
+                renderCurrentView();
+            }
+        });
+
+        // Keyboard navigation: Escape / Backspace navigates back
+        window.addEventListener('keydown', (e) => {
+            if (document.activeElement === dialSearchInput) {
+                if (e.key === 'Escape') {
+                    dialSearchInput.value = '';
+                    searchQuery = '';
+                    clearSearchBtn.classList.add('hidden');
+                    renderCurrentView();
+                }
                 return;
             }
+            if ((e.key === 'Backspace' || e.key === 'Escape') && folderHistory.length > 1) {
+                e.preventDefault();
+                folderHistory.pop();
+                const parent = folderHistory[folderHistory.length - 1];
+                currentFolderId = parent.id;
+                renderCurrentView();
+            }
+        });
 
-            unauthPrompt.classList.add('hidden');
-            loadingDials.classList.remove('hidden');
+        // Initialize and check auth
+        async function initSpeedDials(force = false) {
+            if (isFetchingDials) {
+                logDebug('info', 'initSpeedDials skipped: fetch already in progress');
+                return;
+            }
+            isFetchingDials = true;
+            logDebug('info', 'initSpeedDials() started');
 
             try {
-                // 1. Fetch user's collections
-                const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections`);
-                if (res.ok) {
-                    const result = await res.json();
-                    if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-                        collectionsList = result.data;
-                    }
+                if (!window.TabsomeAuth) {
+                    logDebug('error', 'TabsomeAuth SDK is missing on window');
+                    return;
                 }
-            } catch (err) {
-                console.warn('Could not list collections:', err);
-            }
 
-            // 2. Fetch default collection or first collection
-            try {
-                const defaultRes = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections/default`);
-                if (defaultRes.ok) {
-                    const defaultResult = await defaultRes.json();
-                    if (defaultResult.success && defaultResult.data) {
-                        activeCollectionData = defaultResult.data;
-                        activeCollectionId = activeCollectionData.id;
-                    }
+                const user = await TabsomeAuth.getUser();
+                currentAuthUserId = user ? user.id : null;
+
+                if (debugAuthStatus) {
+                    debugAuthStatus.textContent = user ? `Logged in (${user.email || user.id.substring(0, 8)})` : 'Unauthenticated';
+                    debugAuthStatus.className = user ? 'font-bold text-emerald-400 text-xs' : 'font-bold text-rose-400 text-xs';
                 }
-            } catch (err) {
-                console.error('Failed to load default collection:', err);
-            }
 
-            // Populate collection dropdown if multiple collections exist
+                if (!user) {
+                    logDebug('warn', 'No user logged in. Showing auth prompt.');
+                    loadingDials.classList.add('hidden');
+                    dialsGrid.classList.add('hidden');
+                    emptyDials.classList.add('hidden');
+                    collectionSelectorContainer.classList.add('hidden');
+                    collectionBadge.classList.add('hidden');
+                    breadcrumbsContainer.innerHTML = '';
+                    itemCountBadge.classList.add('hidden');
+                    backFolderBtn.classList.add('hidden');
+                    unauthPrompt.classList.remove('hidden');
+                    updateDebugUI();
+                    return;
+                }
+
+                logDebug('success', `User authenticated: ${user.email || user.id}`);
+                unauthPrompt.classList.add('hidden');
+                loadingDials.classList.remove('hidden');
+                dialsGrid.classList.add('hidden');
+                emptyDials.classList.add('hidden');
+
+                try {
+                    // 1. Fetch user's collections list
+                    logDebug('info', `Fetching collections list from ${API_BASE_URL}/api/v3/users/me/collections`);
+                    const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections`);
+                    logDebug('info', `Collections list response status: ${res.status}`);
+                    
+                    if (res.ok) {
+                        const result = await res.json();
+                        logDebug('info', 'Collections list response payload:', result);
+                        if (result.success && Array.isArray(result.data) && result.data.length > 0) {
+                            collectionsList = result.data;
+                            logDebug('success', `Found ${collectionsList.length} collection(s) in list`);
+                        }
+                    } else {
+                        const errText = await res.text();
+                        logDebug('warn', `Collections list HTTP error ${res.status}: ${errText}`);
+                    }
+                } catch (err) {
+                    logDebug('error', 'Exception fetching collections list:', err);
+                }
+
+                // 2. Fetch default collection or first collection details
+                try {
+                    logDebug('info', `Fetching default collection from ${API_BASE_URL}/api/v3/users/me/collections/default`);
+                    const defaultRes = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections/default`);
+                    logDebug('info', `Default collection status: ${defaultRes.status}`);
+
+                    if (defaultRes.ok) {
+                        const defaultResult = await defaultRes.json();
+                        logDebug('info', 'Default collection response payload:', defaultResult);
+                        if (defaultResult.success && defaultResult.data) {
+                            activeCollectionData = defaultResult.data;
+                            activeCollectionId = activeCollectionData.id;
+                            logDebug('success', `Loaded default collection: "${activeCollectionData.name}" (id: ${activeCollectionId})`);
+                        }
+                    } else if (collectionsList.length > 0) {
+                        // Fallback to first collection in list
+                        activeCollectionId = collectionsList[0].id;
+                        logDebug('info', `Default collection endpoint failed (${defaultRes.status}). Falling back to first collection: ${activeCollectionId}`);
+                        await loadCollectionDetails(activeCollectionId);
+                        return;
+                    } else {
+                        const errText = await defaultRes.text();
+                        logDebug('warn', `Default collection HTTP error ${defaultRes.status}: ${errText}`);
+                    }
+                } catch (err) {
+                    logDebug('error', 'Exception loading default collection:', err);
+                }
+
+                setupCollectionSelector();
+
+                if (activeCollectionData) {
+                    allItems = extractItemsFromCollection(activeCollectionData);
+                } else {
+                    allItems = [];
+                    logDebug('warn', 'activeCollectionData is null after fetch attempts');
+                }
+
+                // Reset navigation stack to root
+                folderHistory = [{ id: null, name: activeCollectionData?.name || 'All Dials' }];
+                currentFolderId = null;
+
+                updateDebugUI();
+                loadingDials.classList.add('hidden');
+                renderCurrentView();
+                initialLoadCompleted = true;
+            } finally {
+                isFetchingDials = false;
+            }
+        }
+
+        function setupCollectionSelector() {
             if (collectionsList.length > 1) {
                 collectionSelect.innerHTML = collectionsList.map(c =>
                     `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Collection')}</option>`
                 ).join('');
                 collectionSelectorContainer.classList.remove('hidden');
+                collectionBadge.classList.add('hidden');
+            } else if (activeCollectionData) {
+                collectionSelectorContainer.classList.add('hidden');
+                collectionBadge.textContent = activeCollectionData.name || 'Personal Collection';
+                collectionBadge.classList.remove('hidden');
             } else {
                 collectionSelectorContainer.classList.add('hidden');
+                collectionBadge.classList.add('hidden');
             }
-
-            // If we have collection data, extract items
-            if (activeCollectionData) {
-                allItems = extractItemsFromCollection(activeCollectionData);
-            }
-
-            // Reset navigation
-            folderHistory = [{ id: null, title: activeCollectionData?.name || 'All Dials' }];
-            currentFolderId = null;
-
-            loadingDials.classList.add('hidden');
-            renderCurrentView();
         }
 
         async function loadCollectionDetails(collectionId) {
+            logDebug('info', `loadCollectionDetails(${collectionId}) initiated`);
             loadingDials.classList.remove('hidden');
             dialsGrid.classList.add('hidden');
             emptyDials.classList.add('hidden');
 
             try {
                 const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections/${collectionId}`);
+                logDebug('info', `Collection detail HTTP status: ${res.status}`);
                 if (res.ok) {
                     const result = await res.json();
+                    logDebug('info', 'Collection detail payload:', result);
                     if (result.success && result.data) {
                         activeCollectionData = result.data;
                         allItems = extractItemsFromCollection(activeCollectionData);
+                        logDebug('success', `Successfully loaded collection "${activeCollectionData.name}" with ${allItems.length} items`);
                     }
+                } else {
+                    const errText = await res.text();
+                    logDebug('error', `Failed to load collection ${collectionId}: ${errText}`);
                 }
             } catch (err) {
-                console.error('Failed to load collection:', err);
+                logDebug('error', 'Exception loading collection:', err);
             }
 
-            folderHistory = [{ id: null, title: activeCollectionData?.name || 'All Dials' }];
+            folderHistory = [{ id: null, name: activeCollectionData?.name || 'All Dials' }];
             currentFolderId = null;
+            searchQuery = '';
+            dialSearchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
 
+            updateDebugUI();
             loadingDials.classList.add('hidden');
             renderCurrentView();
         }
 
         function renderBreadcrumbs() {
+            if (searchQuery) {
+                breadcrumbsContainer.innerHTML = `
+                    <span class="text-white font-bold flex items-center gap-1.5">
+                        <i class="fas fa-search text-pink-300 text-xs"></i>
+                        <span>Search Results for "${escapeHtml(searchQuery)}"</span>
+                    </span>
+                `;
+                backFolderBtn.classList.add('hidden');
+                return;
+            }
+
             if (folderHistory.length <= 1) {
                 breadcrumbsContainer.innerHTML = `
                     <span class="text-white font-bold flex items-center gap-1.5">
                         <i class="fas fa-home text-pink-300 text-xs"></i>
-                        <span>${escapeHtml(folderHistory[0].title)}</span>
+                        <span>${escapeHtml(folderHistory[0].name)}</span>
                     </span>
                 `;
+                backFolderBtn.classList.add('hidden');
                 return;
             }
+
+            backFolderBtn.classList.remove('hidden');
 
             let html = '';
             folderHistory.forEach((f, idx) => {
                 const isLast = idx === folderHistory.length - 1;
                 if (!isLast) {
                     html += `
-                        <button type="button" class="breadcrumb-item text-gray-300 hover:text-white font-medium flex items-center gap-1 cursor-pointer" data-idx="${idx}">
-                            ${idx === 0 ? '<i class="fas fa-home text-pink-300 text-xs"></i>' : ''}
-                            <span>${escapeHtml(f.title)}</span>
+                        <button type="button" class="breadcrumb-link text-gray-300 hover:text-white font-medium flex items-center gap-1.5 cursor-pointer" data-idx="${idx}">
+                            ${idx === 0 ? '<i class="fas fa-home text-pink-300 text-xs"></i>' : '<i class="fas fa-folder text-amber-300 text-xs"></i>'}
+                            <span>${escapeHtml(f.name)}</span>
                         </button>
-                        <span class="text-gray-500 text-xs"><i class="fas fa-chevron-right text-[10px]"></i></span>
+                        <span class="text-white/40 text-xs"><i class="fas fa-chevron-right text-[10px]"></i></span>
                     `;
                 } else {
                     html += `
-                        <span class="text-white font-bold">${escapeHtml(f.title)}</span>
+                        <span class="text-white font-bold flex items-center gap-1.5">
+                            <i class="fas fa-folder-open text-amber-300 text-xs"></i>
+                            <span>${escapeHtml(f.name)}</span>
+                        </span>
                     `;
                 }
             });
 
             breadcrumbsContainer.innerHTML = html;
 
-            breadcrumbsContainer.querySelectorAll('.breadcrumb-item').forEach(btn => {
+            breadcrumbsContainer.querySelectorAll('.breadcrumb-link').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const idx = parseInt(btn.getAttribute('data-idx'), 10);
                     folderHistory = folderHistory.slice(0, idx + 1);
                     currentFolderId = folderHistory[folderHistory.length - 1].id;
+                    logDebug('info', `Breadcrumb jump to index ${idx}: ${folderHistory[folderHistory.length - 1].name}`);
                     renderCurrentView();
                 });
             });
@@ -432,102 +908,219 @@
         function renderCurrentView() {
             renderBreadcrumbs();
 
-            // Filter items by current folder level
-            let visibleItems = allItems.filter(item => {
-                const itemFolderId = item.folderId || null;
-                return itemFolderId === currentFolderId;
-            });
+            let visibleItems = [];
+            let isSearching = Boolean(searchQuery);
 
-            // Apply search query across visible items (or search globally if user typed something)
-            if (searchQuery) {
+            if (isSearching) {
+                // Global search across all items in this collection
                 visibleItems = allItems.filter(item => {
-                    const title = (item.title || '').toLowerCase();
+                    const name = (item.name || '').toLowerCase();
                     const url = (item.url || '').toLowerCase();
-                    return title.includes(searchQuery) || url.includes(searchQuery);
+                    return name.includes(searchQuery) || url.includes(searchQuery);
                 });
+                searchResultNote.textContent = `Found ${visibleItems.length} match${visibleItems.length === 1 ? '' : 'es'}`;
+                searchResultNote.classList.remove('hidden');
+            } else {
+                // Filter by parentId at current folder level
+                visibleItems = allItems.filter(item => {
+                    const itemParentId = item.parentId || null;
+                    const targetFolderId = currentFolderId || null;
+                    return itemParentId === targetFolderId;
+                });
+                searchResultNote.classList.add('hidden');
             }
+
+            logDebug('info', `renderCurrentView: showing ${visibleItems.length} items (isSearching: ${isSearching}, currentFolderId: ${currentFolderId})`);
 
             if (visibleItems.length === 0) {
                 dialsGrid.classList.add('hidden');
                 emptyDials.classList.remove('hidden');
                 itemCountBadge.classList.add('hidden');
+
+                if (isSearching) {
+                    emptyTitle.textContent = 'No matching speed dials';
+                    emptyDescription.textContent = `No dials or folders match "${escapeHtml(searchQuery)}". Try searching for another keyword.`;
+                } else if (folderHistory.length > 1) {
+                    emptyTitle.textContent = 'This folder is empty';
+                    emptyDescription.textContent = 'There are no bookmarks or subfolders inside this folder yet.';
+                } else {
+                    emptyTitle.textContent = 'No speed dials found';
+                    emptyDescription.textContent = 'This collection is currently empty. Add speed dials in your Tabsome browser extension to sync them here!';
+                }
                 return;
             }
 
             emptyDials.classList.add('hidden');
             dialsGrid.classList.remove('hidden');
-            itemCountBadge.textContent = `${visibleItems.length} dial${visibleItems.length === 1 ? '' : 's'}`;
+
+            const folderCount = visibleItems.filter(i => i.type === 'folder').length;
+            const linkCount = visibleItems.filter(i => i.type === 'link').length;
+            let countText = '';
+            if (folderCount > 0 && linkCount > 0) {
+                countText = `${visibleItems.length} items (${folderCount} ${folderCount === 1 ? 'folder' : 'folders'}, ${linkCount} ${linkCount === 1 ? 'link' : 'links'})`;
+            } else if (folderCount > 0) {
+                countText = `${folderCount} ${folderCount === 1 ? 'folder' : 'folders'}`;
+            } else {
+                countText = `${linkCount} ${linkCount === 1 ? 'dial' : 'dials'}`;
+            }
+
+            itemCountBadge.textContent = countText;
             itemCountBadge.classList.remove('hidden');
 
             dialsGrid.innerHTML = '';
 
             visibleItems.forEach(item => {
                 const isFolder = item.type === 'folder';
+                const itemName = item.name || (isFolder ? 'Untitled Folder' : 'Untitled Dial');
 
                 if (isFolder) {
-                    // Count nested dials in folder
-                    const subItemCount = allItems.filter(i => (i.folderId || null) === item.id).length;
+                    // Count children of this folder
+                    const childCount = allItems.filter(i => (i.parentId || null) === item.id).length;
 
                     const folderEl = document.createElement('div');
-                    folderEl.className = 'folder-card rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer relative group h-36';
+                    folderEl.className = 'folder-card rounded-2xl p-4 flex flex-col justify-between cursor-pointer group h-40 select-none';
+                    folderEl.setAttribute('role', 'button');
+                    folderEl.setAttribute('tabindex', '0');
+                    folderEl.setAttribute('aria-label', `Folder: ${itemName}, ${childCount} items`);
+
                     folderEl.innerHTML = `
-                        <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-300 border border-pink-500/30 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition transform">
-                            <i class="fas fa-folder"></i>
+                        <!-- Top Header: Folder Icon & Indicator Badge -->
+                        <div class="flex items-center justify-between">
+                            <div class="w-11 h-11 rounded-xl bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-xl group-hover:scale-110 group-hover:bg-amber-400/30 transition transform shadow-sm">
+                                <i class="fas fa-folder"></i>
+                            </div>
+                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-amber-200 border border-white/10 group-hover:bg-amber-400/20 transition">
+                                ${childCount} ${childCount === 1 ? 'item' : 'items'}
+                            </span>
                         </div>
-                        <h4 class="text-sm font-bold text-white truncate max-w-full group-hover:text-pink-200 transition">
-                            ${escapeHtml(item.title || 'Folder')}
-                        </h4>
-                        <span class="text-[11px] text-gray-300 mt-0.5">
-                            ${subItemCount} item${subItemCount === 1 ? '' : 's'}
-                        </span>
+
+                        <!-- Bottom Footer: Name & Action Prompt -->
+                        <div class="mt-auto pt-2">
+                            <h4 class="text-sm font-bold text-white truncate group-hover:text-amber-200 transition" title="${escapeHtml(itemName)}">
+                                ${escapeHtml(itemName)}
+                            </h4>
+                            <p class="text-[11px] text-gray-300 flex items-center gap-1 mt-0.5 font-medium">
+                                <span>Open folder</span>
+                                <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-1 transition transform text-amber-300"></i>
+                            </p>
+                        </div>
                     `;
 
-                    folderEl.addEventListener('click', () => {
+                    const openFolderAction = () => {
                         currentFolderId = item.id;
-                        folderHistory.push({ id: item.id, title: item.title || 'Folder' });
-                        dialSearchInput.value = '';
-                        searchQuery = '';
+                        folderHistory.push({ id: item.id, name: itemName });
+                        if (searchQuery) {
+                            dialSearchInput.value = '';
+                            searchQuery = '';
+                            clearSearchBtn.classList.add('hidden');
+                        }
+                        logDebug('info', `Opened folder: "${itemName}" (id: ${item.id})`);
                         renderCurrentView();
+                    };
+
+                    folderEl.addEventListener('click', openFolderAction);
+                    folderEl.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openFolderAction();
+                        }
                     });
 
                     dialsGrid.appendChild(folderEl);
                 } else {
-                    // Speed Dial Link Card
+                    // Speed Dial Link Tile
                     const dialEl = document.createElement('a');
                     dialEl.href = item.url || '#';
                     dialEl.target = '_blank';
                     dialEl.rel = 'noopener noreferrer';
-                    dialEl.className = 'glass-card rounded-2xl p-3.5 flex flex-col justify-between group h-36 relative overflow-hidden';
+                    dialEl.className = 'dial-card rounded-2xl flex flex-col justify-between group h-40';
+                    dialEl.setAttribute('title', `${itemName} - ${item.url || ''}`);
 
                     const domain = extractDomain(item.url);
-                    const title = item.title || domain || 'Speed Dial';
-                    const initial = (title[0] || 'D').toUpperCase();
+                    const thumbnailType = (item.thumbnailType || 'cover').toLowerCase();
+                    const hasValidImage = item.image && typeof item.image === 'string' && item.image.trim() !== '';
+                    const initials = getInitials(itemName || domain);
+                    const gradientClass = getDeterministicGradient(itemName || domain);
+                    const customBg = item.bgColor ? `style="background-color: ${escapeHtml(item.bgColor)};"` : '';
 
-                    let imageHtml = '';
-                    if (item.image && typeof item.image === 'string' && item.image.trim()) {
-                        imageHtml = `<img src="${item.image}" alt="${escapeHtml(title)}" class="w-8 h-8 rounded-lg object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 hidden items-center justify-center text-white font-bold text-sm shadow">${initial}</div>`;
+                    if (thumbnailType === 'cover' && hasValidImage) {
+                        // 1. Cover Mode: Banner / Cover image with sleek frosted footer
+                        dialEl.innerHTML = `
+                            <!-- Cover Image Header -->
+                            <div class="relative w-full h-24 cover-img-wrapper overflow-hidden bg-slate-900/60 rounded-t-2xl flex items-center justify-center">
+                                <img src="${escapeHtml(item.image)}" alt="${escapeHtml(itemName)}"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr ${gradientClass} flex items-center justify-center text-white font-extrabold text-2xl shadow-inner\\'>${initials}</div>';" />
+                                
+                                <!-- Top-right External Link Icon Pill -->
+                                <div class="absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 transition">
+                                    <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                </div>
+                            </div>
+
+                            <!-- Title & Domain Footer -->
+                            <div class="p-3 bg-slate-900/90 backdrop-blur-md flex flex-col justify-center flex-1 border-t border-white/10" ${customBg}>
+                                <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
+                                    ${escapeHtml(itemName)}
+                                </h4>
+                                <p class="text-[11px] text-gray-300 truncate font-mono mt-0.5">
+                                    ${escapeHtml(domain)}
+                                </p>
+                            </div>
+                        `;
+                    } else if (thumbnailType === 'favicon' && hasValidImage) {
+                        // 2. Favicon Mode: Centralized crisp favicon icon well (to avoid pixelation)
+                        dialEl.innerHTML = `
+                            <div class="p-3.5 flex flex-col justify-between h-full" ${customBg}>
+                                <!-- Top Header with Open Icon -->
+                                <div class="flex items-start justify-between">
+                                    <div class="w-12 h-12 rounded-xl bg-white/10 border border-white/15 p-2 flex items-center justify-center shadow-md group-hover:scale-105 transition backdrop-blur-sm">
+                                        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(itemName)}"
+                                            class="w-7 h-7 object-contain rounded"
+                                            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr ${gradientClass} rounded-lg flex items-center justify-center text-white font-bold text-xs\\'>${initials}</div>';" />
+                                    </div>
+                                    <div class="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 transition">
+                                        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Title and Domain Footer -->
+                                <div class="mt-auto pt-2">
+                                    <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
+                                        ${escapeHtml(itemName)}
+                                    </h4>
+                                    <p class="text-[11px] text-gray-300 truncate font-mono mt-0.5">
+                                        ${escapeHtml(domain)}
+                                    </p>
+                                </div>
+                            </div>
+                        `;
                     } else {
-                        imageHtml = `<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-sm shadow">${initial}</div>`;
+                        // 3. Initials / Custom Mode / Fallback
+                        dialEl.innerHTML = `
+                            <div class="p-3.5 flex flex-col justify-between h-full" ${customBg}>
+                                <!-- Top Header: Initials Monogram Badge & Open Icon -->
+                                <div class="flex items-start justify-between">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr ${gradientClass} flex items-center justify-center text-white font-black text-base shadow-md group-hover:scale-105 transition border border-white/20">
+                                        ${initials}
+                                    </div>
+                                    <div class="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 transition">
+                                        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Title and Domain Footer -->
+                                <div class="mt-auto pt-2">
+                                    <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
+                                        ${escapeHtml(itemName)}
+                                    </h4>
+                                    <p class="text-[11px] text-gray-300 truncate font-mono mt-0.5">
+                                        ${escapeHtml(domain)}
+                                    </p>
+                                </div>
+                            </div>
+                        `;
                     }
-
-                    dialEl.innerHTML = `
-                        <!-- Header with icon and open arrow -->
-                        <div class="flex items-start justify-between gap-2">
-                            ${imageHtml}
-                            <i class="fas fa-arrow-up-right-from-square text-[11px] text-gray-400 group-hover:text-white transition"></i>
-                        </div>
-
-                        <!-- Title and Domain footer -->
-                        <div class="mt-auto pt-2">
-                            <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
-                                ${escapeHtml(title)}
-                            </h4>
-                            <p class="text-[11px] text-gray-400 truncate mt-0.5 font-mono">
-                                ${escapeHtml(domain)}
-                            </p>
-                        </div>
-                    `;
 
                     dialsGrid.appendChild(dialEl);
                 }
@@ -538,10 +1131,22 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (window.TabsomeAuth) {
                 TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
-                TabsomeAuth.onAuthStateChange(() => {
-                    initSpeedDials();
+                TabsomeAuth.onAuthStateChange((user, session, event) => {
+                    const newUserId = user ? user.id : null;
+                    if (event === 'SIGNED_OUT') {
+                        logDebug('info', 'Auth SIGNED_OUT -> resetting state');
+                        currentAuthUserId = null;
+                        initialLoadCompleted = false;
+                        initSpeedDials();
+                    } else if (event === 'SIGNED_IN' && newUserId !== currentAuthUserId) {
+                        logDebug('info', `Auth SIGNED_IN (${newUserId}) -> fetching dials`);
+                        initSpeedDials();
+                    } else {
+                        logDebug('info', `Ignored background auth event '${event || 'token_refresh'}'`);
+                    }
                 });
             }
+            // Trigger initial load once
             initSpeedDials();
         });
     </script>
