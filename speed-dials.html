@@ -34,52 +34,73 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #9333ea;
-            background-image: linear-gradient(to right, #ff5757, #8c52ff);
+            background-color: #0f111a;
+            background-image: 
+                linear-gradient(rgba(15, 17, 26, 0.45), rgba(15, 17, 26, 0.65)),
+                url('image/wallpaper.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
         }
 
         /* Glassmorphism Header */
         .glass-header {
-            background: rgba(55, 71, 79, 0.92);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(30, 32, 42, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        /* Base Speed Dial Tile */
-        .dial-card {
-            background: rgba(45, 55, 72, 0.7);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Opera-Style Smooth Glassmorphism Tile */
+        .opera-tile {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04));
+            backdrop-filter: blur(20px) saturate(170%);
+            -webkit-backdrop-filter: blur(20px) saturate(170%);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 
+                0 10px 30px -8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.22);
+            transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
+            border-radius: 20px;
         }
 
-        .dial-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.28);
+        .opera-tile:hover {
+            transform: translateY(-5px) scale(1.015);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
+            border-color: rgba(255, 255, 255, 0.38);
+            box-shadow: 
+                0 22px 48px -12px rgba(0, 0, 0, 0.45),
+                0 0 28px rgba(255, 255, 255, 0.1),
+                inset 0 1px 1px rgba(255, 255, 255, 0.35);
         }
 
-        /* Folder Specific Tile */
-        .folder-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Opera Folder Tile with Warm Glow */
+        .opera-folder-tile {
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.12), rgba(255, 255, 255, 0.04));
+            backdrop-filter: blur(20px) saturate(170%);
+            -webkit-backdrop-filter: blur(20px) saturate(170%);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 
+                0 10px 30px -8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 235, 120, 0.25);
+            transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
+            overflow: hidden;
+            border-radius: 20px;
         }
 
-        .folder-card:hover {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08));
-            border-color: rgba(255, 215, 0, 0.45);
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 193, 7, 0.15);
+        .opera-folder-tile:hover {
+            transform: translateY(-5px) scale(1.015);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.2), rgba(255, 255, 255, 0.09));
+            border-color: rgba(255, 215, 0, 0.55);
+            box-shadow: 
+                0 22px 48px -12px rgba(0, 0, 0, 0.45),
+                0 0 35px rgba(255, 215, 0, 0.22),
+                inset 0 1px 1px rgba(255, 245, 160, 0.4);
         }
 
         /* Breadcrumb items */
@@ -95,11 +116,11 @@
 
         /* Cover Image zoom on card hover */
         .cover-img-wrapper img {
-            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .dial-card:hover .cover-img-wrapper img {
-            transform: scale(1.06);
+        .opera-tile:hover .cover-img-wrapper img {
+            transform: scale(1.08);
         }
 
         /* Skeleton pulse animation */
@@ -248,12 +269,12 @@
 
         <!-- Loading Skeleton -->
         <div id="loadingDials" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
-            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
-            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
-            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
-            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
-            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
-            <div class="dial-card rounded-2xl p-4 skeleton-pulse h-40"></div>
+            <div class="opera-tile p-4 skeleton-pulse h-44"></div>
+            <div class="opera-tile p-4 skeleton-pulse h-44"></div>
+            <div class="opera-tile p-4 skeleton-pulse h-44"></div>
+            <div class="opera-tile p-4 skeleton-pulse h-44"></div>
+            <div class="opera-tile p-4 skeleton-pulse h-44"></div>
+            <div class="opera-tile p-4 skeleton-pulse h-44"></div>
         </div>
 
         <!-- Empty State -->
@@ -978,7 +999,7 @@
                     const childCount = allItems.filter(i => (i.parentId || null) === item.id).length;
 
                     const folderEl = document.createElement('div');
-                    folderEl.className = 'folder-card rounded-2xl p-4 flex flex-col justify-between cursor-pointer group h-40 select-none';
+                    folderEl.className = 'opera-folder-tile p-4 flex flex-col justify-between cursor-pointer group h-44 select-none';
                     folderEl.setAttribute('role', 'button');
                     folderEl.setAttribute('tabindex', '0');
                     folderEl.setAttribute('aria-label', `Folder: ${itemName}, ${childCount} items`);
@@ -986,22 +1007,29 @@
                     folderEl.innerHTML = `
                         <!-- Top Header: Folder Icon & Indicator Badge -->
                         <div class="flex items-center justify-between">
-                            <div class="w-11 h-11 rounded-xl bg-amber-400/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-xl group-hover:scale-110 group-hover:bg-amber-400/30 transition transform shadow-sm">
+                            <div class="w-11 h-11 rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/35 flex items-center justify-center text-lg group-hover:scale-110 group-hover:bg-amber-400/30 transition transform shadow-sm">
                                 <i class="fas fa-folder"></i>
                             </div>
-                            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-amber-200 border border-white/10 group-hover:bg-amber-400/20 transition">
+                            <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white/10 text-amber-200 border border-white/15 group-hover:bg-amber-400/25 transition">
                                 ${childCount} ${childCount === 1 ? 'item' : 'items'}
                             </span>
                         </div>
 
+                        <!-- Mini Folder Content Preview Grid -->
+                        <div class="flex items-center gap-1.5 py-1 px-1 opacity-70 group-hover:opacity-100 transition">
+                            <div class="w-2 h-2 rounded-full bg-amber-300/60"></div>
+                            <div class="w-2 h-2 rounded-full bg-amber-300/40"></div>
+                            <div class="w-2 h-2 rounded-full bg-amber-300/20"></div>
+                        </div>
+
                         <!-- Bottom Footer: Name & Action Prompt -->
-                        <div class="mt-auto pt-2">
-                            <h4 class="text-sm font-bold text-white truncate group-hover:text-amber-200 transition" title="${escapeHtml(itemName)}">
+                        <div class="mt-auto pt-1">
+                            <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-amber-200 transition" title="${escapeHtml(itemName)}">
                                 ${escapeHtml(itemName)}
                             </h4>
-                            <p class="text-[11px] text-gray-300 flex items-center gap-1 mt-0.5 font-medium">
+                            <p class="text-[11px] text-gray-300 flex items-center gap-1.5 mt-0.5 font-medium">
                                 <span>Open folder</span>
-                                <i class="fas fa-arrow-right text-[9px] group-hover:translate-x-1 transition transform text-amber-300"></i>
+                                <i class="fas fa-chevron-right text-[9px] group-hover:translate-x-1 transition transform text-amber-300"></i>
                             </p>
                         </div>
                     `;
@@ -1033,7 +1061,7 @@
                     dialEl.href = item.url || '#';
                     dialEl.target = '_blank';
                     dialEl.rel = 'noopener noreferrer';
-                    dialEl.className = 'dial-card rounded-2xl flex flex-col justify-between group h-40';
+                    dialEl.className = 'opera-tile flex flex-col justify-between group h-44';
                     dialEl.setAttribute('title', `${itemName} - ${item.url || ''}`);
 
                     const domain = extractDomain(item.url);
@@ -1044,77 +1072,85 @@
                     const customBg = item.bgColor ? `style="background-color: ${escapeHtml(item.bgColor)};"` : '';
 
                     if (thumbnailType === 'cover' && hasValidImage) {
-                        // 1. Cover Mode: Banner / Cover image with sleek frosted footer
+                        // 1. Opera Cover Mode: Sleek snapshot banner with frosted bottom pill
                         dialEl.innerHTML = `
-                            <!-- Cover Image Header -->
-                            <div class="relative w-full h-24 cover-img-wrapper overflow-hidden bg-slate-900/60 rounded-t-2xl flex items-center justify-center">
+                            <!-- Cover Image Canvas -->
+                            <div class="relative w-full h-28 cover-img-wrapper overflow-hidden bg-slate-950/40 rounded-t-[19px] flex items-center justify-center">
                                 <img src="${escapeHtml(item.image)}" alt="${escapeHtml(itemName)}"
                                     class="w-full h-full object-cover"
-                                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr ${gradientClass} flex items-center justify-center text-white font-extrabold text-2xl shadow-inner\\'>${initials}</div>';" />
+                                    onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr ${gradientClass} flex items-center justify-center text-white font-black text-2xl shadow-inner\\'>${initials}</div>';" />
                                 
-                                <!-- Top-right External Link Icon Pill -->
-                                <div class="absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 transition">
-                                    <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                <!-- Top-right External Link Pill -->
+                                <div class="absolute top-2.5 right-2.5 w-6 h-6 rounded-lg bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 group-hover:border-purple-400/50 transition shadow-sm">
+                                    <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
                                 </div>
                             </div>
 
-                            <!-- Title & Domain Footer -->
-                            <div class="p-3 bg-slate-900/90 backdrop-blur-md flex flex-col justify-center flex-1 border-t border-white/10" ${customBg}>
+                            <!-- Title & Domain Footer Bar -->
+                            <div class="p-3 bg-slate-950/70 backdrop-blur-md flex flex-col justify-center flex-1 border-t border-white/10" ${customBg}>
                                 <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
                                     ${escapeHtml(itemName)}
                                 </h4>
-                                <p class="text-[11px] text-gray-300 truncate font-mono mt-0.5">
+                                <p class="text-[11px] text-gray-300/90 truncate font-mono mt-0.5">
                                     ${escapeHtml(domain)}
                                 </p>
                             </div>
                         `;
                     } else if (thumbnailType === 'favicon' && hasValidImage) {
-                        // 2. Favicon Mode: Centralized crisp favicon icon well (to avoid pixelation)
+                        // 2. Opera Favicon Mode: Centered floating brand icon in frosted squircle
                         dialEl.innerHTML = `
-                            <div class="p-3.5 flex flex-col justify-between h-full" ${customBg}>
-                                <!-- Top Header with Open Icon -->
-                                <div class="flex items-start justify-between">
-                                    <div class="w-12 h-12 rounded-xl bg-white/10 border border-white/15 p-2 flex items-center justify-center shadow-md group-hover:scale-105 transition backdrop-blur-sm">
-                                        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(itemName)}"
-                                            class="w-7 h-7 object-contain rounded"
-                                            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr ${gradientClass} rounded-lg flex items-center justify-center text-white font-bold text-xs\\'>${initials}</div>';" />
+                            <div class="p-4 flex flex-col justify-between h-full" ${customBg}>
+                                <!-- Top Bar with Open Arrow -->
+                                <div class="flex items-center justify-end">
+                                    <div class="w-6 h-6 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 group-hover:border-purple-400/50 transition">
+                                        <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
                                     </div>
-                                    <div class="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 transition">
-                                        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                </div>
+
+                                <!-- Center Brand Icon Container -->
+                                <div class="flex items-center justify-center my-auto">
+                                    <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-white/10 border border-white/20 p-2.5 flex items-center justify-center shadow-lg backdrop-blur-md group-hover:scale-110 group-hover:bg-white/15 group-hover:border-white/30 transition transform">
+                                        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(itemName)}"
+                                            class="w-7 h-7 sm:w-8 sm:h-8 object-contain rounded"
+                                            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-gradient-to-tr ${gradientClass} rounded-xl flex items-center justify-center text-white font-bold text-sm\\'>${initials}</div>';" />
                                     </div>
                                 </div>
 
                                 <!-- Title and Domain Footer -->
-                                <div class="mt-auto pt-2">
+                                <div class="text-center pt-1">
                                     <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
                                         ${escapeHtml(itemName)}
                                     </h4>
-                                    <p class="text-[11px] text-gray-300 truncate font-mono mt-0.5">
+                                    <p class="text-[10.5px] text-gray-300/80 truncate font-mono mt-0.5">
                                         ${escapeHtml(domain)}
                                     </p>
                                 </div>
                             </div>
                         `;
                     } else {
-                        // 3. Initials / Custom Mode / Fallback
+                        // 3. Opera Initials Mode: Sleek gradient disc / squircle
                         dialEl.innerHTML = `
-                            <div class="p-3.5 flex flex-col justify-between h-full" ${customBg}>
-                                <!-- Top Header: Initials Monogram Badge & Open Icon -->
-                                <div class="flex items-start justify-between">
-                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr ${gradientClass} flex items-center justify-center text-white font-black text-base shadow-md group-hover:scale-105 transition border border-white/20">
-                                        ${initials}
+                            <div class="p-4 flex flex-col justify-between h-full" ${customBg}>
+                                <!-- Top Bar with Open Arrow -->
+                                <div class="flex items-center justify-end">
+                                    <div class="w-6 h-6 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 group-hover:border-purple-400/50 transition">
+                                        <i class="fas fa-arrow-up-right-from-square text-[9px]"></i>
                                     </div>
-                                    <div class="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:bg-purple-600/80 transition">
-                                        <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                                </div>
+
+                                <!-- Center Monogram Container -->
+                                <div class="flex items-center justify-center my-auto">
+                                    <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr ${gradientClass} flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-lg border border-white/25 group-hover:scale-110 transition transform">
+                                        ${initials}
                                     </div>
                                 </div>
 
                                 <!-- Title and Domain Footer -->
-                                <div class="mt-auto pt-2">
+                                <div class="text-center pt-1">
                                     <h4 class="text-xs sm:text-sm font-bold text-white truncate group-hover:text-pink-200 transition">
                                         ${escapeHtml(itemName)}
                                     </h4>
-                                    <p class="text-[11px] text-gray-300 truncate font-mono mt-0.5">
+                                    <p class="text-[10.5px] text-gray-300/80 truncate font-mono mt-0.5">
                                         ${escapeHtml(domain)}
                                     </p>
                                 </div>
