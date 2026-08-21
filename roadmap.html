@@ -34,13 +34,15 @@
         content="Explore upcoming features, upvote your favorite ideas, and submit suggestions to help shape Tabsome.">
     <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
 
-    <!-- Tailwind & Fonts & Icons -->
+    <!-- Tailwind & Fonts & Icons & Supabase Auth -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
 
     <style>
         html {
@@ -181,8 +183,9 @@
                     <i class="fas fa-lightbulb text-yellow-300"></i>
                     <span>Suggest Idea</span>
                 </button>
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
                 <a href="index.html#download"
-                    class="bg-white text-purple-600 font-bold text-sm px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105 shadow-md">
+                    class="bg-white text-purple-600 font-bold text-sm px-4 sm:px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105 shadow-md">
                     Get Tabsome
                 </a>
             </div>
@@ -979,19 +982,18 @@
             }
             if (numElement) numElement.textContent = newCount;
 
-            // Fire remote API call
+            // Fire remote API call with TabsomeAuth (automatically attaches Bearer token if logged in)
             try {
                 if (nextVotedState) {
-                    await fetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react`, {
+                    await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             reactionType: 'upvote',
                             installationId: installationId
                         })
                     });
                 } else {
-                    await fetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react?reactionType=upvote&installationId=${encodeURIComponent(installationId)}`, {
+                    await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react?reactionType=upvote&installationId=${encodeURIComponent(installationId)}`, {
                         method: 'DELETE'
                     });
                 }
@@ -1012,7 +1014,7 @@
 
             try {
                 const url = `${API_BASE_URL}/api/v3/roadmap?limit=100&installationId=${encodeURIComponent(installationId)}`;
-                const response = await fetch(url, {
+                const response = await TabsomeAuth.apiFetch(url, {
                     headers: { 'Accept': 'application/json' }
                 });
 
@@ -1300,9 +1302,23 @@
         }
 
         // Suggestion Modal Handlers
-        function openSuggestModal() {
+        async function openSuggestModal() {
             formFeedback.classList.add('hidden');
             suggestForm.reset();
+
+            // Auto-populate author if authenticated
+            try {
+                const user = await TabsomeAuth.getUser();
+                if (user) {
+                    const metadata = user.user_metadata || {};
+                    const fullName = metadata.full_name || metadata.name || '';
+                    if (fullName) document.getElementById('formAuthorName').value = fullName;
+                    if (user.email) document.getElementById('formAuthorEmail').value = user.email;
+                }
+            } catch (err) {
+                console.warn('Could not read user for suggestion modal:', err);
+            }
+
             suggestModal.classList.remove('hidden');
             setTimeout(() => {
                 suggestModal.classList.remove('opacity-0');
@@ -1355,9 +1371,8 @@
             };
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/v3/roadmap/suggestions`, {
+                const response = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/suggestions`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
@@ -1464,8 +1479,16 @@
 
         retryBtn.addEventListener('click', fetchRoadmapData);
 
-        // Check if query params have `item` or `suggest`
+        // Initialize Authentication UI and Load Data
         document.addEventListener('DOMContentLoaded', () => {
+            // Mount Navbar Auth
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+                TabsomeAuth.onAuthStateChange(() => {
+                    fetchRoadmapData();
+                });
+            }
+
             fetchRoadmapData().then(() => {
                 const params = new URLSearchParams(window.location.search);
                 const itemId = params.get('item');
