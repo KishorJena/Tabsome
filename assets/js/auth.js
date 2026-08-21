@@ -226,7 +226,7 @@
             const client = getSupabaseClient();
             if (client) {
                 try {
-                    await client.auth.signOut();
+                    await client.auth.signOut({ scope: 'local' });
                 } catch (e) {
                     console.warn('[TabsomeAuth] Sign out error:', e);
                 }
