@@ -17,6 +17,17 @@
     let currentUser = null;
     let currentSession = null;
     let isInitialized = false;
+    let isInitializing = false;
+
+    function notifyListeners(user, session, event) {
+        authListeners.forEach(listener => {
+            try {
+                listener(user, session, event);
+            } catch (err) {
+                console.error('[TabsomeAuth] Listener error:', err);
+            }
+        });
+    }
 
     function getSupabaseClient() {
         if (supabaseClient) {
@@ -37,6 +48,19 @@
             }
         });
 
+        // Listen immediately to Supabase auth events (OAuth redirect callback, token refresh, etc.)
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            console.log(`[TabsomeAuth] Supabase onAuthStateChange: ${event}`, session?.user?.email || 'no session');
+            currentSession = session || null;
+            currentUser = session?.user || null;
+
+            if (event === 'SIGNED_OUT' || !session) {
+                notifyListeners(null, null, 'SIGNED_OUT');
+            } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
+                notifyListeners(currentUser, currentSession, event);
+            }
+        });
+
         return supabaseClient;
     }
 
@@ -47,13 +71,18 @@
             return getSupabaseClient();
         },
 
-        async init() {
-            if (isInitialized) {
+        async init(forceRevalidate = false) {
+            if (isInitialized && !forceRevalidate) {
                 return { user: currentUser, session: currentSession };
             }
+            if (isInitializing) {
+                return { user: currentUser, session: currentSession };
+            }
+            isInitializing = true;
 
             const client = getSupabaseClient();
             if (!client) {
+                isInitializing = false;
                 return { user: null, session: null };
             }
 
@@ -62,47 +91,86 @@
                 currentSession = data?.session || null;
                 currentUser = currentSession?.user || null;
 
-                client.auth.onAuthStateChange((event, session) => {
-                    currentSession = session || null;
-                    currentUser = session?.user || null;
-                    authListeners.forEach(listener => {
+                // Validate session with Supabase server to prevent displaying stale cached profiles
+                if (currentSession) {
+                    const { data: userData, error: userError } = await client.auth.getUser();
+                    if (userError || !userData?.user) {
+                        console.warn('[TabsomeAuth] Stored session is invalid or revoked on server:', userError?.message);
+                        currentUser = null;
+                        currentSession = null;
                         try {
-                            listener(currentUser, currentSession, event);
-                        } catch (err) {
-                            console.error('[TabsomeAuth] Listener error:', err);
+                            await client.auth.signOut({ scope: 'local' });
+                        } catch (e) {
+                            // ignore local signout error
                         }
-                    });
-                });
+                        notifyListeners(null, null, 'SIGNED_OUT');
+                    } else {
+                        currentUser = userData.user;
+                        notifyListeners(currentUser, currentSession, 'INITIAL_USER');
+                    }
+                } else {
+                    notifyListeners(null, null, 'INITIAL_ANON');
+                }
 
                 isInitialized = true;
             } catch (err) {
                 console.error('[TabsomeAuth] Failed to initialize session:', err);
+                currentUser = null;
+                currentSession = null;
+                notifyListeners(null, null, 'SIGNED_OUT');
+            } finally {
+                isInitializing = false;
             }
 
             return { user: currentUser, session: currentSession };
         },
 
-        async getUser() {
-            if (currentUser) return currentUser;
+        async getUser(forceValidate = false) {
             const client = getSupabaseClient();
             if (!client) return null;
-            try {
-                const { data } = await client.auth.getUser();
-                currentUser = data?.user || null;
+
+            if (currentUser && !forceValidate) {
+                // If token is about to expire or already expired, validate against server
+                if (currentSession && currentSession.expires_at) {
+                    const nowSec = Math.floor(Date.now() / 1000);
+                    if (nowSec >= currentSession.expires_at - 10) {
+                        return this.getUser(true);
+                    }
+                }
                 return currentUser;
-            } catch {
+            }
+
+            try {
+                const { data, error } = await client.auth.getUser();
+                if (error || !data?.user) {
+                    if (currentUser || currentSession) {
+                        console.warn('[TabsomeAuth] User session invalid on server:', error?.message);
+                        await this.clearSessionAndNotify();
+                    }
+                    return null;
+                }
+                currentUser = data.user;
+                return currentUser;
+            } catch (err) {
+                console.error('[TabsomeAuth] getUser error:', err);
                 return null;
             }
         },
 
         async getSession() {
-            if (currentSession) return currentSession;
             const client = getSupabaseClient();
             if (!client) return null;
+
             try {
-                const { data } = await client.auth.getSession();
-                currentSession = data?.session || null;
-                currentUser = currentSession?.user || null;
+                const { data, error } = await client.auth.getSession();
+                if (error || !data?.session) {
+                    if (currentUser || currentSession) {
+                        await this.clearSessionAndNotify();
+                    }
+                    return null;
+                }
+                currentSession = data.session;
+                currentUser = currentSession.user || null;
                 return currentSession;
             } catch {
                 return null;
@@ -140,23 +208,38 @@
             }
         },
 
+        async clearSessionAndNotify() {
+            currentUser = null;
+            currentSession = null;
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    await client.auth.signOut({ scope: 'local' });
+                } catch (e) {
+                    // Ignore signOut cleanup errors
+                }
+            }
+            notifyListeners(null, null, 'SIGNED_OUT');
+        },
+
         async signOut() {
             const client = getSupabaseClient();
             if (client) {
-                await client.auth.signOut();
+                try {
+                    await client.auth.signOut();
+                } catch (e) {
+                    console.warn('[TabsomeAuth] Sign out error:', e);
+                }
             }
-            currentUser = null;
-            currentSession = null;
+            await this.clearSessionAndNotify();
             window.location.reload();
         },
 
         onAuthStateChange(callback) {
             if (typeof callback === 'function') {
                 authListeners.push(callback);
-                // Call immediately with current cached state if already evaluated
-                if (isInitialized) {
-                    callback(currentUser, currentSession, 'INITIAL');
-                }
+                // Call immediately with current state
+                callback(currentUser, currentSession, currentUser ? 'INITIAL_USER' : (isInitialized ? 'INITIAL_ANON' : 'PENDING'));
             }
             return () => {
                 authListeners = authListeners.filter(cb => cb !== callback);
@@ -164,8 +247,10 @@
         },
 
         /**
-         * Authenticated API request wrapper
+         * Authenticated API request wrapper.
          * Injects Authorization Bearer token automatically if logged in.
+         * If the server responds with 401 Unauthorized, automatically purges the stale session
+         * and notifies all UI elements to switch to the signed-out state.
          */
         async apiFetch(url, options = {}) {
             const token = await this.getAccessToken();
@@ -178,10 +263,22 @@
                 headers['Authorization'] = `Bearer ${token}`;
             }
 
-            return fetch(url, {
-                ...options,
-                headers
-            });
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers
+                });
+
+                // If unauthorized and we sent a token, the session was revoked or expired on backend
+                if (response.status === 401 && token) {
+                    console.warn('[TabsomeAuth] API returned 401 Unauthorized. Purging stale session and resetting UI.');
+                    await this.clearSessionAndNotify();
+                }
+
+                return response;
+            } catch (fetchError) {
+                throw fetchError;
+            }
         },
 
         /**
@@ -196,7 +293,7 @@
                     // Render Sign in with Google Button
                     container.innerHTML = `
                         <button id="navSignInGoogleBtn"
-                            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border border-white/20 transition-all duration-200 shadow-sm hover:shadow hover:scale-[1.02]">
+                            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border border-white/20 transition-all duration-200 shadow-sm hover:shadow hover:scale-[1.02] cursor-pointer">
                             <svg class="w-4 h-4" viewBox="0 0 24 24">
                                 <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -222,7 +319,7 @@
                     container.innerHTML = `
                         <div class="relative inline-block text-left" id="userAuthDropdownWrapper">
                             <button id="userAuthProfileBtn" type="button"
-                                class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full sm:rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-white text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-400">
+                                class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full sm:rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-white text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-400 cursor-pointer">
                                 ${avatarUrl
                             ? `<img src="${avatarUrl}" alt="${fullName}" class="w-7 h-7 rounded-full object-cover border border-white/30" />`
                             : `<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs shadow-inner">${initials}</div>`
@@ -250,7 +347,7 @@
                                 </div>
                                 <div class="pt-1 border-t border-white/10">
                                     <button id="navSignOutBtn" type="button"
-                                        class="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-300 hover:text-rose-200 hover:bg-rose-500/20 rounded-lg transition text-left font-medium">
+                                        class="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-rose-300 hover:text-rose-200 hover:bg-rose-500/20 rounded-lg transition text-left font-medium cursor-pointer">
                                         <i class="fas fa-sign-out-alt w-4 text-center"></i>
                                         <span>Sign Out</span>
                                     </button>
@@ -290,6 +387,17 @@
             this.init();
         }
     };
+
+    // Cross-tab synchronization: Listen for storage events (e.g. if user signs out in another tab)
+    window.addEventListener('storage', (event) => {
+        if (event.key && (event.key.includes('supabase') || event.key.includes('auth-token') || event.key.includes('sb-'))) {
+            if (!event.newValue) {
+                TabsomeAuth.clearSessionAndNotify();
+            } else {
+                TabsomeAuth.init(true);
+            }
+        }
+    });
 
     // Expose globally
     window.TabsomeAuth = TabsomeAuth;

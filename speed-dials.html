@@ -767,6 +767,11 @@
                     const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections`);
                     logDebug('info', `Collections list response status: ${res.status}`);
                     
+                    if (res.status === 401) {
+                        logDebug('warn', 'Collections API returned 401 Unauthorized. Session invalidated.');
+                        return;
+                    }
+
                     if (res.ok) {
                         const result = await res.json();
                         logDebug('info', 'Collections list response payload:', result);
@@ -787,6 +792,11 @@
                     logDebug('info', `Fetching default collection from ${API_BASE_URL}/api/v3/users/me/collections/default`);
                     const defaultRes = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections/default`);
                     logDebug('info', `Default collection status: ${defaultRes.status}`);
+
+                    if (defaultRes.status === 401) {
+                        logDebug('warn', 'Default collection API returned 401 Unauthorized. Session invalidated.');
+                        return;
+                    }
 
                     if (defaultRes.ok) {
                         const defaultResult = await defaultRes.json();
@@ -1205,22 +1215,26 @@
             if (window.TabsomeAuth) {
                 TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
                 TabsomeAuth.onAuthStateChange((user, session, event) => {
+                    if (event === 'PENDING') return;
                     const newUserId = user ? user.id : null;
-                    if (event === 'SIGNED_OUT') {
-                        logDebug('info', 'Auth SIGNED_OUT -> resetting state');
+                    if (!user || event === 'SIGNED_OUT') {
+                        logDebug('info', 'Auth state: Unauthenticated -> resetting state');
                         currentAuthUserId = null;
                         initialLoadCompleted = false;
+                        allItems = [];
+                        activeCollectionData = null;
+                        collectionsList = [];
                         initSpeedDials();
-                    } else if (event === 'SIGNED_IN' && newUserId !== currentAuthUserId) {
+                    } else if (newUserId && newUserId !== currentAuthUserId) {
                         logDebug('info', `Auth SIGNED_IN (${newUserId}) -> fetching dials`);
                         initSpeedDials();
                     } else {
-                        logDebug('info', `Ignored background auth event '${event || 'token_refresh'}'`);
+                        logDebug('info', `Auth event '${event || 'token_refresh'}' evaluated`);
                     }
                 });
+            } else {
+                initSpeedDials();
             }
-            // Trigger initial load once
-            initSpeedDials();
         });
     </script>
 </body>
