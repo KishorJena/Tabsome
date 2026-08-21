@@ -1019,10 +1019,69 @@
                     folderEl.setAttribute('tabindex', '0');
                     folderEl.setAttribute('aria-label', `Folder: ${itemName}`);
 
+                    // Get top 4 children
+                    const children = allItems.filter(i => (i.parentId || null) === item.id);
+                    const topChildren = children.slice(0, 4);
+
+                    let childrenPreviewHtml = '';
+                    if (topChildren.length === 0) {
+                        // Empty folder
+                        childrenPreviewHtml = `
+                            <div class="flex items-center justify-center text-2xl sm:text-3xl opacity-70 group-hover:scale-110 transition transform select-none">
+                                📁
+                            </div>
+                        `;
+                    } else {
+                        // 2x2 grid of top 4 children
+                        let slotsHtml = '';
+                        for (let slot = 0; slot < 4; slot++) {
+                            const child = topChildren[slot];
+                            if (child) {
+                                const isChildFolder = child.type === 'folder';
+                                const childName = child.name || (isChildFolder ? 'Folder' : 'Link');
+                                const childInitials = getInitials(childName);
+                                const childGradient = getDeterministicGradient(childName);
+
+                                if (isChildFolder) {
+                                    slotsHtml += `
+                                        <div class="w-full h-full aspect-square rounded-lg bg-amber-400/15 border border-amber-400/25 flex items-center justify-center text-sm sm:text-base select-none shadow-xs group-hover:scale-105 transition transform" title="${escapeHtml(childName)}">
+                                            📁
+                                        </div>
+                                    `;
+                                } else if (child.image && typeof child.image === 'string' && child.image.trim() !== '') {
+                                    slotsHtml += `
+                                        <div class="w-full h-full aspect-square rounded-lg bg-white/10 border border-white/15 p-1 flex items-center justify-center overflow-hidden shadow-xs group-hover:scale-105 transition transform" title="${escapeHtml(childName)}">
+                                            <img src="${escapeHtml(child.image)}" alt="${escapeHtml(childName)}"
+                                                class="w-full h-full object-contain rounded"
+                                                onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-[9px] sm:text-[10px] font-extrabold text-white\\'>${childInitials}</span>';" />
+                                        </div>
+                                    `;
+                                } else {
+                                    slotsHtml += `
+                                        <div class="w-full h-full aspect-square rounded-lg bg-gradient-to-tr ${childGradient} flex items-center justify-center text-[9px] sm:text-[10px] font-extrabold text-white shadow-xs group-hover:scale-105 transition transform" title="${escapeHtml(childName)}">
+                                            ${childInitials}
+                                        </div>
+                                    `;
+                                }
+                            } else {
+                                // Subtle empty placeholder slot
+                                slotsHtml += `
+                                    <div class="w-full h-full aspect-square rounded-lg bg-white/5 border border-white/5"></div>
+                                `;
+                            }
+                        }
+
+                        childrenPreviewHtml = `
+                            <div class="grid grid-cols-2 grid-rows-2 gap-1.5 p-1.5 w-18 h-18 sm:w-20 sm:h-20 max-w-[85%] max-h-[85%] items-center justify-center">
+                                ${slotsHtml}
+                            </div>
+                        `;
+                    }
+
                     folderEl.innerHTML = `
-                        <!-- Opera Folder Tile (Transparent Icon) -->
-                        <div class="opera-folder-tile w-full aspect-[16/10] flex items-center justify-center relative">
-                            <i class="fas fa-folder text-3xl sm:text-4xl text-amber-300 drop-shadow group-hover:scale-110 transition transform"></i>
+                        <!-- Opera Folder Tile (2x2 Children Preview) -->
+                        <div class="opera-folder-tile w-full aspect-[16/10] flex items-center justify-center relative overflow-hidden">
+                            ${childrenPreviewHtml}
                         </div>
 
                         <!-- Label Outside & Below Tile -->
