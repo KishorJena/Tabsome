@@ -11,8 +11,13 @@ The Roadmap API allows client applications (browser extensions, web apps, mobile
 - `fix`: Bug fixes, reliability improvements, or performance patches.
 - `improvement`: Enhancements to existing features.
 
+### Item Sources
+- `community`: Feature requests and bug reports submitted by community members.
+- `official`: Core roadmap initiatives curated by the Tabsome team.
+
 ### Lifecycle Statuses
 - `under_review`: Community suggestions or ideas awaiting team assessment.
+- `considering`: Actively under evaluation/research by the team to determine feasibility, UX, and impact.
 - `planned`: Accepted and queued for upcoming development.
 - `in_progress`: Actively being engineered.
 - `completed`: Shipped and available in production.
