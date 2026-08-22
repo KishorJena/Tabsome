@@ -241,9 +241,10 @@
                         </p>
                     </div>
                     <button id="surfaceSuggestBtn"
-                        class="bg-white text-purple-700 font-bold px-5 py-2.5 rounded-xl text-xs hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 flex-shrink-0">
-                        <i class="fas fa-plus"></i>
-                        <span>Suggest Idea</span>
+                        class="bg-white text-purple-700 font-bold px-5 py-2.5 rounded-xl text-xs hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 flex-shrink-0 cursor-pointer"
+                        title="Sign in to suggest idea">
+                        <i class="fas fa-right-to-bracket"></i>
+                        <span>Sign in to suggest idea</span>
                     </button>
                 </div>
 
@@ -295,9 +296,10 @@
                             Be the first to share an idea and shape the future of Tabsome!
                         </p>
                         <button id="emptySuggestBtn"
-                            class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2">
-                            <i class="fas fa-plus"></i>
-                            <span>Submit a Suggestion</span>
+                            class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2 cursor-pointer"
+                            title="Sign in to suggest idea">
+                            <i class="fas fa-right-to-bracket"></i>
+                            <span>Sign in to suggest idea</span>
                         </button>
                     </div>
                 </div>
@@ -548,6 +550,7 @@
         // State
         let allRoadmapItems = [];
         let installationId = getOrCreateInstallationId();
+        let currentAuthUser = null;
 
         // DOM Elements
         const loadingState = document.getElementById('loadingState');
@@ -1098,13 +1101,59 @@
             }, 200);
         }
 
+        // Update Suggest buttons according to Auth state
+        function updateSuggestButtons(user) {
+            currentAuthUser = user || null;
+            const surfaceBtn = document.getElementById('surfaceSuggestBtn');
+            const emptyBtn = document.getElementById('emptySuggestBtn');
+
+            if (user) {
+                if (surfaceBtn) {
+                    surfaceBtn.innerHTML = `<i class="fas fa-plus"></i><span>Suggest Idea</span>`;
+                    surfaceBtn.setAttribute('title', 'Suggest a feature or improvement');
+                }
+                if (emptyBtn) {
+                    emptyBtn.innerHTML = `<i class="fas fa-plus"></i><span>Suggest Idea</span>`;
+                    emptyBtn.setAttribute('title', 'Suggest a feature or improvement');
+                }
+            } else {
+                if (surfaceBtn) {
+                    surfaceBtn.innerHTML = `<i class="fas fa-right-to-bracket"></i><span>Sign in to suggest idea</span>`;
+                    surfaceBtn.setAttribute('title', 'Sign in with Google to suggest an idea');
+                }
+                if (emptyBtn) {
+                    emptyBtn.innerHTML = `<i class="fas fa-right-to-bracket"></i><span>Sign in to suggest idea</span>`;
+                    emptyBtn.setAttribute('title', 'Sign in with Google to suggest an idea');
+                }
+            }
+        }
+
+        async function handleSuggestClick() {
+            if (currentAuthUser) {
+                openSuggestModal();
+            } else {
+                if (window.TabsomeAuth) {
+                    const redirectUrl = new URL(window.location.href);
+                    redirectUrl.searchParams.set('suggest', 'true');
+                    TabsomeAuth.signInWithGoogle(redirectUrl.toString());
+                } else {
+                    openSuggestModal();
+                }
+            }
+        }
+
         // Suggestion Modal Handlers
         async function openSuggestModal() {
+            if (!currentAuthUser) {
+                handleSuggestClick();
+                return;
+            }
+
             formFeedback.classList.add('hidden');
             suggestForm.reset();
 
             try {
-                const user = await TabsomeAuth.getUser();
+                const user = currentAuthUser || await TabsomeAuth.getUser();
                 if (user) {
                     const metadata = user.user_metadata || {};
                     const fullName = metadata.full_name || metadata.name || '';
@@ -1199,7 +1248,7 @@
 
         // Event Listeners: Modals Trigger & Close
         [surfaceSuggestBtn, emptySuggestBtn].forEach(btn => {
-            if (btn) btn.addEventListener('click', openSuggestModal);
+            if (btn) btn.addEventListener('click', handleSuggestClick);
         });
 
         [closeSuggestModalBtn, cancelSuggestBtn].forEach(btn => {
@@ -1224,6 +1273,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (window.TabsomeAuth) {
                 TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+                TabsomeAuth.onAuthStateChange((user) => {
+                    updateSuggestButtons(user);
+                    const params = new URLSearchParams(window.location.search);
+                    if (user && params.get('suggest') === 'true') {
+                        const cleanUrl = new URL(window.location.href);
+                        cleanUrl.searchParams.delete('suggest');
+                        window.history.replaceState({}, document.title, cleanUrl.toString());
+                        openSuggestModal();
+                    }
+                });
             }
 
             fetchRoadmapData().then(() => {
@@ -1231,9 +1290,6 @@
                 const itemId = params.get('item');
                 if (itemId) {
                     openItemDetailModal(itemId);
-                }
-                if (params.get('suggest') === 'true') {
-                    openSuggestModal();
                 }
             });
         });
