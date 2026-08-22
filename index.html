@@ -10,7 +10,7 @@
   <meta name="description"
     content="Transform your Chrome tab into a sleek dashboard with AI widgets, speed dials, and interactive tools. Create custom widgets without coding.">
   <meta name="keywords"
-    content="chrome extension, new tab, speed dials, AI widgets, opera like speed dials, browser customization, productivity, chrome dashboard, custom widgets, omnisearch, browser tools, chrome addon, tab customization, AI-powered browser, smart dashboard, browser enhancement, best new tab replacement for chrome">
+    content="chrome extension, new tab, speed dials, AI widgets, opera like speed dials, browser customization, productivity, chrome dashboard, custom widgets, AI bar, browser tools, chrome addon, tab customization, AI-powered browser, smart dashboard, browser enhancement, best new tab replacement for chrome">
   <meta name="author" content="Kishor Jena">
   <meta name="robots" content="index, follow">
 
@@ -381,38 +381,55 @@
   <section id="features" class="py-20 section-container">
     <div class="max-w-6xl mx-auto px-6 text-center content-layer">
       <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Why You'll Love Tabsome</h3>
-      <div class="grid md:grid-cols-3 gap-10">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Material Design blue-gray cards -->
-        <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);"
+        <div class="p-8 rounded-2xl backdrop-blur-sm flex flex-col justify-between" style="background-color: rgba(55, 71, 79, 0.9);"
           data-aos="fade-up">
-          <h4 class="font-semibold text-xl mb-2 flex items-center">
-            <i class="fas fa-rocket text-blue-400 mr-3"></i>
-            Speed Dials
-          </h4>
-          <p class="text-gray-300 text-left">
-            Bookmarks are dead. Meet Speed Dials... instant, visual launchpads for the sites that matter.
-          </p>
+          <div>
+            <h4 class="font-semibold text-xl mb-2 flex items-center">
+              <i class="fas fa-rocket text-blue-400 mr-3"></i>
+              Speed Dials
+            </h4>
+            <p class="text-gray-300 text-left">
+              Bookmarks are dead. Meet Speed Dials... instant, visual launchpads for the sites that matter.
+            </p>
+          </div>
         </div>
-        <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);"
+        <div class="p-8 rounded-2xl backdrop-blur-sm flex flex-col justify-between" style="background-color: rgba(55, 71, 79, 0.9);"
           data-aos="fade-up" data-aos-delay="100">
-          <h4 class="font-semibold text-xl mb-2 flex items-center">
-            <i class="fas fa-brain text-purple-400 mr-3"></i>
-            AI Widgets
-          </h4>
-          <p class="text-gray-300 text-left">
-            Use AI to design widgets that inform, inspire, or just look ridiculously cool... all without writing a
-            single line of code
-          </p>
+          <div>
+            <h4 class="font-semibold text-xl mb-2 flex items-center">
+              <i class="fas fa-puzzle-piece text-purple-400 mr-3"></i>
+              Widgets
+            </h4>
+            <p class="text-gray-300 text-left">
+              Design, customize, or discover interactive widgets that inform, inspire, and elevate your dashboard.
+            </p>
+          </div>
         </div>
-        <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);"
+        <div class="p-8 rounded-2xl backdrop-blur-sm flex flex-col justify-between" style="background-color: rgba(55, 71, 79, 0.9);"
           data-aos="fade-up" data-aos-delay="200">
-          <h4 class="font-semibold text-xl mb-2 flex items-center">
-            <i class="fas fa-search text-green-400 mr-3"></i>
-            Omnisearch
-          </h4>
-          <p class="text-gray-300 text-left">
-            The universal search bar your browser was missing. One place for web results to AI responses.
-          </p>
+          <div>
+            <h4 class="font-semibold text-xl mb-2 flex items-center">
+              <i class="fas fa-robot text-green-400 mr-3"></i>
+              AI Bar
+            </h4>
+            <p class="text-gray-300 text-left">
+              An intelligent assistant right on your tab to answer questions, generate ideas, and take actions.
+            </p>
+          </div>
+        </div>
+        <div class="p-8 rounded-2xl backdrop-blur-sm flex flex-col justify-between" style="background-color: rgba(55, 71, 79, 0.9);"
+          data-aos="fade-up" data-aos-delay="300">
+          <div>
+            <h4 class="font-semibold text-xl mb-2 flex items-center">
+              <i class="fas fa-book-open text-amber-400 mr-3"></i>
+              Library
+            </h4>
+            <p class="text-gray-300 text-left">
+              Your personal web board. Collect content from across the internet, save notes, and keep ideas organized.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -427,13 +444,13 @@
     </div>
   </section>
 
-  <!-- AI Widgets description -->
+  <!-- Widgets description -->
   <section class="py-20 section-container">
     <div class="max-w-6xl mx-auto px-6 content-layer">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <!-- Text Content -->
         <div class="order-2 md:order-1 text-left" data-aos="fade-right">
-          <h3 class="text-3xl font-bold mb-6 gradient-text">AI Widgets: Build Stunning Widgets without Coding</h3>
+          <h3 class="text-3xl font-bold mb-6 gradient-text">Widgets: Build Stunning Widgets without Coding</h3>
           <p class="text-lg text-white leading-relaxed">
             Tabsome lets you create fully custom widgets with simple AI prompts.
             Craft visually stunning and interactive widgets that are completely your own. Widgets are dynamic and
@@ -449,27 +466,20 @@
     </div>
   </section>
 
-  <!-- Omnisearch Feature -->
+  <!-- AI Bar Feature -->
   <section class="py-20 section-container">
     <div class="max-w-6xl mx-auto px-6 content-layer">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <!-- Image -->
         <div class="order-1" data-aos="fade-right">
-          <img src="assets/screenshots/omni-search.webp" alt="Omnisearch Feature"
+          <img src="assets/screenshots/ai-bar.png" alt="AI Bar Feature"
             class="rounded-3xl shadow-lg w-full border border-gray-700/50">
         </div>
         <!-- Text Content -->
         <div class="order-2 text-left" data-aos="fade-left">
-          <h3 class="text-3xl font-bold mb-6 gradient-text">Omnisearch</h3>
+          <h3 class="text-3xl font-bold mb-6 gradient-text">AI Bar</h3>
           <p class="text-lg text-white leading-relaxed">
-            Search smarter, faster. Switch engines or get AI answers with simple shortcuts, right from your new tab.
-            Supports Google, Bing, Yadnex, DuckduckGo, Yahoo and AI.
-          </p>
-          <p class="text-lg text-white leading-relaxed">
-            <li> /g for Google, /b for Bing</li>
-            <li> /y for Yandex, /d for DuckduckGo, /yh for Yahoo</li>
-            <li> /ai for AI.</li>
-
+            Your personal AI assistant integrated seamlessly into your new tab. Ask questions, brainstorm ideas, draft content, and get instant answers with simple commands without leaving your dashboard.
           </p>
         </div>
       </div>
