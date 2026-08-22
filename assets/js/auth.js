@@ -314,17 +314,23 @@
                     const fullName = metadata.full_name || metadata.name || user.email?.split('@')[0] || 'User';
                     const avatarUrl = metadata.avatar_url || metadata.picture || null;
                     const email = user.email || '';
-                    const initials = (fullName || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+                    const initials = (fullName || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+
+                    const safeFullName = fullName.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    const safeEmail = email.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    const safeInitials = initials.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
                     container.innerHTML = `
                         <div class="relative inline-block text-left" id="userAuthDropdownWrapper">
                             <button id="userAuthProfileBtn" type="button"
                                 class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full sm:rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-white text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-400 cursor-pointer">
-                                ${avatarUrl
-                            ? `<img src="${avatarUrl}" alt="${fullName}" class="w-7 h-7 rounded-full object-cover border border-white/30" />`
-                            : `<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs shadow-inner">${initials}</div>`
+                                <span class="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0">
+                                    ${avatarUrl
+                            ? `<img src="${avatarUrl}" alt="${safeFullName}" referrerpolicy="no-referrer" class="w-7 h-7 rounded-full object-cover border border-white/30" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\\'w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs shadow-inner\\\'>${safeInitials}</div>';" />`
+                            : `<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xs shadow-inner">${safeInitials}</div>`
                         }
-                                <span class="hidden sm:inline font-semibold max-w-[120px] truncate">${fullName}</span>
+                                </span>
+                                <span class="hidden sm:inline font-semibold max-w-[120px] truncate">${safeFullName}</span>
                                 <i class="fas fa-chevron-down text-[10px] text-white/70 ml-0.5 hidden sm:inline"></i>
                             </button>
 
@@ -332,8 +338,8 @@
                             <div id="userAuthDropdownMenu"
                                 class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-white/15 shadow-2xl p-2 z-50 transform transition-all duration-200">
                                 <div class="px-3 py-2.5 border-b border-white/10">
-                                    <p class="text-xs font-bold text-white truncate">${fullName}</p>
-                                    <p class="text-[11px] text-gray-300 truncate mt-0.5">${email}</p>
+                                    <p class="text-xs font-bold text-white truncate">${safeFullName}</p>
+                                    <p class="text-[11px] text-gray-300 truncate mt-0.5">${safeEmail}</p>
                                 </div>
                                 <div class="py-1">
                                     <a href="speed-dials.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
