@@ -81,75 +81,75 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .kanban-col {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Upvote Button Style */
-        .vote-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        /* Reaction Buttons */
+        .reaction-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 9999px;
+            padding: 0.25rem 0.55rem;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            color: #e2e8f0;
         }
 
-        .vote-btn:hover {
+        .reaction-btn:hover {
             background: rgba(255, 255, 255, 0.18);
             border-color: rgba(255, 255, 255, 0.35);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        .vote-btn.voted {
-            background: linear-gradient(135deg, #ff5757, #8c52ff);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 15px rgba(255, 87, 87, 0.35);
+        .reaction-btn.active {
+            background: linear-gradient(135deg, rgba(255, 87, 87, 0.35), rgba(140, 82, 255, 0.45));
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 10px rgba(140, 82, 255, 0.35);
             color: #ffffff;
-        }
-
-        .vote-btn.voted:hover {
-            background: linear-gradient(135deg, #ff6b6b, #9d6aff);
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        /* Filter Pills */
-        .filter-pill {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.2s ease;
-        }
-
-        .filter-pill:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .filter-pill.active {
-            background: #ffffff;
-            color: #7e22ce;
-            border-color: #ffffff;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .reaction-popover {
+            background: rgba(20, 27, 45, 0.96);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+        }
+
+        .emoji-pick-btn {
+            transition: all 0.15s ease;
+        }
+
+        .emoji-pick-btn:hover {
+            transform: scale(1.25);
+        }
+
+        .todo-row {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .todo-row:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .todo-row:last-child {
+            border-bottom: none;
         }
 
         /* Skeleton Animation */
         @keyframes pulse-subtle {
-
-            0%,
-            100% {
-                opacity: 0.6;
-            }
-
-            50% {
-                opacity: 0.25;
-            }
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.25; }
         }
 
         .skeleton-pulse {
             animation: pulse-subtle 1.8s ease-in-out infinite;
         }
 
-        /* Custom Scrollbar for Kanban columns */
+        /* Custom Scrollbar */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -241,7 +241,7 @@
 
     <!-- Interactive "How This Works & Community Guide" -->
     <section id="howItWorks" class="pb-8">
-        <div class="max-w-6xl mx-auto px-6" data-aos="fade-up">
+        <div class="max-w-7xl mx-auto px-6" data-aos="fade-up">
             <div class="glass-card rounded-2xl p-6 md:p-8">
                 <div
                     class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
@@ -341,19 +341,16 @@
                 <div
                     class="mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-gray-300">
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-arrow-up text-pink-400 text-sm"></i>
-                        <span><strong>Upvote items:</strong> Click the vote button on any card to push it higher on our
-                            backlog.</span>
+                        <i class="fas fa-face-smile text-pink-400 text-sm"></i>
+                        <span><strong>React & Vote:</strong> Click 👍, 🔥, 🚀, ❤️, or 💡 on any item to show support.</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <i class="fas fa-paper-plane text-yellow-300 text-sm"></i>
-                        <span><strong>Propose ideas:</strong> Share features or bug fixes directly from the submission
-                            form.</span>
+                        <span><strong>Propose ideas:</strong> Share new features or improvements directly with the community.</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <i class="fas fa-share-nodes text-sky-400 text-sm"></i>
-                        <span><strong>Share & Track:</strong> Copy direct links to rally your colleagues or
-                            community.</span>
+                        <span><strong>Share & Track:</strong> Copy item links to track progress and gather support.</span>
                     </div>
                 </div>
             </div>
@@ -361,277 +358,83 @@
     </section>
 
     <!-- Main Roadmap Content Area -->
-    <main class="py-4 flex-grow">
-        <div class="max-w-7xl mx-auto px-6">
-
-            <!-- Control Bar: Status Tabs, Search, Filters, View Toggles -->
-            <div class="glass-card rounded-2xl p-4 mb-8" data-aos="fade-up">
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-
-                    <!-- Status Filter Tabs -->
-                    <div class="flex items-center gap-2 overflow-x-auto custom-scroll pb-1 lg:pb-0"
-                        id="statusTabsContainer">
-                        <button
-                            class="filter-pill active px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap flex items-center gap-1.5"
-                            data-status="all">
-                            <span>All Items</span>
-                            <span class="count-badge bg-black/20 text-current px-1.5 py-0.5 rounded-md text-[10px]"
-                                id="countAll">0</span>
-                        </button>
-                        <button
-                            class="filter-pill px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap flex items-center gap-1.5 text-amber-200"
-                            data-status="under_review">
-                            <i class="fas fa-lightbulb text-[10px]"></i>
-                            <span>Under Review</span>
-                            <span class="count-badge bg-black/20 text-current px-1.5 py-0.5 rounded-md text-[10px]"
-                                id="countUnderReview">0</span>
-                        </button>
-                        <button
-                            class="filter-pill px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap flex items-center gap-1.5 text-indigo-200"
-                            data-status="considering">
-                            <i class="fas fa-compass text-[10px]"></i>
-                            <span>Considering</span>
-                            <span class="count-badge bg-black/20 text-current px-1.5 py-0.5 rounded-md text-[10px]"
-                                id="countConsidering">0</span>
-                        </button>
-                        <button
-                            class="filter-pill px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap flex items-center gap-1.5 text-sky-200"
-                            data-status="planned">
-                            <i class="fas fa-clipboard-list text-[10px]"></i>
-                            <span>Planned</span>
-                            <span class="count-badge bg-black/20 text-current px-1.5 py-0.5 rounded-md text-[10px]"
-                                id="countPlanned">0</span>
-                        </button>
-                        <button
-                            class="filter-pill px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap flex items-center gap-1.5 text-emerald-200"
-                            data-status="in_progress">
-                            <i class="fas fa-code text-[10px]"></i>
-                            <span>In Progress</span>
-                            <span class="count-badge bg-black/20 text-current px-1.5 py-0.5 rounded-md text-[10px]"
-                                id="countInProgress">0</span>
-                        </button>
-                        <button
-                            class="filter-pill px-3.5 py-1.5 rounded-xl text-xs whitespace-nowrap flex items-center gap-1.5 text-purple-200"
-                            data-status="completed">
-                            <i class="fas fa-check-circle text-[10px]"></i>
-                            <span>Completed</span>
-                            <span class="count-badge bg-black/20 text-current px-1.5 py-0.5 rounded-md text-[10px]"
-                                id="countCompleted">0</span>
-                        </button>
-                    </div>
-
-                    <!-- Right Controls: Search, Source Filter, Type Filter, Sort, View Toggle -->
-                    <div class="flex flex-wrap items-center gap-3">
-                        <!-- Search Box -->
-                        <div class="relative flex-grow sm:flex-grow-0 sm:w-52">
-                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                            <input type="text" id="searchInput" placeholder="Search roadmap..."
-                                class="w-full bg-black/30 text-white placeholder-gray-400 text-xs rounded-xl pl-8 pr-7 py-2 border border-white/10 focus:outline-none focus:border-purple-400 transition">
-                            <button id="clearSearchBtn"
-                                class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs">
-                                <i class="fas fa-xmark"></i>
-                            </button>
-                        </div>
-
-                        <!-- Source Dropdown -->
-                        <select id="sourceFilter"
-                            class="bg-black/30 text-white text-xs rounded-xl px-3 py-2 border border-white/10 focus:outline-none focus:border-purple-400 cursor-pointer">
-                            <option value="all" class="bg-gray-800 text-white">All Sources</option>
-                            <option value="official" class="bg-gray-800 text-white">⚡ Official</option>
-                            <option value="community" class="bg-gray-800 text-white">👥 Community</option>
-                        </select>
-
-                        <!-- Type Dropdown -->
-                        <select id="typeFilter"
-                            class="bg-black/30 text-white text-xs rounded-xl px-3 py-2 border border-white/10 focus:outline-none focus:border-purple-400 cursor-pointer">
-                            <option value="all" class="bg-gray-800 text-white">All Types</option>
-                            <option value="feature" class="bg-gray-800 text-white">✨ Features</option>
-                            <option value="improvement" class="bg-gray-800 text-white">🚀 Improvements</option>
-                            <option value="fix" class="bg-gray-800 text-white">🐛 Bug Fixes</option>
-                        </select>
-
-                        <!-- Sort Dropdown -->
-                        <select id="sortSelect"
-                            class="bg-black/30 text-white text-xs rounded-xl px-3 py-2 border border-white/10 focus:outline-none focus:border-purple-400 cursor-pointer">
-                            <option value="votes" class="bg-gray-800 text-white">🔥 Most Upvoted</option>
-                            <option value="recent" class="bg-gray-800 text-white">🕒 Newest First</option>
-                        </select>
-
-                        <!-- View Switcher (Kanban vs Grid) -->
-                        <div class="bg-black/30 p-1 rounded-xl border border-white/10 flex items-center">
-                            <button id="boardViewBtn" title="Board / Kanban View"
-                                class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-purple-700 transition">
-                                <i class="fas fa-columns"></i>
-                            </button>
-                            <button id="listViewBtn" title="Feed / List View"
-                                class="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition">
-                                <i class="fas fa-list"></i>
-                            </button>
-                        </div>
+    <main class="pb-16 flex-grow">
+        <div class="max-w-7xl mx-auto px-6" data-aos="fade-up">
+            <div class="glass-card rounded-2xl p-6 md:p-8">
+                <!-- Surface Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                            <i class="fas fa-layer-group text-purple-400"></i>
+                            <span>Roadmap Items & Community Ideas</span>
+                        </h2>
+                        <p class="text-gray-300 text-sm mt-1">
+                            Explore upcoming features, proposed enhancements, and community discussions.
+                        </p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Loading State (Skeleton) -->
-            <div id="loadingState" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                <!-- Col Skeleton 1 -->
-                <div class="kanban-col rounded-2xl p-4 skeleton-pulse space-y-4">
-                    <div class="h-6 w-3/4 bg-white/20 rounded"></div>
-                    <div class="glass-card rounded-xl p-4 space-y-3">
-                        <div class="h-4 w-1/3 bg-white/20 rounded"></div>
-                        <div class="h-5 w-4/5 bg-white/20 rounded"></div>
+                <!-- Loading State (Post Card Skeletons inside Surface) -->
+                <div id="loadingState" class="space-y-4 mt-6">
+                    <div class="bg-black/20 rounded-xl p-5 border border-white/5 space-y-3 skeleton-pulse">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20"></div>
+                            <div class="h-4 w-32 bg-white/20 rounded"></div>
+                        </div>
+                        <div class="h-5 w-3/4 bg-white/25 rounded"></div>
                         <div class="h-12 w-full bg-white/10 rounded"></div>
                     </div>
-                    <div class="glass-card rounded-xl p-4 space-y-3">
-                        <div class="h-4 w-1/2 bg-white/20 rounded"></div>
-                        <div class="h-5 w-2/3 bg-white/20 rounded"></div>
-                    </div>
-                </div>
-                <!-- Col Skeleton 2 -->
-                <div class="kanban-col rounded-2xl p-4 skeleton-pulse space-y-4">
-                    <div class="h-6 w-3/4 bg-white/20 rounded"></div>
-                    <div class="glass-card rounded-xl p-4 space-y-3">
-                        <div class="h-4 w-1/3 bg-white/20 rounded"></div>
-                        <div class="h-5 w-4/5 bg-white/20 rounded"></div>
+                    <div class="bg-black/20 rounded-xl p-5 border border-white/5 space-y-3 skeleton-pulse">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20"></div>
+                            <div class="h-4 w-32 bg-white/20 rounded"></div>
+                        </div>
+                        <div class="h-5 w-3/4 bg-white/25 rounded"></div>
                         <div class="h-12 w-full bg-white/10 rounded"></div>
                     </div>
                 </div>
-                <!-- Col Skeleton 3 -->
-                <div class="kanban-col rounded-2xl p-4 skeleton-pulse space-y-4">
-                    <div class="h-6 w-3/4 bg-white/20 rounded"></div>
-                    <div class="glass-card rounded-xl p-4 space-y-3">
-                        <div class="h-4 w-1/3 bg-white/20 rounded"></div>
-                        <div class="h-5 w-4/5 bg-white/20 rounded"></div>
+
+                <!-- Error State -->
+                <div id="errorState" class="hidden mt-6">
+                    <div class="bg-black/20 rounded-xl p-8 text-center max-w-lg mx-auto border border-rose-500/30">
+                        <i class="fas fa-triangle-exclamation text-4xl text-rose-400 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Unable to Load Roadmap</h3>
+                        <p id="errorMessage" class="text-gray-300 text-sm mb-6">
+                            An error occurred while communicating with the roadmap API.
+                        </p>
+                        <button id="retryBtn"
+                            class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2">
+                            <i class="fas fa-rotate-right"></i>
+                            <span>Try Again</span>
+                        </button>
                     </div>
                 </div>
-                <!-- Col Skeleton 4 -->
-                <div class="kanban-col rounded-2xl p-4 skeleton-pulse space-y-4">
-                    <div class="h-6 w-3/4 bg-white/20 rounded"></div>
-                    <div class="glass-card rounded-xl p-4 space-y-3">
-                        <div class="h-4 w-1/3 bg-white/20 rounded"></div>
-                        <div class="h-5 w-4/5 bg-white/20 rounded"></div>
-                    </div>
-                </div>
-                <!-- Col Skeleton 5 -->
-                <div class="kanban-col rounded-2xl p-4 skeleton-pulse space-y-4">
-                    <div class="h-6 w-3/4 bg-white/20 rounded"></div>
-                    <div class="glass-card rounded-xl p-4 space-y-3">
-                        <div class="h-4 w-1/3 bg-white/20 rounded"></div>
-                        <div class="h-5 w-4/5 bg-white/20 rounded"></div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Error State -->
-            <div id="errorState" class="hidden">
-                <div class="glass-card rounded-2xl p-8 text-center max-w-lg mx-auto border-l-4 border-rose-500">
-                    <i class="fas fa-triangle-exclamation text-4xl text-rose-400 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">Unable to Load Roadmap</h3>
-                    <p id="errorMessage" class="text-gray-300 text-sm mb-6">
-                        An error occurred while communicating with the roadmap API.
-                    </p>
-                    <button id="retryBtn"
-                        class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2">
-                        <i class="fas fa-rotate-right"></i>
-                        <span>Try Again</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden">
-                <div class="glass-card rounded-2xl p-10 text-center max-w-lg mx-auto">
-                    <div
-                        class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4 text-2xl text-yellow-300">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">No Matching Roadmap Items</h3>
-                    <p class="text-gray-300 text-sm mb-6">
-                        No features found matching the selected filter or search term. Be the first to suggest one!
-                    </p>
-                    <button id="emptySuggestBtn"
-                        class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2">
-                        <i class="fas fa-plus"></i>
-                        <span>Submit a Suggestion</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Kanban Board View Container -->
-            <div id="boardViewContainer" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 items-start">
-
-                    <!-- Column: Under Review -->
-                    <div class="kanban-col rounded-2xl p-4 flex flex-col" data-col-status="under_review">
-                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                                <h3 class="font-bold text-sm">Under Review</h3>
-                            </div>
-                            <span class="text-xs bg-white/10 px-2 py-0.5 rounded-md font-semibold text-amber-300"
-                                id="colBadgeUnderReview">0</span>
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden mt-6">
+                    <div class="bg-black/20 rounded-xl p-10 text-center max-w-lg mx-auto border border-white/5">
+                        <div
+                            class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4 text-2xl text-yellow-300">
+                            <i class="fas fa-lightbulb"></i>
                         </div>
-                        <div class="space-y-4" id="colItemsUnderReview"></div>
+                        <h3 class="text-xl font-bold mb-2">No Roadmap Items Yet</h3>
+                        <p class="text-gray-300 text-sm mb-6">
+                            Be the first to share an idea and shape the future of Tabsome!
+                        </p>
+                        <button id="emptySuggestBtn"
+                            class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span>Submit a Suggestion</span>
+                        </button>
                     </div>
-
-                    <!-- Column: Considering -->
-                    <div class="kanban-col rounded-2xl p-4 flex flex-col" data-col-status="considering">
-                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-indigo-400"></span>
-                                <h3 class="font-bold text-sm">Considering</h3>
-                            </div>
-                            <span class="text-xs bg-white/10 px-2 py-0.5 rounded-md font-semibold text-indigo-300"
-                                id="colBadgeConsidering">0</span>
-                        </div>
-                        <div class="space-y-4" id="colItemsConsidering"></div>
-                    </div>
-
-                    <!-- Column: Planned -->
-                    <div class="kanban-col rounded-2xl p-4 flex flex-col" data-col-status="planned">
-                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-sky-400"></span>
-                                <h3 class="font-bold text-sm">Planned</h3>
-                            </div>
-                            <span class="text-xs bg-white/10 px-2 py-0.5 rounded-md font-semibold text-sky-300"
-                                id="colBadgePlanned">0</span>
-                        </div>
-                        <div class="space-y-4" id="colItemsPlanned"></div>
-                    </div>
-
-                    <!-- Column: In Progress -->
-                    <div class="kanban-col rounded-2xl p-4 flex flex-col" data-col-status="in_progress">
-                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
-                                <h3 class="font-bold text-sm">In Progress</h3>
-                            </div>
-                            <span class="text-xs bg-white/10 px-2 py-0.5 rounded-md font-semibold text-emerald-300"
-                                id="colBadgeInProgress">0</span>
-                        </div>
-                        <div class="space-y-4" id="colItemsInProgress"></div>
-                    </div>
-
-                    <!-- Column: Completed -->
-                    <div class="kanban-col rounded-2xl p-4 flex flex-col" data-col-status="completed">
-                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-purple-400"></span>
-                                <h3 class="font-bold text-sm">Completed</h3>
-                            </div>
-                            <span class="text-xs bg-white/10 px-2 py-0.5 rounded-md font-semibold text-purple-300"
-                                id="colBadgeCompleted">0</span>
-                        </div>
-                        <div class="space-y-4" id="colItemsCompleted"></div>
-                    </div>
-
                 </div>
-            </div>
 
-            <!-- List / Grid View Container -->
-            <div id="listViewContainer" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="listItemsGrid"></div>
+                <!-- Roadmap Posts Feed Container -->
+                <div id="roadmapTableContainer" class="hidden mt-6">
+                    <div id="roadmapListRows" class="space-y-4">
+                        <!-- Populated dynamically as post cards -->
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -757,7 +560,7 @@
 
     <!-- Footer -->
     <footer class="py-10 text-center text-gray-300 text-sm border-t border-white/10 mt-auto">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
                 <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-6 h-6 opacity-80">
                 <span class="font-bold text-white">Tabsome</span>
@@ -781,44 +584,50 @@
         // Configuration
         const API_BASE_URL = 'https://tabsome.vercel.app';
         const STORAGE_KEY_INSTALLATION_ID = 'tabsome_installation_id';
-        const STORAGE_KEY_VOTED_ITEMS = 'tabsome_voted_items';
+        const STORAGE_KEY_USER_REACTIONS = 'tabsome_user_reactions';
         const STORAGE_KEY_LOCAL_SUGGESTIONS = 'tabsome_local_suggestions';
 
-        // Stage and Type Badges Meta
+        // Stage, Source and Type Meta
         const STATUS_CONFIG = {
             under_review: {
                 label: 'Under Review',
                 badgeClass: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
+                textColor: 'text-amber-300',
                 dotClass: 'bg-amber-400',
                 icon: 'fa-lightbulb'
             },
             considering: {
                 label: 'Considering',
                 badgeClass: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30',
+                textColor: 'text-indigo-300',
                 dotClass: 'bg-indigo-400',
                 icon: 'fa-compass'
             },
             planned: {
                 label: 'Planned',
                 badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-500/30',
+                textColor: 'text-sky-300',
                 dotClass: 'bg-sky-400',
                 icon: 'fa-clipboard-list'
             },
             in_progress: {
                 label: 'In Progress',
                 badgeClass: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
+                textColor: 'text-emerald-300',
                 dotClass: 'bg-emerald-400',
                 icon: 'fa-code'
             },
             completed: {
                 label: 'Completed',
                 badgeClass: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+                textColor: 'text-purple-300',
                 dotClass: 'bg-purple-400',
                 icon: 'fa-check-circle'
             },
             closed: {
                 label: 'Closed',
                 badgeClass: 'bg-gray-500/20 text-gray-300 border border-gray-500/30',
+                textColor: 'text-gray-400',
                 dotClass: 'bg-gray-400',
                 icon: 'fa-box-archive'
             }
@@ -855,14 +664,16 @@
             }
         };
 
+        const SUPPORTED_REACTIONS = [
+            { type: 'upvote', emoji: '👍', label: 'Upvote' },
+            { type: 'fire', emoji: '🔥', label: 'Fire' },
+            { type: 'rocket', emoji: '🚀', label: 'Rocket' },
+            { type: 'like', emoji: '❤️', label: 'Love' },
+            { type: 'bulb', emoji: '💡', label: 'Idea' }
+        ];
+
         // State
         let allRoadmapItems = [];
-        let activeStatusFilter = 'all';
-        let activeSourceFilter = 'all';
-        let activeTypeFilter = 'all';
-        let activeSearchQuery = '';
-        let activeSort = 'votes';
-        let currentView = 'board';
         let installationId = getOrCreateInstallationId();
 
         // DOM Elements
@@ -871,17 +682,8 @@
         const errorMessage = document.getElementById('errorMessage');
         const retryBtn = document.getElementById('retryBtn');
         const emptyState = document.getElementById('emptyState');
-        const boardViewContainer = document.getElementById('boardViewContainer');
-        const listViewContainer = document.getElementById('listViewContainer');
-        const listItemsGrid = document.getElementById('listItemsGrid');
-        const boardViewBtn = document.getElementById('boardViewBtn');
-        const listViewBtn = document.getElementById('listViewBtn');
-        const searchInput = document.getElementById('searchInput');
-        const clearSearchBtn = document.getElementById('clearSearchBtn');
-        const sourceFilter = document.getElementById('sourceFilter');
-        const typeFilter = document.getElementById('typeFilter');
-        const sortSelect = document.getElementById('sortSelect');
-        const statusTabsContainer = document.getElementById('statusTabsContainer');
+        const roadmapTableContainer = document.getElementById('roadmapTableContainer');
+        const roadmapListRows = document.getElementById('roadmapListRows');
 
         // Modal Elements
         const suggestModal = document.getElementById('suggestModal');
@@ -914,19 +716,25 @@
             return id;
         }
 
-        // Local voted state persistence
-        function getLocalVotedSet() {
+        // Local User Reactions Persistence
+        function getLocalUserReactions() {
             try {
-                const stored = localStorage.getItem(STORAGE_KEY_VOTED_ITEMS);
-                return new Set(stored ? JSON.parse(stored) : []);
+                const stored = localStorage.getItem(STORAGE_KEY_USER_REACTIONS);
+                return stored ? JSON.parse(stored) : {};
             } catch {
-                return new Set();
+                return {};
             }
         }
 
-        function saveLocalVotedSet(set) {
+        function saveLocalUserReaction(itemId, reactionType) {
             try {
-                localStorage.setItem(STORAGE_KEY_VOTED_ITEMS, JSON.stringify(Array.from(set)));
+                const reactions = getLocalUserReactions();
+                if (reactionType) {
+                    reactions[itemId] = reactionType;
+                } else {
+                    delete reactions[itemId];
+                }
+                localStorage.setItem(STORAGE_KEY_USER_REACTIONS, JSON.stringify(reactions));
             } catch { }
         }
 
@@ -989,168 +797,237 @@
             }, 3000);
         }
 
-        // Card Renderer
-        function createItemCard(item) {
-            const card = document.createElement('div');
-            card.className = 'glass-card rounded-2xl p-5 relative flex flex-col group';
+        // Reaction Toggle Handler
+        async function handleReactionToggle(itemId, reactionType) {
+            const item = allRoadmapItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (!item.reactionsCount || typeof item.reactionsCount !== 'object') {
+                item.reactionsCount = {};
+            }
+
+            const currentReaction = item.userReaction;
+            const isRemoving = currentReaction === reactionType;
+            const newReaction = isRemoving ? null : reactionType;
+
+            // Optimistic updates
+            if (isRemoving) {
+                item.reactionsCount[reactionType] = Math.max(0, (item.reactionsCount[reactionType] || 1) - 1);
+                item.userReaction = null;
+                item.hasVoted = false;
+                item.voteCount = Math.max(0, (item.voteCount || 1) - 1);
+            } else {
+                if (currentReaction && item.reactionsCount[currentReaction]) {
+                    item.reactionsCount[currentReaction] = Math.max(0, item.reactionsCount[currentReaction] - 1);
+                } else {
+                    item.voteCount = (item.voteCount || 0) + 1;
+                    item.hasVoted = true;
+                }
+                item.reactionsCount[reactionType] = (item.reactionsCount[reactionType] || 0) + 1;
+                item.userReaction = reactionType;
+            }
+
+            // Save locally
+            saveLocalUserReaction(itemId, newReaction);
+
+            // Re-render
+            renderFilteredItems();
+
+            // Fire remote API call
+            try {
+                if (isRemoving) {
+                    await TabsomeAuth.apiFetch(
+                        `${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react?reactionType=${encodeURIComponent(reactionType)}&installationId=${encodeURIComponent(installationId)}`,
+                        { method: 'DELETE' }
+                    );
+                    showToast('Reaction removed.');
+                } else {
+                    await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            reactionType,
+                            installationId
+                        })
+                    });
+                    const rObj = SUPPORTED_REACTIONS.find(r => r.type === reactionType);
+                    showToast(`Reacted with ${rObj ? rObj.emoji : reactionType}!`);
+                }
+            } catch (err) {
+                console.warn('API reaction sync error:', err);
+            }
+        }
+
+        function createTableRow(item) {
+            const card = document.createElement('article');
+            card.className = 'bg-black/25 hover:bg-black/35 rounded-xl p-5 sm:p-6 border border-white/10 hover:border-white/20 transition-all duration-200 group flex flex-col gap-3.5';
             card.setAttribute('data-id', item.id);
 
-            const statusMeta = STATUS_CONFIG[item.status] || STATUS_CONFIG.under_review;
-            const typeMeta = TYPE_CONFIG[item.type] || TYPE_CONFIG.feature;
-            const sourceMeta = (item.source && SOURCE_CONFIG[item.source]) ? SOURCE_CONFIG[item.source] : SOURCE_CONFIG.community;
-            const isVoted = Boolean(item.hasVoted);
-            const voteCount = item.voteCount || 0;
+            const dateStr = formatDate(item.createdAt);
+            const authorName = item.authorName || (item.source === 'official' ? 'Tabsome Team' : 'Community Member');
+            const authorInitial = authorName.charAt(0).toUpperCase();
 
             const tagsHtml = (Array.isArray(item.tags) && item.tags.length > 0)
-                ? item.tags.map(t => `<span class="text-[10px] bg-black/20 text-gray-300 px-2 py-0.5 rounded-full">#${escapeHtml(t)}</span>`).join('')
+                ? item.tags.map(t => `<span class="text-xs bg-black/30 text-gray-300 px-2.5 py-0.5 rounded-full border border-white/5">#${escapeHtml(t)}</span>`).join('')
                 : '';
 
             const versionBadge = item.targetVersion
-                ? `<span class="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded-md font-semibold border border-white/10">🎯 ${escapeHtml(item.targetVersion)}</span>`
+                ? `<span class="text-xs bg-white/10 text-white px-2.5 py-0.5 rounded-md font-semibold border border-white/15">🎯 ${escapeHtml(item.targetVersion)}</span>`
                 : '';
 
             const pinnedBadge = item.isPinned
-                ? `<span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-md font-bold border border-amber-500/30 flex items-center gap-1"><i class="fas fa-thumbtack text-[9px]"></i> Pinned</span>`
+                ? `<span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-md font-bold border border-amber-500/30 flex items-center gap-1"><i class="fas fa-thumbtack text-[10px]"></i> Pinned</span>`
                 : '';
 
-            const sourceBadge = `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 ${sourceMeta.badgeClass}" title="${escapeHtml(sourceMeta.label)} Item">
-                <i class="fas ${sourceMeta.icon} text-[9px]"></i>
-                ${escapeHtml(sourceMeta.label)}
-            </span>`;
+            // Render reaction pills
+            const reactionsMap = item.reactionsCount || {};
+            if (Object.keys(reactionsMap).length === 0 && item.voteCount) {
+                reactionsMap['upvote'] = item.voteCount;
+            }
+
+            let renderedReactionButtons = '';
+            let hasAnyReaction = false;
+
+            SUPPORTED_REACTIONS.forEach(r => {
+                const count = reactionsMap[r.type] || 0;
+                const isActive = item.userReaction === r.type || (r.type === 'upvote' && item.hasVoted && !item.userReaction);
+                if (count > 0 || isActive) {
+                    hasAnyReaction = true;
+                    renderedReactionButtons += `
+                        <button class="reaction-btn ${isActive ? 'active' : ''} reaction-toggle-btn px-3 py-1.5 text-xs font-medium"
+                            data-reaction="${r.type}" title="${r.label} (${count})">
+                            <span class="text-sm">${r.emoji}</span>
+                            <span class="font-bold text-xs">${count}</span>
+                        </button>
+                    `;
+                }
+            });
+
+            // Default upvote button if no reactions exist
+            if (!hasAnyReaction) {
+                renderedReactionButtons = `
+                    <button class="reaction-btn reaction-toggle-btn px-3 py-1.5 text-xs font-medium" data-reaction="upvote" title="Upvote">
+                        <span class="text-sm">👍</span>
+                        <span class="font-bold text-xs">0</span>
+                    </button>
+                `;
+            }
 
             card.innerHTML = `
-                <!-- Header: Type Badge, Source Badge, Target Version, Pinned -->
-                <div class="flex items-center justify-between gap-2 mb-3">
-                    <div class="flex flex-wrap items-center gap-1.5">
-                        <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1 ${typeMeta.badgeClass}">
-                            <i class="fas ${typeMeta.icon} text-[9px]"></i>
-                            ${escapeHtml(typeMeta.label)}
-                        </span>
-                        ${sourceBadge}
-                        ${versionBadge}
+                <!-- Post Top Row: Title + Badges + View more (Left) & Author Info (Right) -->
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-2.5 flex-wrap flex-grow">
+                        <h3 class="font-bold text-white text-lg leading-snug cursor-pointer item-title-trigger hover:text-yellow-200 transition">
+                            ${escapeHtml(item.title)}
+                        </h3>
                         ${pinnedBadge}
+                        ${versionBadge}
+                        <button type="button" class="text-purple-400 hover:text-purple-300 font-semibold text-xs inline-flex items-center gap-1 item-view-more cursor-pointer transition" title="View details">
+                            <span>View more</span>
+                            <i class="fas fa-arrow-right text-[9px]"></i>
+                        </button>
                     </div>
-                    <!-- Status pill -->
-                    <span class="text-[10px] font-medium px-2 py-0.5 rounded-md flex items-center gap-1 ${statusMeta.badgeClass}">
-                        <span class="w-1.5 h-1.5 rounded-full ${statusMeta.dotClass}"></span>
-                        ${escapeHtml(statusMeta.label)}
-                    </span>
+
+                    <!-- Author Info (By [Avatar] [Name] on Right) -->
+                    <div class="flex items-center gap-2 flex-shrink-0 pt-0.5">
+                        <span class="text-xs text-gray-300">By</span>
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm flex-shrink-0">
+                            ${escapeHtml(authorInitial)}
+                        </div>
+                        <span class="text-xs font-semibold text-white">
+                            ${escapeHtml(authorName)}
+                        </span>
+                    </div>
                 </div>
 
-                <!-- Body: Title & Description -->
-                <h4 class="font-bold text-white text-base mb-2 group-hover:text-yellow-200 transition cursor-pointer item-title-click">
-                    ${escapeHtml(item.title)}
-                </h4>
-                <p class="text-xs text-gray-300 mb-4 leading-relaxed line-clamp-3 cursor-pointer item-desc-click">
-                    ${escapeHtml(item.description)}
-                </p>
+                <!-- Bottom Row: Reactions (Left) & Tags + Date (Right) -->
+                <div class="pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-2 flex-wrap relative">
+                        ${renderedReactionButtons}
 
-                <!-- Tags -->
-                ${tagsHtml ? `<div class="flex flex-wrap gap-1 mb-4">${tagsHtml}</div>` : ''}
+                        <!-- Quick Add Reaction (+) Trigger -->
+                        <div class="relative inline-block add-reaction-container">
+                            <button class="reaction-btn text-gray-400 hover:text-white add-reaction-btn px-2.5 py-1.5 text-xs" title="Add reaction">
+                                <i class="fas fa-plus text-[9px]"></i>
+                                <i class="far fa-face-smile text-xs"></i>
+                            </button>
+                            <div class="reaction-popover hidden absolute left-0 bottom-full mb-1.5 z-40 p-1.5 rounded-xl flex items-center gap-1 shadow-2xl">
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="upvote" title="Upvote">👍</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="fire" title="Fire">🔥</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="rocket" title="Rocket">🚀</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="like" title="Love">❤️</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="bulb" title="Idea">💡</button>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- Footer: Upvote Button, Author & Details Link -->
-                <div class="mt-auto pt-3 border-t border-white/10 flex items-center justify-between gap-3">
-                    <button class="vote-btn ${isVoted ? 'voted' : ''} px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer vote-action-btn"
-                        data-id="${escapeHtml(item.id)}" data-voted="${isVoted ? 'true' : 'false'}">
-                        <i class="fas fa-arrow-up text-[11px] ${isVoted ? 'text-white' : 'text-pink-400'}"></i>
-                        <span class="vote-number">${voteCount}</span>
-                    </button>
-
-                    <div class="flex items-center gap-2">
-                        <span class="text-[11px] text-gray-400">
-                            ${escapeHtml(item.authorName || (item.source === 'official' ? 'Tabsome Team' : 'Community Member'))}
-                        </span>
-                        <button class="text-gray-400 hover:text-white text-xs p-1.5 rounded-lg hover:bg-white/10 transition item-detail-btn"
-                            title="View details & discussion">
-                            <i class="fas fa-arrow-up-right-from-square"></i>
-                        </button>
+                    <!-- Tags & Date on the Right -->
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        ${tagsHtml}
+                        <div class="text-[11px] text-gray-400 font-medium flex items-center gap-1.5">
+                            <i class="far fa-calendar-alt text-[10px]"></i>
+                            <span>${dateStr ? dateStr : 'Recently'}</span>
+                        </div>
                     </div>
                 </div>
             `;
 
-            // Event Listeners on Card
-            const voteBtn = card.querySelector('.vote-action-btn');
-            voteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                handleVoteToggle(item.id, voteBtn);
+            // View More & Title Click Listeners to open Modal
+            const viewMoreBtn = card.querySelector('.item-view-more');
+            const titleTrigger = card.querySelector('.item-title-trigger');
+            [viewMoreBtn, titleTrigger].forEach(el => {
+                if (el) {
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openItemDetailModal(item.id);
+                    });
+                }
             });
 
-            const openDetailElements = card.querySelectorAll('.item-title-click, .item-desc-click, .item-detail-btn');
-            openDetailElements.forEach(el => {
-                el.addEventListener('click', () => {
-                    openItemDetailModal(item.id);
+            // Reaction Pill Buttons Listeners
+            card.querySelectorAll('.reaction-toggle-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const reaction = btn.getAttribute('data-reaction');
+                    handleReactionToggle(item.id, reaction);
                 });
             });
+
+            // Popover Add Reaction Handlers
+            const addBtn = card.querySelector('.add-reaction-btn');
+            const popover = card.querySelector('.reaction-popover');
+            if (addBtn && popover) {
+                addBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.reaction-popover').forEach(p => {
+                        if (p !== popover) p.classList.add('hidden');
+                    });
+                    popover.classList.toggle('hidden');
+                });
+
+                popover.querySelectorAll('.emoji-pick-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        popover.classList.add('hidden');
+                        const reaction = btn.getAttribute('data-reaction');
+                        handleReactionToggle(item.id, reaction);
+                    });
+                });
+            }
 
             return card;
         }
 
-        // Vote Toggle Handler (Optimistic UI + Local & Remote Sync)
-        async function handleVoteToggle(itemId, btnElement) {
-            const item = allRoadmapItems.find(i => i.id === itemId);
-            if (!item) return;
-
-            const isCurrentlyVoted = Boolean(item.hasVoted);
-            const numElement = btnElement.querySelector('.vote-number');
-            const iconElement = btnElement.querySelector('i');
-
-            const nextVotedState = !isCurrentlyVoted;
-            const originalCount = item.voteCount || 0;
-            const newCount = nextVotedState ? originalCount + 1 : Math.max(0, originalCount - 1);
-
-            item.hasVoted = nextVotedState;
-            item.voteCount = newCount;
-
-            // Save locally
-            const votedSet = getLocalVotedSet();
-            if (nextVotedState) {
-                votedSet.add(itemId);
-            } else {
-                votedSet.delete(itemId);
-            }
-            saveLocalVotedSet(votedSet);
-
-            // Update DOM button immediately
-            if (nextVotedState) {
-                btnElement.classList.add('voted');
-                btnElement.setAttribute('data-voted', 'true');
-                if (iconElement) iconElement.className = 'fas fa-arrow-up text-[11px] text-white';
-            } else {
-                btnElement.classList.remove('voted');
-                btnElement.setAttribute('data-voted', 'false');
-                if (iconElement) iconElement.className = 'fas fa-arrow-up text-[11px] text-pink-400';
-            }
-            if (numElement) numElement.textContent = newCount;
-
-            // Fire remote API call with TabsomeAuth (automatically attaches Bearer token if logged in)
-            try {
-                if (nextVotedState) {
-                    await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react`, {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            reactionType: 'upvote',
-                            installationId: installationId
-                        })
-                    });
-                } else {
-                    await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/${encodeURIComponent(itemId)}/react?reactionType=upvote&installationId=${encodeURIComponent(installationId)}`, {
-                        method: 'DELETE'
-                    });
-                }
-            } catch (err) {
-                console.warn('API sync vote notice:', err);
-            }
-
-            showToast(nextVotedState ? 'Upvote registered! Thank you.' : 'Upvote removed.');
-        }
+        // Close popovers on outside click
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.reaction-popover').forEach(p => p.classList.add('hidden'));
+        });
 
         // Fetch Roadmap Items from API
         async function fetchRoadmapData() {
             loadingState.classList.remove('hidden');
             errorState.classList.add('hidden');
             emptyState.classList.add('hidden');
-            boardViewContainer.classList.add('hidden');
-            listViewContainer.classList.add('hidden');
+            roadmapTableContainer.classList.add('hidden');
 
             try {
                 const url = `${API_BASE_URL}/api/v3/roadmap?limit=100&installationId=${encodeURIComponent(installationId)}`;
@@ -1178,19 +1055,20 @@
                     }
                 });
 
-                // Sync with local votes
-                const votedSet = getLocalVotedSet();
+                // Sync with local reactions
+                const localReactions = getLocalUserReactions();
                 allRoadmapItems.forEach(item => {
-                    if (votedSet.has(item.id)) {
-                        if (!item.hasVoted) {
-                            item.hasVoted = true;
-                            item.voteCount = (item.voteCount || 0) + 1;
+                    if (localReactions[item.id]) {
+                        item.userReaction = localReactions[item.id];
+                        item.hasVoted = true;
+                        if (!item.reactionsCount) item.reactionsCount = {};
+                        if (!item.reactionsCount[item.userReaction]) {
+                            item.reactionsCount[item.userReaction] = 1;
                         }
                     }
                 });
 
                 loadingState.classList.add('hidden');
-                updateCounts();
                 renderFilteredItems();
 
             } catch (err) {
@@ -1201,168 +1079,74 @@
             }
         }
 
-        // Update Counter Badges
-        function updateCounts() {
-            const counts = {
-                all: allRoadmapItems.length,
-                under_review: 0,
-                considering: 0,
-                planned: 0,
-                in_progress: 0,
-                completed: 0
-            };
-
-            allRoadmapItems.forEach(item => {
-                if (counts[item.status] !== undefined) {
-                    counts[item.status]++;
-                }
-            });
-
-            document.getElementById('countAll').textContent = counts.all;
-            document.getElementById('countUnderReview').textContent = counts.under_review;
-            document.getElementById('countConsidering').textContent = counts.considering;
-            document.getElementById('countPlanned').textContent = counts.planned;
-            document.getElementById('countInProgress').textContent = counts.in_progress;
-            document.getElementById('countCompleted').textContent = counts.completed;
-
-            document.getElementById('colBadgeUnderReview').textContent = counts.under_review;
-            document.getElementById('colBadgeConsidering').textContent = counts.considering;
-            document.getElementById('colBadgePlanned').textContent = counts.planned;
-            document.getElementById('colBadgeInProgress').textContent = counts.in_progress;
-            document.getElementById('colBadgeCompleted').textContent = counts.completed;
-        }
-
-        // Filter and Render
+        // Render Items
         function renderFilteredItems() {
             let filtered = [...allRoadmapItems];
 
-            // 1. Status Filter
-            if (activeStatusFilter !== 'all') {
-                filtered = filtered.filter(i => i.status === activeStatusFilter);
-            }
-
-            // 2. Source Filter
-            if (activeSourceFilter !== 'all') {
-                filtered = filtered.filter(i => (i.source || 'community') === activeSourceFilter);
-            }
-
-            // 3. Type Filter
-            if (activeTypeFilter !== 'all') {
-                filtered = filtered.filter(i => i.type === activeTypeFilter);
-            }
-
-            // 4. Search Filter
-            if (activeSearchQuery.trim()) {
-                const query = activeSearchQuery.toLowerCase().trim();
-                filtered = filtered.filter(i => {
-                    const titleMatch = (i.title || '').toLowerCase().includes(query);
-                    const descMatch = (i.description || '').toLowerCase().includes(query);
-                    const tagMatch = Array.isArray(i.tags) && i.tags.some(t => (t || '').toLowerCase().includes(query));
-                    return titleMatch || descMatch || tagMatch;
-                });
-            }
-
-            // 5. Sort
+            // Sort: Pinned first, then high votes/reactions, then date
             filtered.sort((a, b) => {
                 if (a.isPinned && !b.isPinned) return -1;
                 if (!a.isPinned && b.isPinned) return 1;
 
-                if (activeSort === 'votes') {
-                    const voteDiff = (b.voteCount || 0) - (a.voteCount || 0);
-                    if (voteDiff !== 0) return voteDiff;
-                }
+                const voteA = a.voteCount || 0;
+                const voteB = b.voteCount || 0;
+                if (voteB !== voteA) return voteB - voteA;
+
                 const dateA = new Date(a.createdAt || 0).getTime();
                 const dateB = new Date(b.createdAt || 0).getTime();
                 return dateB - dateA;
             });
 
-            // Check Empty
+            // Empty check
             if (filtered.length === 0) {
                 emptyState.classList.remove('hidden');
-                boardViewContainer.classList.add('hidden');
-                listViewContainer.classList.add('hidden');
+                roadmapTableContainer.classList.add('hidden');
                 return;
             } else {
                 emptyState.classList.add('hidden');
+                roadmapTableContainer.classList.remove('hidden');
             }
 
-            if (currentView === 'board') {
-                renderBoardView(filtered);
-            } else {
-                renderListView(filtered);
-            }
-        }
-
-        function renderBoardView(items) {
-            boardViewContainer.classList.remove('hidden');
-            listViewContainer.classList.add('hidden');
-
-            const colUnderReview = document.getElementById('colItemsUnderReview');
-            const colConsidering = document.getElementById('colItemsConsidering');
-            const colPlanned = document.getElementById('colItemsPlanned');
-            const colInProgress = document.getElementById('colItemsInProgress');
-            const colCompleted = document.getElementById('colItemsCompleted');
-
-            colUnderReview.innerHTML = '';
-            colConsidering.innerHTML = '';
-            colPlanned.innerHTML = '';
-            colInProgress.innerHTML = '';
-            colCompleted.innerHTML = '';
-
-            items.forEach(item => {
-                const card = createItemCard(item);
-                if (item.status === 'under_review') {
-                    colUnderReview.appendChild(card);
-                } else if (item.status === 'considering') {
-                    colConsidering.appendChild(card);
-                } else if (item.status === 'planned') {
-                    colPlanned.appendChild(card);
-                } else if (item.status === 'in_progress') {
-                    colInProgress.appendChild(card);
-                } else if (item.status === 'completed') {
-                    colCompleted.appendChild(card);
-                }
-            });
-
-            // Empty placeholders for columns
-            [
-                { col: colUnderReview, name: 'Under Review' },
-                { col: colConsidering, name: 'Considering' },
-                { col: colPlanned, name: 'Planned' },
-                { col: colInProgress, name: 'In Progress' },
-                { col: colCompleted, name: 'Completed' }
-            ].forEach(({ col, name }) => {
-                if (col.children.length === 0) {
-                    col.innerHTML = `<div class="p-6 text-center text-xs text-gray-400 bg-black/10 rounded-xl border border-dashed border-white/10">No ${escapeHtml(name)} items</div>`;
-                }
+            // Render Table Rows
+            roadmapListRows.innerHTML = '';
+            filtered.forEach(item => {
+                const row = createTableRow(item);
+                roadmapListRows.appendChild(row);
             });
         }
 
-        function renderListView(items) {
-            listViewContainer.classList.remove('hidden');
-            boardViewContainer.classList.add('hidden');
-            listItemsGrid.innerHTML = '';
-
-            items.forEach(item => {
-                const card = createItemCard(item);
-                listItemsGrid.appendChild(card);
-            });
-        }
-
-        // Open Detail Modal
+        // Open Detail Modal with Complete Reactions Bar
         function openItemDetailModal(itemId) {
-            const item = allRoadmapItems.find(i => i.id === itemId);
+            const item = allRoadmapItems.find(i => String(i.id) === String(itemId));
             if (!item) return;
 
             const statusMeta = STATUS_CONFIG[item.status] || STATUS_CONFIG.under_review;
             const typeMeta = TYPE_CONFIG[item.type] || TYPE_CONFIG.feature;
             const sourceMeta = (item.source && SOURCE_CONFIG[item.source]) ? SOURCE_CONFIG[item.source] : SOURCE_CONFIG.community;
-            const isVoted = Boolean(item.hasVoted);
             const dateStr = formatDate(item.createdAt);
 
             const tagsHtml = (Array.isArray(item.tags) && item.tags.length > 0)
                 ? item.tags.map(t => `<span class="text-xs bg-black/30 text-gray-200 px-2.5 py-1 rounded-full border border-white/10">#${escapeHtml(t)}</span>`).join('')
                 : '';
+
+            const reactionsMap = item.reactionsCount || {};
+            if (Object.keys(reactionsMap).length === 0 && item.voteCount) {
+                reactionsMap['upvote'] = item.voteCount;
+            }
+
+            let modalReactionsHtml = '';
+            SUPPORTED_REACTIONS.forEach(r => {
+                const count = reactionsMap[r.type] || 0;
+                const isActive = item.userReaction === r.type || (r.type === 'upvote' && item.hasVoted && !item.userReaction);
+                modalReactionsHtml += `
+                    <button class="reaction-btn ${isActive ? 'active' : ''} px-3 py-2 text-xs modal-reaction-toggle"
+                        data-reaction="${r.type}">
+                        <span class="text-base">${r.emoji}</span>
+                        <span>${r.label}</span>
+                        <span class="font-bold bg-black/30 px-1.5 py-0.5 rounded-md text-[10px]">${count}</span>
+                    </button>
+                `;
+            });
 
             detailModalBody.innerHTML = `
                 <!-- Meta tags -->
@@ -1395,44 +1179,39 @@
 
                 <!-- Full Description -->
                 <div class="text-sm text-gray-200 leading-relaxed mb-6 whitespace-pre-wrap bg-black/20 p-4 rounded-xl border border-white/5">
-                    ${escapeHtml(item.description)}
+                    ${escapeHtml(item.description || 'No extended details provided for this roadmap task.')}
                 </div>
 
                 <!-- Tags -->
                 ${tagsHtml ? `<div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>` : ''}
 
-                <!-- Modal Actions -->
-                <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-                    <button id="modalVoteBtn"
-                        class="vote-btn ${isVoted ? 'voted' : ''} px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 cursor-pointer shadow-md">
-                        <i class="fas fa-arrow-up ${isVoted ? 'text-white' : 'text-pink-400'}"></i>
-                        <span>Upvote (${item.voteCount || 0})</span>
-                    </button>
+                <!-- Modal Actions & Full Reactions Bar -->
+                <div class="pt-4 border-t border-white/10 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Leave a reaction:</span>
+                        <button id="copyShareLinkBtn"
+                            class="bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-white/20 transition inline-flex items-center gap-1.5">
+                            <i class="fas fa-link text-[10px]"></i>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
 
-                    <button id="copyShareLinkBtn"
-                        class="bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-4 py-2.5 rounded-xl border border-white/20 transition inline-flex items-center gap-2">
-                        <i class="fas fa-link"></i>
-                        <span>Copy Link</span>
-                    </button>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        ${modalReactionsHtml}
+                    </div>
                 </div>
             `;
 
-            // Modal Vote Listener
-            const modalVoteBtn = document.getElementById('modalVoteBtn');
-            modalVoteBtn.addEventListener('click', () => {
-                handleVoteToggle(item.id, modalVoteBtn);
-                setTimeout(() => {
-                    const latest = allRoadmapItems.find(i => i.id === item.id);
-                    if (latest) {
-                        modalVoteBtn.innerHTML = `
-                            <i class="fas fa-arrow-up ${latest.hasVoted ? 'text-white' : 'text-pink-400'}"></i>
-                            <span>Upvote (${latest.voteCount || 0})</span>
-                        `;
-                    }
-                }, 100);
+            // Modal Reaction Click Listeners
+            detailModalBody.querySelectorAll('.modal-reaction-toggle').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const reaction = btn.getAttribute('data-reaction');
+                    await handleReactionToggle(item.id, reaction);
+                    openItemDetailModal(item.id); // Refresh modal state
+                });
             });
 
-            // Copy link button
+            // Copy Link Button Listener
             document.getElementById('copyShareLinkBtn').addEventListener('click', () => {
                 const url = new URL(window.location.href);
                 url.searchParams.set('item', item.id);
@@ -1464,7 +1243,6 @@
             formFeedback.classList.add('hidden');
             suggestForm.reset();
 
-            // Auto-populate author if authenticated
             try {
                 const user = await TabsomeAuth.getUser();
                 if (user) {
@@ -1521,7 +1299,9 @@
                 status: 'under_review',
                 source: 'community',
                 voteCount: 1,
+                reactionsCount: { upvote: 1 },
                 hasVoted: true,
+                userReaction: 'upvote',
                 authorName,
                 authorEmail,
                 installationId,
@@ -1545,79 +1325,16 @@
                 console.warn('Backend sync suggestion note:', err);
             }
 
-            // Always add locally and persist
             saveLocalSuggestion(payload);
-            const votedSet = getLocalVotedSet();
-            votedSet.add(payload.id);
-            saveLocalVotedSet(votedSet);
+            saveLocalUserReaction(payload.id, 'upvote');
 
             allRoadmapItems.unshift(payload);
-            updateCounts();
             renderFilteredItems();
 
             closeSuggestModal();
             showToast('Suggestion submitted successfully! Thank you.');
             submitSuggestBtn.disabled = false;
             submitSuggestBtn.innerHTML = `<i class="fas fa-paper-plane"></i><span>Submit to Roadmap</span>`;
-        });
-
-        // Event Listeners: Filter Tabs
-        statusTabsContainer.querySelectorAll('.filter-pill').forEach(pill => {
-            pill.addEventListener('click', () => {
-                statusTabsContainer.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                activeStatusFilter = pill.getAttribute('data-status');
-                renderFilteredItems();
-            });
-        });
-
-        // Event Listeners: Search & Clear
-        searchInput.addEventListener('input', (e) => {
-            activeSearchQuery = e.target.value;
-            if (activeSearchQuery) {
-                clearSearchBtn.classList.remove('hidden');
-            } else {
-                clearSearchBtn.classList.add('hidden');
-            }
-            renderFilteredItems();
-        });
-
-        clearSearchBtn.addEventListener('click', () => {
-            searchInput.value = '';
-            activeSearchQuery = '';
-            clearSearchBtn.classList.add('hidden');
-            renderFilteredItems();
-        });
-
-        // Event Listeners: Source, Type & Sort
-        sourceFilter.addEventListener('change', (e) => {
-            activeSourceFilter = e.target.value;
-            renderFilteredItems();
-        });
-
-        typeFilter.addEventListener('change', (e) => {
-            activeTypeFilter = e.target.value;
-            renderFilteredItems();
-        });
-
-        sortSelect.addEventListener('change', (e) => {
-            activeSort = e.target.value;
-            renderFilteredItems();
-        });
-
-        // Event Listeners: View Mode Switcher
-        boardViewBtn.addEventListener('click', () => {
-            currentView = 'board';
-            boardViewBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-purple-700 transition';
-            listViewBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition';
-            renderFilteredItems();
-        });
-
-        listViewBtn.addEventListener('click', () => {
-            currentView = 'list';
-            listViewBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-white text-purple-700 transition';
-            boardViewBtn.className = 'px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition';
-            renderFilteredItems();
         });
 
         // Event Listeners: Modals Trigger & Close
@@ -1645,12 +1362,8 @@
 
         // Initialize Authentication UI and Load Data
         document.addEventListener('DOMContentLoaded', () => {
-            // Mount Navbar Auth
             if (window.TabsomeAuth) {
                 TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
-                TabsomeAuth.onAuthStateChange(() => {
-                    fetchRoadmapData();
-                });
             }
 
             fetchRoadmapData().then(() => {
