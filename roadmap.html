@@ -738,10 +738,6 @@
             const authorName = item.authorName || (item.source === 'official' ? 'Tabsome Team' : 'Community Member');
             const authorInitial = authorName.charAt(0).toUpperCase();
 
-            const tagsHtml = (Array.isArray(item.tags) && item.tags.length > 0)
-                ? item.tags.map(t => `<span class="text-xs bg-black/30 text-gray-300 px-2.5 py-0.5 rounded-full border border-white/5">#${escapeHtml(t)}</span>`).join('')
-                : '';
-
             const versionBadge = item.targetVersion
                 ? `<span class="text-xs bg-white/10 text-white px-2.5 py-0.5 rounded-md font-semibold border border-white/15">🎯 ${escapeHtml(item.targetVersion)}</span>`
                 : '';
@@ -811,7 +807,7 @@
                     </div>
                 </div>
 
-                <!-- Bottom Row: Reactions (Left) & Tags + Date (Right) -->
+                <!-- Bottom Row: Reactions (Left) & Date (Right) -->
                 <div class="pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 flex-wrap">
                     <div class="flex items-center gap-2 flex-wrap relative">
                         ${renderedReactionButtons}
@@ -832,9 +828,8 @@
                         </div>
                     </div>
 
-                    <!-- Tags & Date on the Right -->
+                    <!-- Date on the Right -->
                     <div class="flex items-center gap-2.5 flex-wrap">
-                        ${tagsHtml}
                         <div class="text-[11px] text-gray-400 font-medium flex items-center gap-1.5">
                             <i class="far fa-calendar-alt text-[10px]"></i>
                             <span>${dateStr ? dateStr : 'Recently'}</span>
@@ -997,10 +992,6 @@
             const sourceMeta = (item.source && SOURCE_CONFIG[item.source]) ? SOURCE_CONFIG[item.source] : SOURCE_CONFIG.community;
             const dateStr = formatDate(item.createdAt);
 
-            const tagsHtml = (Array.isArray(item.tags) && item.tags.length > 0)
-                ? item.tags.map(t => `<span class="text-xs bg-black/30 text-gray-200 px-2.5 py-1 rounded-full border border-white/10">#${escapeHtml(t)}</span>`).join('')
-                : '';
-
             const reactionsMap = item.reactionsCount || {};
             if (Object.keys(reactionsMap).length === 0 && item.voteCount) {
                 reactionsMap['upvote'] = item.voteCount;
@@ -1053,9 +1044,6 @@
                 <div class="text-sm text-gray-200 leading-relaxed mb-6 whitespace-pre-wrap bg-black/20 p-4 rounded-xl border border-white/5">
                     ${escapeHtml(item.description || 'No extended details provided for this roadmap task.')}
                 </div>
-
-                <!-- Tags -->
-                ${tagsHtml ? `<div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>` : ''}
 
                 <!-- Modal Actions & Full Reactions Bar -->
                 <div class="pt-4 border-t border-white/10 space-y-4">
