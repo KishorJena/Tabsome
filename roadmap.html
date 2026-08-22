@@ -141,8 +141,15 @@
 
         /* Skeleton Animation */
         @keyframes pulse-subtle {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 0.25; }
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
         }
 
         .skeleton-pulse {
@@ -195,11 +202,6 @@
                 <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
             </nav>
             <div class="flex items-center space-x-3">
-                <button id="openSuggestModalNavBtn"
-                    class="hidden sm:inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white text-sm font-semibold px-4 py-2 rounded-lg border border-white/20 transition transform hover:scale-105">
-                    <i class="fas fa-lightbulb text-yellow-300"></i>
-                    <span>Suggest Idea</span>
-                </button>
                 <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
                 <a href="index.html#download"
                     class="bg-white text-purple-600 font-bold text-sm px-4 sm:px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105 shadow-md">
@@ -209,169 +211,45 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-8 text-center flex-shrink-0">
+    <!-- Header Intro / Top Tag, Heading & Caption -->
+    <section class="pt-28 pb-4 text-center flex-shrink-0">
         <div class="max-w-4xl mx-auto px-6" data-aos="fade-up">
             <div
-                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider mb-4">
+                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider mb-3">
                 <i class="fas fa-compass text-yellow-300"></i>
-                <span>Community-Driven Product Board</span>
+                <span>Roadmap</span>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-                Product Roadmap & Ideas
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-3 tracking-tight text-amber-100/90">
+                What’s coming to Tabsome
             </h1>
-            <p class="text-lg md:text-xl text-white/85 max-w-2xl mx-auto mb-6">
-                See what we're actively building, vote on features you want next, and submit your own ideas to shape the
-                future of Tabsome.
+            <p class="text-sm md:text-base text-gray-300 max-w-2xl mx-auto">
+                Explore possible future features, vote for what you’d like to see, and share your own ideas.
             </p>
-            <div class="flex flex-wrap justify-center items-center gap-3">
-                <button id="heroSuggestBtn"
-                    class="bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2">
-                    <i class="fas fa-plus-circle text-purple-600"></i>
-                    <span>Suggest a Feature</span>
-                </button>
-                <a href="#howItWorks"
-                    class="bg-white/15 hover:bg-white/25 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 transition transform hover:scale-105 inline-flex items-center gap-2">
-                    <i class="fas fa-circle-question text-yellow-300"></i>
-                    <span>How This Works</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive "How This Works & Community Guide" -->
-    <section id="howItWorks" class="pb-8">
-        <div class="max-w-7xl mx-auto px-6" data-aos="fade-up">
-            <div class="glass-card rounded-2xl p-6 md:p-8">
-                <div
-                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
-                    <div>
-                        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                            <i class="fas fa-bullhorn text-yellow-300"></i>
-                            <span>How the Roadmap Works & How to React</span>
-                        </h2>
-                        <p class="text-gray-300 text-sm mt-1">
-                            We build Tabsome transparently in public. Every vote and suggestion directly informs our
-                            development priorities.
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span
-                            class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-medium flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            Live Community Board
-                        </span>
-                    </div>
-                </div>
-
-                <!-- 5 Lifecycle Stages -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-6">
-                    <!-- Stage 1 -->
-                    <div class="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center text-xs font-bold">
-                                <i class="fas fa-lightbulb"></i>
-                            </span>
-                            <h3 class="font-semibold text-white text-sm">1. Under Review</h3>
-                        </div>
-                        <p class="text-xs text-gray-300 leading-relaxed flex-grow">
-                            Community submissions awaiting team review and upvotes to measure demand.
-                        </p>
-                    </div>
-
-                    <!-- Stage 2 -->
-                    <div class="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center justify-center text-xs font-bold">
-                                <i class="fas fa-compass"></i>
-                            </span>
-                            <h3 class="font-semibold text-white text-sm">2. Considering</h3>
-                        </div>
-                        <p class="text-xs text-gray-300 leading-relaxed flex-grow">
-                            Under active research and feasibility evaluation for potential inclusion.
-                        </p>
-                    </div>
-
-                    <!-- Stage 3 -->
-                    <div class="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center justify-center text-xs font-bold">
-                                <i class="fas fa-clipboard-list"></i>
-                            </span>
-                            <h3 class="font-semibold text-white text-sm">3. Planned</h3>
-                        </div>
-                        <p class="text-xs text-gray-300 leading-relaxed flex-grow">
-                            Approved features scheduled for upcoming development milestones.
-                        </p>
-                    </div>
-
-                    <!-- Stage 4 -->
-                    <div class="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center justify-center text-xs font-bold">
-                                <i class="fas fa-code"></i>
-                            </span>
-                            <h3 class="font-semibold text-white text-sm">4. In Progress</h3>
-                        </div>
-                        <p class="text-xs text-gray-300 leading-relaxed flex-grow">
-                            Currently being coded and tested by our engineering team.
-                        </p>
-                    </div>
-
-                    <!-- Stage 5 -->
-                    <div class="bg-black/20 rounded-xl p-4 border border-white/5 flex flex-col">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span
-                                class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center text-xs font-bold">
-                                <i class="fas fa-check-circle"></i>
-                            </span>
-                            <h3 class="font-semibold text-white text-sm">5. Completed</h3>
-                        </div>
-                        <p class="text-xs text-gray-300 leading-relaxed flex-grow">
-                            Shipped and available in the latest version on the Chrome Web Store.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 3 Action Guide for User Participation -->
-                <div
-                    class="mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-gray-300">
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-face-smile text-pink-400 text-sm"></i>
-                        <span><strong>React & Vote:</strong> Click 👍, 🔥, 🚀, ❤️, or 💡 on any item to show support.</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-paper-plane text-yellow-300 text-sm"></i>
-                        <span><strong>Propose ideas:</strong> Share new features or improvements directly with the community.</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-share-nodes text-sky-400 text-sm"></i>
-                        <span><strong>Share & Track:</strong> Copy item links to track progress and gather support.</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
     <!-- Main Roadmap Content Area -->
-    <main class="pb-16 flex-grow">
+    <main class="py-4 pb-16 flex-grow">
         <div class="max-w-7xl mx-auto px-6" data-aos="fade-up">
             <div class="glass-card rounded-2xl p-6 md:p-8">
                 <!-- Surface Header -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
                     <div>
-                        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2 text-white">
                             <i class="fas fa-layer-group text-purple-400"></i>
-                            <span>Roadmap Items & Community Ideas</span>
+                            <span>Upcoming Features & Improvements</span>
                         </h2>
                         <p class="text-gray-300 text-sm mt-1">
-                            Explore upcoming features, proposed enhancements, and community discussions.
+                            Your feedback helps us decide which features to prioritize. Let’s shape the future of
+                            Tabsome together.
                         </p>
                     </div>
+                    <button id="surfaceSuggestBtn"
+                        class="bg-white text-purple-700 font-bold px-5 py-2.5 rounded-xl text-xs hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 flex-shrink-0">
+                        <i class="fas fa-plus"></i>
+                        <span>Suggest Idea</span>
+                    </button>
                 </div>
 
                 <!-- Loading State (Post Card Skeletons inside Surface) -->
@@ -688,8 +566,7 @@
         // Modal Elements
         const suggestModal = document.getElementById('suggestModal');
         const suggestModalContent = document.getElementById('suggestModalContent');
-        const openSuggestModalNavBtn = document.getElementById('openSuggestModalNavBtn');
-        const heroSuggestBtn = document.getElementById('heroSuggestBtn');
+        const surfaceSuggestBtn = document.getElementById('surfaceSuggestBtn');
         const emptySuggestBtn = document.getElementById('emptySuggestBtn');
         const closeSuggestModalBtn = document.getElementById('closeSuggestModalBtn');
         const cancelSuggestBtn = document.getElementById('cancelSuggestBtn');
@@ -1338,7 +1215,7 @@
         });
 
         // Event Listeners: Modals Trigger & Close
-        [openSuggestModalNavBtn, heroSuggestBtn, emptySuggestBtn].forEach(btn => {
+        [surfaceSuggestBtn, emptySuggestBtn].forEach(btn => {
             if (btn) btn.addEventListener('click', openSuggestModal);
         });
 
