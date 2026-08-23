@@ -741,6 +741,8 @@
                 ? `<span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-md font-bold border border-amber-500/30 flex items-center gap-1"><i class="fas fa-thumbtack text-[10px]"></i> Pinned</span>`
                 : '';
 
+            const isUnpublished = item.isPublished === false || item.is_published === false;
+
             // Render reaction pills
             const reactionsMap = item.reactionsCount || {};
             if (Object.keys(reactionsMap).length === 0 && item.voteCount) {
@@ -776,6 +778,15 @@
             }
 
             card.innerHTML = `
+                ${isUnpublished ? `
+                    <!-- Awaiting Review Banner Above Title & Author -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-md font-semibold border border-amber-500/30 inline-flex items-center gap-1.5 cursor-help" title="Not public yet. We'll review it before publishing.">
+                            <i class="fas fa-clock text-[10px]"></i> Awaiting review
+                        </span>
+                    </div>
+                ` : ''}
+
                 <!-- Post Top Row: Title + Badges + View more (Left) & Author Info (Right) -->
                 <div class="flex items-start justify-between gap-4">
                     <div class="flex items-center gap-2.5 flex-wrap flex-grow">
@@ -985,6 +996,7 @@
             const statusMeta = STATUS_CONFIG[item.status] || STATUS_CONFIG.under_review;
             const typeMeta = TYPE_CONFIG[item.type] || TYPE_CONFIG.feature;
             const sourceMeta = (item.source && SOURCE_CONFIG[item.source]) ? SOURCE_CONFIG[item.source] : SOURCE_CONFIG.community;
+            const isUnpublished = item.isPublished === false || item.is_published === false;
             const dateStr = formatDate(item.createdAt);
 
             const reactionsMap = item.reactionsCount || {};
@@ -1021,6 +1033,7 @@
                         <span class="w-2 h-2 rounded-full ${statusMeta.dotClass}"></span>
                         ${escapeHtml(statusMeta.label)}
                     </span>
+                    ${isUnpublished ? `<span class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 cursor-help" title="Not public yet. We'll review it before publishing."><i class="fas fa-clock text-xs"></i> Awaiting review</span>` : ''}
                     ${item.targetVersion ? `<span class="text-xs bg-white/10 text-white px-2.5 py-1 rounded-md font-semibold border border-white/15">🎯 Target: ${escapeHtml(item.targetVersion)}</span>` : ''}
                     ${item.isPinned ? `<span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-md font-semibold border border-amber-500/30">📌 Pinned</span>` : ''}
                 </div>
@@ -1198,6 +1211,7 @@
                 description,
                 status: 'under_review',
                 source: 'community',
+                isPublished: false,
                 voteCount: 1,
                 reactionsCount: { upvote: 1 },
                 hasVoted: true,
