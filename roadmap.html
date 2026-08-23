@@ -728,7 +728,7 @@
                     showToast(`Reacted with ${rObj ? rObj.emoji : reactionType}!`);
                 }
             } catch (err) {
-                console.warn('API reaction sync error:', err);
+                console.warn('Sync error');
             }
         }
 
@@ -942,7 +942,7 @@
                 renderFilteredItems();
 
             } catch (err) {
-                console.error('Roadmap fetch error:', err);
+                console.error('Fetch error');
                 loadingState.classList.add('hidden');
                 errorMessage.textContent = err.message || 'Unable to connect to roadmap server.';
                 errorState.classList.remove('hidden');
@@ -1161,7 +1161,7 @@
                     if (user.email) document.getElementById('formAuthorEmail').value = user.email;
                 }
             } catch (err) {
-                console.warn('Could not read user for suggestion modal:', err);
+                console.warn('User error');
             }
 
             suggestModal.classList.remove('hidden');
@@ -1231,7 +1231,7 @@
                     }
                 }
             } catch (err) {
-                console.warn('Backend sync suggestion note:', err);
+                console.warn('Sync error');
             }
 
             saveLocalSuggestion(payload);

@@ -501,7 +501,6 @@
 
             for (const apiUrl of API_ENDPOINTS) {
                 try {
-                    console.log(`Trying API: ${apiUrl}/api/v2/widgets`);
                     const response = await fetch(`${apiUrl}/api/v2/widgets`, {
                         mode: 'cors',
                         headers: { 'Accept': 'application/json' }
@@ -515,7 +514,6 @@
 
                     if (data.success) {
                         currentApiUrl = apiUrl;
-                        console.log(`Connected to: ${apiUrl}`);
                         allWidgets = data.data;
                         applyFilters();
                         return;
@@ -523,7 +521,7 @@
                         throw new Error(data.error || 'API returned failure');
                     }
                 } catch (error) {
-                    console.warn(`Failed to connect to ${apiUrl}:`, error.message);
+                    console.warn('Fetch error');
                     lastError = error;
                 }
             }

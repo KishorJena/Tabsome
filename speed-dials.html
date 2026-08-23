@@ -467,8 +467,6 @@
             const logEntry = { timestamp, type, message, data };
             debugLogs.unshift(logEntry);
 
-            console.log(`[SpeedDials ${type.toUpperCase()}] ${message}`, data || '');
-
             if (debugLogContainer) {
                 const colorClass = type === 'error' ? 'text-rose-400' :
                                    type === 'warn' ? 'text-amber-400' :

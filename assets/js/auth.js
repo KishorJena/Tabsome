@@ -24,7 +24,7 @@
             try {
                 listener(user, session, event);
             } catch (err) {
-                console.error('[TabsomeAuth] Listener error:', err);
+                console.error('Auth listener error');
             }
         });
     }
@@ -35,7 +35,7 @@
         }
 
         if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
-            console.error('[TabsomeAuth] Supabase SDK is not loaded. Ensure @supabase/supabase-js is included via script tag.');
+            console.error('Auth client error');
             return null;
         }
 
@@ -50,7 +50,6 @@
 
         // Listen immediately to Supabase auth events (OAuth redirect callback, token refresh, etc.)
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            console.log(`[TabsomeAuth] Supabase onAuthStateChange: ${event}`, session?.user?.email || 'no session');
             currentSession = session || null;
             currentUser = session?.user || null;
 
@@ -95,7 +94,7 @@
                 if (currentSession) {
                     const { data: userData, error: userError } = await client.auth.getUser();
                     if (userError || !userData?.user) {
-                        console.warn('[TabsomeAuth] Stored session is invalid or revoked on server:', userError?.message);
+                        console.warn('Auth session invalid');
                         currentUser = null;
                         currentSession = null;
                         try {
@@ -114,7 +113,7 @@
 
                 isInitialized = true;
             } catch (err) {
-                console.error('[TabsomeAuth] Failed to initialize session:', err);
+                console.error('Auth init error');
                 currentUser = null;
                 currentSession = null;
                 notifyListeners(null, null, 'SIGNED_OUT');
@@ -144,7 +143,7 @@
                 const { data, error } = await client.auth.getUser();
                 if (error || !data?.user) {
                     if (currentUser || currentSession) {
-                        console.warn('[TabsomeAuth] User session invalid on server:', error?.message);
+                        console.warn('Auth session invalid');
                         await this.clearSessionAndNotify();
                     }
                     return null;
@@ -152,7 +151,7 @@
                 currentUser = data.user;
                 return currentUser;
             } catch (err) {
-                console.error('[TabsomeAuth] getUser error:', err);
+                console.error('Auth user error');
                 return null;
             }
         },
@@ -203,7 +202,7 @@
             });
 
             if (error) {
-                console.error('[TabsomeAuth] Google Sign-In error:', error);
+                console.error('Auth sign in error');
                 alert('Sign in error: ' + (error.message || 'Unable to sign in with Google.'));
             }
         },
@@ -228,7 +227,7 @@
                 try {
                     await client.auth.signOut({ scope: 'local' });
                 } catch (e) {
-                    console.warn('[TabsomeAuth] Sign out error:', e);
+                    console.warn('Auth sign out error');
                 }
             }
             await this.clearSessionAndNotify();
@@ -271,7 +270,7 @@
 
                 // If unauthorized and we sent a token, the session was revoked or expired on backend
                 if (response.status === 401 && token) {
-                    console.warn('[TabsomeAuth] API returned 401 Unauthorized. Purging stale session and resetting UI.');
+                    console.warn('Auth session expired');
                     await this.clearSessionAndNotify();
                 }
 
