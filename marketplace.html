@@ -50,6 +50,25 @@
             background-color: #9333ea;
             background-image: linear-gradient(to right, #ff5757, #8c52ff);
             min-height: 100vh;
+            position: relative;
+        }
+
+        /* Gradient overlay to reduce overall vibrancy and enhance text contrast */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        main {
+            position: relative;
+            z-index: 10;
         }
 
         .gradient-text {
@@ -145,50 +164,6 @@
             border-radius: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .filter-btn.active {
-            background: white;
-            color: #8c52ff;
-            border-color: white;
-        }
-
-        .search-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px 16px;
-            padding-left: 44px;
-            border-radius: 12px;
-            font-size: 14px;
-            width: 100%;
-            max-width: 400px;
-            transition: all 0.2s ease;
-        }
-
-        .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(0, 0, 0, 0.4);
         }
 
         .action-btn {
@@ -317,11 +292,11 @@
                     <h1 class="text-2xl font-bold gradient-text">Tabsome</h1>
                 </a>
             </div>
-            <nav class="space-x-8 hidden md:block">
-                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="hover:text-gray-200 transition">Download</a>
-                <a href="marketplace.html" class="text-yellow-300 font-medium">Marketplace</a>
-                <a href="roadmap.html" class="hover:text-gray-200 transition">Roadmap</a>
-                <a href="changelogs.html" class="hover:text-gray-200 transition">Changelogs</a>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="marketplace.html" class="text-yellow-300 font-medium text-sm">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
             </nav>
             <div class="flex items-center space-x-3">
                 <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
@@ -346,39 +321,18 @@
                 <div class="rounded-xl p-4 flex items-center gap-4 border border-purple-500/30"
                     style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px) saturate(0.8); -webkit-backdrop-filter: blur(12px) saturate(0.8); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 48px rgba(0, 0, 0, 0.3);">
                     <div class="text-3xl">
-                        <i class="fas fa-puzzle-piece text-purple-400"></i>
+                        <i class="fas fa-lightbulb text-yellow-400"></i>
                     </div>
                     <div class="flex-1">
-                        <h3 class="font-semibold text-white mb-1">💡 Better Experience Inside Tabsome</h3>
+                        <h3 class="font-semibold text-white mb-1">Better Experience Inside Tabsome</h3>
                         <p class="text-white/70 text-sm">Use the Marketplace within the Tabsome extension to browse and
                             <strong>set widgets directly with one click</strong> – no need to copy IDs!
                         </p>
                     </div>
                     <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
                         target="_blank" class="action-btn action-btn-primary whitespace-nowrap">
-                        <i class="fas fa-download mr-2"></i>Get Tabsome
+                        <i class="fas fa-download mr-2"></i>Install
                     </a>
-                </div>
-            </section>
-
-            <!-- Filter Bar -->
-            <section class="mb-8" data-aos="fade-up" data-aos-delay="100">
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                    <!-- Search -->
-                    <div class="relative flex-1 max-w-md">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-white/50"></i>
-                        <input type="text" id="search-input" placeholder="Search widgets..." class="search-input">
-                    </div>
-
-                    <!-- Filter Buttons -->
-                    <div class="flex gap-3">
-                        <button class="filter-btn active" data-filter="all">
-                            <i class="fas fa-th-large mr-2"></i>All
-                        </button>
-                        <button class="filter-btn" data-filter="featured">
-                            <i class="fas fa-star mr-2"></i>Featured
-                        </button>
-                    </div>
                 </div>
             </section>
 
@@ -392,7 +346,7 @@
             <section id="empty-state" class="empty-state hidden">
                 <i class="fas fa-box-open"></i>
                 <h3 class="text-xl font-semibold mb-2">No widgets found</h3>
-                <p>Try adjusting your search or filters.</p>
+                <p>No widgets are currently available.</p>
             </section>
 
             <!-- Widget Grid -->
@@ -469,17 +423,12 @@
 
         // State
         let allWidgets = [];
-        let filteredWidgets = [];
-        let currentFilter = 'all';
-        let searchQuery = '';
         let selectedWidget = null;
 
         // DOM Elements
         const widgetGrid = document.getElementById('widget-grid');
         const loadingState = document.getElementById('loading-state');
         const emptyState = document.getElementById('empty-state');
-        const searchInput = document.getElementById('search-input');
-        const filterBtns = document.querySelectorAll('.filter-btn');
         const modal = document.getElementById('widget-modal');
         const modalClose = document.getElementById('modal-close');
 
@@ -509,8 +458,16 @@
 
                 if (data.success) {
                     currentApiUrl = API_BASE_URL;
-                    allWidgets = data.data;
-                    applyFilters();
+                    allWidgets = data.data || [];
+                    
+                    // Sort to show featured widgets first
+                    allWidgets.sort((a, b) => {
+                        if (a.is_featured && !b.is_featured) return -1;
+                        if (!a.is_featured && b.is_featured) return 1;
+                        return 0;
+                    });
+
+                    renderWidgets();
                     return;
                 } else {
                     throw new Error(data.error || 'API returned failure');
@@ -521,43 +478,11 @@
             }
         }
 
-        // Apply filters and search
-        function applyFilters() {
-            filteredWidgets = allWidgets.filter(widget => {
-                // Filter check
-                if (currentFilter === 'featured' && !widget.is_featured) {
-                    return false;
-                }
-
-                // Search check
-                if (searchQuery) {
-                    const query = searchQuery.toLowerCase();
-                    const matchesTitle = widget.title?.toLowerCase().includes(query);
-                    const matchesDesc = widget.description?.toLowerCase().includes(query);
-                    const matchesLabels = widget.labels?.some(l => l.toLowerCase().includes(query));
-                    if (!matchesTitle && !matchesDesc && !matchesLabels) {
-                        return false;
-                    }
-                }
-
-                return true;
-            });
-
-            // Sort to show featured widgets first
-            filteredWidgets.sort((a, b) => {
-                if (a.is_featured && !b.is_featured) return -1;
-                if (!a.is_featured && b.is_featured) return 1;
-                return 0;
-            });
-
-            renderWidgets();
-        }
-
         // Render widget cards
         function renderWidgets() {
             loadingState.classList.add('hidden');
 
-            if (filteredWidgets.length === 0) {
+            if (allWidgets.length === 0) {
                 widgetGrid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
                 return;
@@ -567,7 +492,7 @@
             widgetGrid.classList.remove('hidden');
             widgetGrid.innerHTML = '';
 
-            filteredWidgets.forEach((widget, index) => {
+            allWidgets.forEach((widget, index) => {
                 const card = createWidgetCard(widget, index);
                 widgetGrid.appendChild(card);
             });
@@ -755,26 +680,6 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            // Search
-            let searchTimeout;
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    searchQuery = e.target.value.trim();
-                    applyFilters();
-                }, 300);
-            });
-
-            // Filter buttons
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.filter;
-                    applyFilters();
-                });
-            });
-
             // Modal close
             modalClose.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => {
