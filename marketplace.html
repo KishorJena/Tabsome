@@ -37,6 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/auth.js"></script>
 
     <style>
@@ -464,10 +465,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // API Configuration
-        const API_ENDPOINTS = [
-            'https://tabsome-widgets.vercel.app' // Production
-        ];
-        let currentApiUrl = API_ENDPOINTS[0];
+        let currentApiUrl = window.API_BASE_URL || 'https://tabsome.vercel.app';
 
         // State
         let allWidgets = [];
@@ -495,39 +493,32 @@
             setupEventListeners();
         });
 
-        // Fetch widgets from API - tries multiple endpoints
+        // Fetch widgets from API
         async function fetchWidgets() {
-            let lastError = null;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v2/widgets`, {
+                    mode: 'cors',
+                    headers: { 'Accept': 'application/json' }
+                });
 
-            for (const apiUrl of API_ENDPOINTS) {
-                try {
-                    const response = await fetch(`${apiUrl}/api/v2/widgets`, {
-                        mode: 'cors',
-                        headers: { 'Accept': 'application/json' }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        currentApiUrl = apiUrl;
-                        allWidgets = data.data;
-                        applyFilters();
-                        return;
-                    } else {
-                        throw new Error(data.error || 'API returned failure');
-                    }
-                } catch (error) {
-                    console.warn('Fetch error');
-                    lastError = error;
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
-            }
 
-            // All endpoints failed
-            showError(`Unable to connect to widget server. Please try again later.`);
+                const data = await response.json();
+
+                if (data.success) {
+                    currentApiUrl = API_BASE_URL;
+                    allWidgets = data.data;
+                    applyFilters();
+                    return;
+                } else {
+                    throw new Error(data.error || 'API returned failure');
+                }
+            } catch (error) {
+                console.warn('Fetch error:', error);
+                showError(`Unable to connect to widget server (${API_BASE_URL}). Please try again later.`);
+            }
         }
 
         // Apply filters and search

@@ -66,6 +66,10 @@
     const TabsomeAuth = {
         config: SUPABASE_CONFIG,
 
+        get apiUrl() {
+            return window.TabsomeConfig?.API_BASE_URL || window.API_BASE_URL || 'https://tabsome.vercel.app';
+        },
+
         get client() {
             return getSupabaseClient();
         },

@@ -37,6 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/auth.js"></script>
 
     <style>
@@ -236,11 +237,6 @@
         AOS.init({ duration: 800, once: true });
 
         // Configuration
-        const API_ENDPOINTS = [
-            'https://tabsome.vercel.app',
-            'https://tabsome-widgets.vercel.app'
-        ];
-        let activeApiUrl = API_ENDPOINTS[0];
         const PAGE_LIMIT = 20;
 
         // Section Badges & Labels Definition according to API doc
@@ -436,60 +432,52 @@
 
             let lastError = null;
             let fetchedSuccess = false;
-            const endpointsToTry = [activeApiUrl, ...API_ENDPOINTS.filter(u => u !== activeApiUrl)];
 
-            for (const endpoint of endpointsToTry) {
-                try {
-                    const response = await TabsomeAuth.apiFetch(`${endpoint}/api/v3/changelogs?page=${page}&limit=${PAGE_LIMIT}`, {
-                        headers: { 'Accept': 'application/json' }
+            try {
+                const response = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/changelogs?page=${page}&limit=${PAGE_LIMIT}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success || !Array.isArray(result.data)) {
+                    throw new Error(result.error?.message || 'Invalid API response format');
+                }
+
+                fetchedSuccess = true;
+
+                const changelogs = result.data;
+                const pagination = result.pagination || {};
+                totalPages = pagination.totalPages || 1;
+                currentPage = pagination.page || page;
+
+                if (page === 1 && changelogs.length === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    changelogs.forEach((item, index) => {
+                        const card = createChangelogCard(item, (page - 1) * PAGE_LIMIT + index === 0);
+                        changelogsList.appendChild(card);
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error ${response.status}`);
+                    if (typeof AOS !== 'undefined') {
+                        AOS.refresh();
                     }
 
-                    const result = await response.json();
-
-                    if (!result.success || !Array.isArray(result.data)) {
-                        throw new Error(result.error?.message || 'Invalid API response format');
-                    }
-
-                    activeApiUrl = endpoint;
-                    fetchedSuccess = true;
-
-                    const changelogs = result.data;
-                    const pagination = result.pagination || {};
-                    totalPages = pagination.totalPages || 1;
-                    currentPage = pagination.page || page;
-
-                    if (page === 1 && changelogs.length === 0) {
-                        emptyState.classList.remove('hidden');
+                    if (currentPage < totalPages) {
+                        paginationContainer.classList.remove('hidden');
+                        loadMoreBtn.classList.remove('hidden');
+                        loadingMoreSpinner.classList.add('hidden');
                     } else {
-                        changelogs.forEach((item, index) => {
-                            const isLatest = (page === 1 && index === 0);
-                            const card = createChangelogCard(item, isLatest);
-                            changelogsList.appendChild(card);
-                        });
-
-                        // Re-initialize or refresh AOS animations
-                        if (window.AOS) {
-                            AOS.refresh();
-                        }
-
-                        // Manage Pagination Button
-                        if (pagination.hasNextPage || currentPage < totalPages) {
-                            paginationContainer.classList.remove('hidden');
-                            loadMoreBtn.classList.remove('hidden');
-                            loadingMoreSpinner.classList.add('hidden');
-                        } else {
-                            paginationContainer.classList.add('hidden');
-                        }
+                        paginationContainer.classList.add('hidden');
                     }
-                    break;
-                } catch (err) {
-                    console.warn('Fetch error');
-                    lastError = err;
                 }
+            } catch (err) {
+                lastError = err;
+                console.warn('Fetch changelogs error:', err);
             }
 
             if (!fetchedSuccess) {
