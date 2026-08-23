@@ -506,8 +506,12 @@
 
         // Configuration
         const STORAGE_KEY_INSTALLATION_ID = 'tabsome_installation_id';
-        const STORAGE_KEY_USER_REACTIONS = 'tabsome_user_reactions';
-        const STORAGE_KEY_LOCAL_SUGGESTIONS = 'tabsome_local_suggestions';
+
+        // Auto-cleanup legacy cached storage items so UI strictly matches database
+        try {
+            localStorage.removeItem('tabsome_local_suggestions');
+            localStorage.removeItem('tabsome_user_reactions');
+        } catch { }
 
         // Stage, Source and Type Meta
         const STATUS_CONFIG = {
@@ -646,45 +650,7 @@
             return id;
         }
 
-        // Local User Reactions Persistence
-        function getLocalUserReactions() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY_USER_REACTIONS);
-                return stored ? JSON.parse(stored) : {};
-            } catch {
-                return {};
-            }
-        }
 
-        function saveLocalUserReaction(itemId, reactionType) {
-            try {
-                const reactions = getLocalUserReactions();
-                if (reactionType) {
-                    reactions[itemId] = reactionType;
-                } else {
-                    delete reactions[itemId];
-                }
-                localStorage.setItem(STORAGE_KEY_USER_REACTIONS, JSON.stringify(reactions));
-            } catch { }
-        }
-
-        // Local suggestions persistence
-        function getLocalSuggestions() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY_LOCAL_SUGGESTIONS);
-                return stored ? JSON.parse(stored) : [];
-            } catch {
-                return [];
-            }
-        }
-
-        function saveLocalSuggestion(item) {
-            try {
-                const list = getLocalSuggestions();
-                list.unshift(item);
-                localStorage.setItem(STORAGE_KEY_LOCAL_SUGGESTIONS, JSON.stringify(list));
-            } catch { }
-        }
 
         // Sanitization
         function escapeHtml(str) {
@@ -1016,15 +982,6 @@
 
                 allRoadmapItems = result.data;
 
-                // Sync with local suggestions
-                const localSuggestions = getLocalSuggestions();
-                const existingIds = new Set(allRoadmapItems.map(i => i.id));
-                localSuggestions.forEach(localItem => {
-                    if (!existingIds.has(localItem.id)) {
-                        allRoadmapItems.unshift(localItem);
-                    }
-                });
-
                 loadingState.classList.add('hidden');
                 renderFilteredItems();
 
@@ -1286,50 +1243,39 @@
             formFeedback.classList.add('hidden');
 
             const payload = {
-                id: 'local-' + Date.now(),
                 title,
                 type,
                 description,
-                status: 'under_review',
-                source: 'community',
-                isPublished: false,
-                voteCount: 1,
-                reactionsCount: { upvote: 1 },
-                hasVoted: true,
-                userReaction: 'upvote',
                 authorName,
                 authorEmail,
                 installationId,
-                createdAt: new Date().toISOString(),
                 metadata: { source: 'roadmap_web_page' }
             };
 
             try {
                 const response = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/suggestions`, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success && result.data) {
-                        Object.assign(payload, result.data);
-                    }
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error?.message || result.message || 'Failed to submit suggestion.');
                 }
+
+                closeSuggestModal();
+                showToast('Suggestion submitted successfully! Thank you.');
+                await fetchRoadmapData();
             } catch (err) {
-                console.warn('Sync error');
+                console.error('Submission error', err);
+                formFeedback.textContent = err.message || 'Unable to submit suggestion. Please try again.';
+                formFeedback.className = 'p-3 rounded-xl text-xs bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                formFeedback.classList.remove('hidden');
+            } finally {
+                submitSuggestBtn.disabled = false;
+                submitSuggestBtn.innerHTML = `<i class="fas fa-paper-plane"></i><span>Submit to Roadmap</span>`;
             }
-
-            saveLocalSuggestion(payload);
-            saveLocalUserReaction(payload.id, 'upvote');
-
-            allRoadmapItems.unshift(payload);
-            renderFilteredItems();
-
-            closeSuggestModal();
-            showToast('Suggestion submitted successfully! Thank you.');
-            submitSuggestBtn.disabled = false;
-            submitSuggestBtn.innerHTML = `<i class="fas fa-paper-plane"></i><span>Submit to Roadmap</span>`;
         });
 
         // Event Listeners: Modals Trigger & Close
