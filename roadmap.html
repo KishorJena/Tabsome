@@ -367,7 +367,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-200 mb-1.5" for="formAuthorName">
-                            Your Name / Handle
+                            Your Display Name
                         </label>
                         <input type="text" id="formAuthorName" maxlength="50" placeholder="e.g. Alex"
                             class="w-full bg-black/40 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 transition">
@@ -381,14 +381,6 @@
                     <textarea id="formDescription" rows="4" required maxlength="1500"
                         placeholder="Explain your idea, why it's helpful, and how you envision it working in Tabsome..."
                         class="w-full bg-black/40 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 transition resize-none"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-gray-200 mb-1.5" for="formAuthorEmail">
-                        Email (Optional, for release notification)
-                    </label>
-                    <input type="email" id="formAuthorEmail" placeholder="you@example.com"
-                        class="w-full bg-black/40 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 transition">
                 </div>
 
                 <!-- Submission alert/error if any -->
@@ -1158,7 +1150,6 @@
                     const metadata = user.user_metadata || {};
                     const fullName = metadata.full_name || metadata.name || '';
                     if (fullName) document.getElementById('formAuthorName').value = fullName;
-                    if (user.email) document.getElementById('formAuthorEmail').value = user.email;
                 }
             } catch (err) {
                 console.warn('User error');
@@ -1187,7 +1178,7 @@
             const type = document.getElementById('formType').value;
             const description = document.getElementById('formDescription').value.trim();
             const authorName = document.getElementById('formAuthorName').value.trim() || 'Community Contributor';
-            const authorEmail = document.getElementById('formAuthorEmail').value.trim() || null;
+            const authorEmail = currentAuthUser?.email || (window.TabsomeAuth ? (await TabsomeAuth.getUser())?.email : null) || null;
 
             if (!title || !description) {
                 formFeedback.textContent = 'Please fill out all required fields.';
