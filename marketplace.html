@@ -48,22 +48,14 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #9333ea;
-            background-image: linear-gradient(to right, #ff5757, #8c52ff);
+            background-image:
+                linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             min-height: 100vh;
             position: relative;
-        }
-
-        /* Gradient overlay to reduce overall vibrancy and enhance text contrast */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%);
-            pointer-events: none;
-            z-index: 0;
         }
 
         main {
