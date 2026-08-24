@@ -22,7 +22,9 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/config.js"></script>
@@ -36,9 +38,9 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #9333ea;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(15, 17, 26, 0.45), rgba(15, 17, 26, 0.65)),
-                url('image/wallpaper.jpg'),
+                url('image/speed-dials.webp'),
                 linear-gradient(to right, #ff5757, #8c52ff);
             background-size: cover;
             background-position: center;
@@ -82,7 +84,7 @@
             backdrop-filter: blur(20px) saturate(170%);
             -webkit-backdrop-filter: blur(20px) saturate(170%);
             border: 1px solid rgba(255, 255, 255, 0.16);
-            box-shadow: 
+            box-shadow:
                 0 10px 30px -8px rgba(0, 0, 0, 0.3),
                 inset 0 1px 1px rgba(255, 255, 255, 0.22);
             transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
@@ -95,7 +97,7 @@
             transform: translateY(-5px) scale(1.015);
             background: linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
             border-color: rgba(255, 255, 255, 0.38);
-            box-shadow: 
+            box-shadow:
                 0 22px 48px -12px rgba(0, 0, 0, 0.45),
                 0 0 28px rgba(255, 255, 255, 0.1),
                 inset 0 1px 1px rgba(255, 255, 255, 0.35);
@@ -107,7 +109,7 @@
             backdrop-filter: blur(20px) saturate(170%);
             -webkit-backdrop-filter: blur(20px) saturate(170%);
             border: 1px solid rgba(255, 215, 0, 0.25);
-            box-shadow: 
+            box-shadow:
                 0 10px 30px -8px rgba(0, 0, 0, 0.3),
                 inset 0 1px 1px rgba(255, 235, 120, 0.25);
             transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
@@ -120,7 +122,7 @@
             transform: translateY(-5px) scale(1.015);
             background: linear-gradient(145deg, rgba(255, 215, 0, 0.2), rgba(255, 255, 255, 0.09));
             border-color: rgba(255, 215, 0, 0.55);
-            box-shadow: 
+            box-shadow:
                 0 22px 48px -12px rgba(0, 0, 0, 0.45),
                 0 0 35px rgba(255, 215, 0, 0.22),
                 inset 0 1px 1px rgba(255, 245, 160, 0.4);
@@ -148,8 +150,15 @@
 
         /* Skeleton pulse animation */
         @keyframes pulse-subtle {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 0.25; }
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
         }
 
         .skeleton-pulse {
@@ -161,13 +170,16 @@
             width: 8px;
             height: 8px;
         }
+
         ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.15);
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.25);
             border-radius: 4px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.4);
         }
@@ -180,14 +192,17 @@
     <header class="fixed w-full glass-header z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="flex items-center space-x-3 group">
-                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8 group-hover:scale-105 transition transform">
+                <img src="assets/logo-white.png" alt="Tabsome Logo"
+                    class="w-8 h-8 group-hover:scale-105 transition transform">
                 <span class="text-2xl font-bold tracking-tight">Tabsome</span>
             </a>
             <nav class="space-x-8 hidden md:flex items-center">
                 <a href="marketplace.html" class="hover:text-gray-200 transition text-sm">Marketplace</a>
                 <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
                 <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
-                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+                    target="_blank" rel="noopener noreferrer"
+                    class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
             </nav>
             <div class="flex items-center space-x-3">
                 <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
@@ -200,8 +215,10 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
                 <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 mb-2">
-                        <svg class="w-3.5 h-3.5 text-pink-300 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 mb-2">
+                        <svg class="w-4 h-4 text-pink-300 flex-shrink-0" width="16" height="16" fill="currentColor"
+                            viewBox="0 0 24 24">
                             <rect x="2" y="2" width="9" height="9" rx="2.5" />
                             <rect x="13" y="2" width="9" height="9" rx="2.5" />
                             <rect x="2" y="13" width="9" height="9" rx="2.5" />
@@ -211,7 +228,8 @@
                     </div>
                     <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
                         <span>Speed Dials</span>
-                        <span id="collectionBadge" class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-white/15 border border-white/20 text-gray-200"></span>
+                        <span id="collectionBadge"
+                            class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-white/15 border border-white/20 text-gray-200"></span>
                     </h1>
                 </div>
 
@@ -220,12 +238,14 @@
                     <!-- Collection Selector -->
                     <div id="collectionSelectorContainer" class="hidden">
                         <div class="relative">
-                            <i class="fas fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300 text-xs pointer-events-none"></i>
+                            <i
+                                class="fas fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300 text-xs pointer-events-none"></i>
                             <select id="collectionSelect"
                                 class="bg-slate-900/80 hover:bg-slate-900 border border-white/20 text-white text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-purple-400 appearance-none cursor-pointer transition">
                                 <!-- Populated dynamically -->
                             </select>
-                            <i class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
+                            <i
+                                class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
                         </div>
                     </div>
 
@@ -234,7 +254,8 @@
                         <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                         <input type="text" id="dialSearchInput" placeholder="Search speed dials or folders..."
                             class="w-full bg-slate-900/60 hover:bg-slate-900/80 border border-white/20 rounded-xl pl-9 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
-                        <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs">
+                        <button id="clearSearchBtn"
+                            class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -245,13 +266,15 @@
             <div class="pt-4 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-3 flex-wrap">
                     <!-- Back Button when inside a subfolder -->
-                    <button id="backFolderBtn" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-semibold text-white transition transform active:scale-95 cursor-pointer">
+                    <button id="backFolderBtn"
+                        class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-semibold text-white transition transform active:scale-95 cursor-pointer">
                         <i class="fas fa-arrow-left text-[11px] text-pink-300"></i>
                         <span>Back</span>
                     </button>
 
                     <!-- Breadcrumbs Trail -->
-                    <nav id="breadcrumbsContainer" class="flex items-center flex-wrap gap-2 text-xs sm:text-sm font-medium text-gray-300">
+                    <nav id="breadcrumbsContainer"
+                        class="flex items-center flex-wrap gap-2 text-xs sm:text-sm font-medium text-gray-300">
                         <!-- Populated dynamically -->
                     </nav>
                 </div>
@@ -259,7 +282,9 @@
                 <!-- Stats Badges -->
                 <div class="flex items-center gap-2">
                     <span id="searchResultNote" class="text-xs text-yellow-200 font-medium hidden"></span>
-                    <div id="itemCountBadge" class="text-xs text-gray-300 font-semibold px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 hidden"></div>
+                    <div id="itemCountBadge"
+                        class="text-xs text-gray-300 font-semibold px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 hidden">
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,21 +295,28 @@
 
         <!-- Unauthenticated Prompt -->
         <div id="unauthPrompt" class="hidden text-center py-16 px-4">
-            <div class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl border border-white/20 bg-slate-900/80 backdrop-blur-xl">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 border border-pink-400/30 mx-auto flex items-center justify-center text-2xl text-pink-300 mb-5 shadow-inner">
+            <div
+                class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl border border-white/20 bg-slate-900/80 backdrop-blur-xl">
+                <div
+                    class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 border border-pink-400/30 mx-auto flex items-center justify-center text-2xl text-pink-300 mb-5 shadow-inner">
                     <i class="fas fa-lock"></i>
                 </div>
                 <h3 class="text-2xl font-extrabold text-white mb-2">Sign in to view your Speed Dials</h3>
                 <p class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
-                    Connect your Tabsome account to view and access your synced bookmarks, folders, and speed dials from anywhere.
+                    Connect your Tabsome account to view and access your synced bookmarks, folders, and speed dials from
+                    anywhere.
                 </p>
                 <button id="unauthSignInBtn"
                     class="w-full justify-center bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-[1.02] shadow-lg inline-flex items-center gap-3 text-sm cursor-pointer">
                     <svg class="w-4 h-4" viewBox="0 0 24 24">
-                        <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#EA4335"
+                            d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                        <path fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                        <path fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                     </svg>
                     <span>Sign in with Google</span>
                 </button>
@@ -292,7 +324,8 @@
         </div>
 
         <!-- Loading Skeleton -->
-        <div id="loadingDials" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        <div id="loadingDials"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
             <div class="flex flex-col items-center">
                 <div class="opera-tile w-full aspect-[16/10] skeleton-pulse"></div>
                 <div class="h-3 w-16 bg-white/20 rounded-full mt-2.5 skeleton-pulse"></div>
@@ -321,17 +354,20 @@
 
         <!-- Empty State -->
         <div id="emptyDials" class="hidden text-center py-20 px-4">
-            <div class="w-20 h-20 rounded-3xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-3xl text-gray-300 mb-4 shadow-inner">
+            <div
+                class="w-20 h-20 rounded-3xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-3xl text-gray-300 mb-4 shadow-inner">
                 <i class="fas fa-folder-open text-pink-300"></i>
             </div>
             <h3 id="emptyTitle" class="text-xl font-bold text-white mb-2">No speed dials found</h3>
             <p id="emptyDescription" class="text-xs sm:text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
-                This folder or collection is currently empty. Add speed dials in your Tabsome browser extension and they will sync here automatically!
+                This folder or collection is currently empty. Add speed dials in your Tabsome browser extension and they
+                will sync here automatically!
             </p>
         </div>
 
         <!-- Dials Grid Container -->
-        <div id="dialsGrid" class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        <div id="dialsGrid"
+            class="hidden grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
             <!-- Rendered dynamically -->
         </div>
 
@@ -348,25 +384,31 @@
     </div>
 
     <!-- Debug Modal / Panel Drawer -->
-    <div id="debugModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-white/20 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+    <div id="debugModal"
+        class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="bg-slate-900 border border-white/20 rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Header -->
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-slate-950/60">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 flex items-center justify-center text-xs">
+                    <div
+                        class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 flex items-center justify-center text-xs">
                         <i class="fas fa-terminal"></i>
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-white">Speed Dials Debugger & State Inspector</h3>
-                        <p class="text-[11px] text-gray-400">Live API response, auth session, and data extraction state</p>
+                        <p class="text-[11px] text-gray-400">Live API response, auth session, and data extraction state
+                        </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="refreshDataBtn" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+                    <button id="refreshDataBtn"
+                        class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
                         <i class="fas fa-rotate text-xs text-pink-300"></i>
                         <span>Re-fetch</span>
                     </button>
-                    <button id="closeDebugBtn" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <button id="closeDebugBtn"
+                        class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center text-xs transition cursor-pointer">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -382,7 +424,8 @@
                     </div>
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
                         <span class="text-[10px] text-gray-400 block uppercase font-sans">API Endpoint</span>
-                        <span id="debugApiUrl" class="font-bold text-gray-200 text-[11px] truncate block" title="">-</span>
+                        <span id="debugApiUrl" class="font-bold text-gray-200 text-[11px] truncate block"
+                            title="">-</span>
                     </div>
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-white/10">
                         <span class="text-[10px] text-gray-400 block uppercase font-sans">Active Collection</span>
@@ -401,9 +444,11 @@
                             <i class="fas fa-list-ul text-pink-400 text-xs"></i>
                             <span>Activity & API Logs</span>
                         </span>
-                        <button id="clearLogsBtn" class="text-[10px] text-gray-400 hover:text-white underline">Clear</button>
+                        <button id="clearLogsBtn"
+                            class="text-[10px] text-gray-400 hover:text-white underline">Clear</button>
                     </div>
-                    <div id="debugLogContainer" class="space-y-1 max-h-36 overflow-y-auto text-[11px] font-mono text-gray-300 select-text">
+                    <div id="debugLogContainer"
+                        class="space-y-1 max-h-36 overflow-y-auto text-[11px] font-mono text-gray-300 select-text">
                         <!-- Dynamic logs -->
                     </div>
                 </div>
@@ -415,9 +460,11 @@
                             <i class="fas fa-code text-indigo-400 text-xs"></i>
                             <span>Raw Collection Data Payload</span>
                         </span>
-                        <button id="copyJsonBtn" class="text-[10px] text-gray-400 hover:text-white underline">Copy JSON</button>
+                        <button id="copyJsonBtn" class="text-[10px] text-gray-400 hover:text-white underline">Copy
+                            JSON</button>
                     </div>
-                    <pre id="debugRawJson" class="max-h-48 overflow-y-auto text-[11px] text-gray-300 bg-black/40 p-2.5 rounded-lg select-text overflow-x-auto leading-tight"></pre>
+                    <pre id="debugRawJson"
+                        class="max-h-48 overflow-y-auto text-[11px] text-gray-300 bg-black/40 p-2.5 rounded-lg select-text overflow-x-auto leading-tight"></pre>
                 </div>
             </div>
         </div>
@@ -495,9 +542,9 @@
 
             if (debugLogContainer) {
                 const colorClass = type === 'error' ? 'text-rose-400' :
-                                   type === 'warn' ? 'text-amber-400' :
-                                   type === 'success' ? 'text-emerald-400' : 'text-cyan-300';
-                
+                    type === 'warn' ? 'text-amber-400' :
+                        type === 'success' ? 'text-emerald-400' : 'text-cyan-300';
+
                 const itemEl = document.createElement('div');
                 itemEl.className = 'py-0.5 border-b border-white/5 font-mono';
                 itemEl.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> <span class="${colorClass} font-bold">${escapeHtml(type.toUpperCase())}:</span> ${escapeHtml(message)}`;
@@ -786,7 +833,7 @@
                     logDebug('info', `Fetching collections list from ${API_BASE_URL}/api/v3/users/me/collections`);
                     const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/collections`);
                     logDebug('info', `Collections list response status: ${res.status}`);
-                    
+
                     if (res.status === 401) {
                         logDebug('warn', 'Collections API returned 401 Unauthorized. Session invalidated.');
                         return;
@@ -1102,7 +1149,7 @@
                         }
 
                         childrenPreviewHtml = `
-                            <div class="grid grid-cols-2 grid-rows-2 gap-1.5 p-1.5 w-18 h-18 sm:w-20 sm:h-20 max-w-[85%] max-h-[85%] items-center justify-center">
+                            <div class="grid grid-cols-2 grid-rows-2 gap-1.5 p-1.5 w-16 h-16 sm:w-20 sm:h-20 max-w-[85%] max-h-[85%] items-center justify-center">
                                 ${slotsHtml}
                             </div>
                         `;
