@@ -225,9 +225,13 @@
                         <span id="collectionBadge"
                             class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-white/15 border border-white/20 text-gray-200">Default Collection</span>
                     </h1>
+                    <p class="text-xs sm:text-sm text-gray-300/90 mt-3.5 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-pink-300 text-xs flex-shrink-0"></i>
+                        <span>Modifying Speed dial here is not supported yet. If you want this feature, <a href="contact.html" class="text-pink-300 hover:text-pink-200 underline underline-offset-2 decoration-pink-400/50 hover:decoration-pink-200 transition font-medium">let us know</a>.</span>
+                    </p>
                 </div>
 
-                <!-- Collection Switcher & Search Bar -->
+                <!-- Collection Switcher -->
                 <div class="flex flex-wrap items-center gap-3">
                     <!-- Collection Selector -->
                     <div id="collectionSelectorContainer" class="hidden">
@@ -241,17 +245,6 @@
                             <i
                                 class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
                         </div>
-                    </div>
-
-                    <!-- Search Input -->
-                    <div class="relative min-w-[220px] sm:min-w-[280px]">
-                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input type="text" id="dialSearchInput" placeholder="Search speed dials or folders..."
-                            class="w-full bg-slate-900/60 hover:bg-slate-900/80 border border-white/20 rounded-xl pl-9 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
-                        <button id="clearSearchBtn"
-                            class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs">
-                            <i class="fas fa-times"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -724,23 +717,27 @@
             });
         }
 
-        dialSearchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value.toLowerCase().trim();
-            if (searchQuery) {
-                clearSearchBtn.classList.remove('hidden');
-            } else {
-                clearSearchBtn.classList.add('hidden');
-            }
-            renderCurrentView();
-        });
+        if (dialSearchInput) {
+            dialSearchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                if (searchQuery) {
+                    if (clearSearchBtn) clearSearchBtn.classList.remove('hidden');
+                } else {
+                    if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+                }
+                renderCurrentView();
+            });
+        }
 
-        clearSearchBtn.addEventListener('click', () => {
-            dialSearchInput.value = '';
-            searchQuery = '';
-            clearSearchBtn.classList.add('hidden');
-            renderCurrentView();
-            dialSearchInput.focus();
-        });
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', () => {
+                if (dialSearchInput) dialSearchInput.value = '';
+                searchQuery = '';
+                clearSearchBtn.classList.add('hidden');
+                renderCurrentView();
+                if (dialSearchInput) dialSearchInput.focus();
+            });
+        }
 
         collectionSelect.addEventListener('change', async (e) => {
             activeCollectionId = e.target.value;
@@ -758,13 +755,13 @@
             }
         });
 
-        // Keyboard navigation: Escape / Backspace navigates back
+        // Keyboard navigation: Backspace navigates back
         window.addEventListener('keydown', (e) => {
-            if (document.activeElement === dialSearchInput) {
+            if (dialSearchInput && document.activeElement === dialSearchInput) {
                 if (e.key === 'Escape') {
                     dialSearchInput.value = '';
                     searchQuery = '';
-                    clearSearchBtn.classList.add('hidden');
+                    if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
                     renderCurrentView();
                 }
                 return;
@@ -945,8 +942,8 @@
             folderHistory = [{ id: null, name: activeCollectionData?.name || 'All Dials' }];
             currentFolderId = null;
             searchQuery = '';
-            dialSearchInput.value = '';
-            clearSearchBtn.classList.add('hidden');
+            if (dialSearchInput) dialSearchInput.value = '';
+            if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
 
             updateDebugUI();
             loadingDials.classList.add('hidden');
