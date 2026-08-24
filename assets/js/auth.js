@@ -345,13 +345,19 @@
                                     <p class="text-[11px] text-gray-300 truncate mt-0.5">${safeEmail}</p>
                                 </div>
                                 <div class="py-1">
-                                    <a href="speed-dials.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
-                                        <i class="fas fa-th-large text-purple-400 w-4 text-center"></i>
-                                        <span>Speed Dials</span>
+                                    <a href="speed-dials.html" class="flex items-center justify-between px-3 py-2 text-xs rounded-lg transition ${window.location.pathname.includes('speed-dials') ? 'bg-purple-600/30 text-white font-semibold border border-purple-500/30' : 'text-gray-200 hover:text-white hover:bg-white/10'}">
+                                        <div class="flex items-center gap-2.5">
+                                            <i class="fas fa-th-large text-purple-400 w-4 text-center"></i>
+                                            <span>Speed Dials</span>
+                                        </div>
+                                        ${window.location.pathname.includes('speed-dials') ? '<span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>' : ''}
                                     </a>
-                                    <a href="library.html" class="flex items-center gap-2.5 px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition">
-                                        <i class="fas fa-bookmark text-pink-400 w-4 text-center"></i>
-                                        <span>Library</span>
+                                    <a href="library.html" class="flex items-center justify-between px-3 py-2 text-xs rounded-lg transition mt-0.5 ${window.location.pathname.includes('library') ? 'bg-pink-600/30 text-white font-semibold border border-pink-500/30' : 'text-gray-200 hover:text-white hover:bg-white/10'}">
+                                        <div class="flex items-center gap-2.5">
+                                            <i class="fas fa-bookmark text-pink-400 w-4 text-center"></i>
+                                            <span>Library</span>
+                                        </div>
+                                        ${window.location.pathname.includes('library') ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span>' : ''}
                                     </a>
                                 </div>
                                 <div class="pt-1 border-t border-white/10">
