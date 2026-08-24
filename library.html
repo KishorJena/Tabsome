@@ -54,9 +54,9 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
+            background-color: #9333ea;
             background-image:
-                linear-gradient(rgba(15, 23, 42, 0.55), rgba(15, 23, 42, 0.75)),
+                linear-gradient(rgba(15, 17, 26, 0.45), rgba(15, 17, 26, 0.65)),
                 url('image/library.webp'),
                 linear-gradient(to right, #ff5757, #8c52ff);
             background-size: cover;
@@ -68,7 +68,7 @@
             overflow-x: hidden;
         }
 
-        /* Ambient gradient backdrop overlay */
+        /* Gradient overlay to reduce overall vibrancy and enhance text contrast */
         body::before {
             content: '';
             position: fixed;
@@ -76,7 +76,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(17, 24, 39, 0.45) 0%, rgba(15, 23, 42, 0.65) 100%);
+            background: linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%);
             pointer-events: none;
             z-index: 0;
         }
@@ -107,6 +107,46 @@
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.14);
             box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Consistent Dark Glass Inputs */
+        #librarySearchInput,
+        #collectionSelect,
+        input[type="text"],
+        input[type="url"],
+        textarea,
+        select {
+            background-color: rgba(15, 23, 42, 0.65) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        #librarySearchInput::placeholder,
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(156, 163, 175, 0.9) !important;
+        }
+
+        #librarySearchInput:hover,
+        #collectionSelect:hover,
+        input[type="text"]:hover,
+        input[type="url"]:hover,
+        textarea:hover,
+        select:hover {
+            background-color: rgba(15, 23, 42, 0.85) !important;
+            border-color: rgba(255, 255, 255, 0.35) !important;
+        }
+
+        #librarySearchInput:focus,
+        #collectionSelect:focus,
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus {
+            background-color: rgba(15, 23, 42, 0.95) !important;
+            border-color: rgba(192, 132, 252, 0.8) !important;
+            box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.3) !important;
+            outline: none !important;
         }
 
         .library-item-card {
@@ -358,9 +398,9 @@
 
                     <!-- Search Input -->
                     <div class="relative flex-1 sm:w-72">
-                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
                         <input type="text" id="librarySearchInput" placeholder="Search links, notes, folders, tags..."
-                            class="w-full bg-slate-900/70 hover:bg-slate-900 border border-white/20 rounded-xl pl-9 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400 transition" />
+                            class="w-full bg-slate-900/60 hover:bg-slate-900/80 border border-white/20 rounded-xl pl-9 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
                         <button id="clearSearchBtn"
                             class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs cursor-pointer">
                             <i class="fas fa-times"></i>
@@ -368,7 +408,7 @@
                     </div>
 
                     <!-- View Mode Toggle (Grid / List) -->
-                    <div class="flex items-center bg-slate-900/70 border border-white/20 rounded-xl p-1">
+                    <div class="flex items-center bg-slate-900/60 border border-white/20 rounded-xl p-1">
                         <button id="viewGridBtn"
                             class="px-2.5 py-1.5 rounded-lg text-xs bg-white/20 text-white font-bold transition cursor-pointer"
                             title="Grid View">
