@@ -223,7 +223,7 @@
                     <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
                         <span>Speed Dials</span>
                         <span id="collectionBadge"
-                            class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-white/15 border border-white/20 text-gray-200"></span>
+                            class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-white/15 border border-white/20 text-gray-200">Default Collection</span>
                     </h1>
                 </div>
 
@@ -906,17 +906,14 @@
         function setupCollectionSelector() {
             if (collectionsList.length > 1) {
                 collectionSelect.innerHTML = collectionsList.map(c =>
-                    `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Collection')}</option>`
+                    `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Default Collection')}</option>`
                 ).join('');
                 collectionSelectorContainer.classList.remove('hidden');
                 collectionBadge.classList.add('hidden');
-            } else if (activeCollectionData) {
-                collectionSelectorContainer.classList.add('hidden');
-                collectionBadge.textContent = activeCollectionData.name || 'Personal Collection';
-                collectionBadge.classList.remove('hidden');
             } else {
                 collectionSelectorContainer.classList.add('hidden');
-                collectionBadge.classList.add('hidden');
+                collectionBadge.textContent = 'Default Collection';
+                collectionBadge.classList.remove('hidden');
             }
         }
 

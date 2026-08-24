@@ -232,6 +232,20 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.4);
         }
+
+        .breadcrumb-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+        }
+
+        .breadcrumb-scroll::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .breadcrumb-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+        }
     </style>
 </head>
 
@@ -281,20 +295,20 @@
                 </div>
             </div>
 
-            <!-- Main Title & Collection Control Row -->
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-6">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <h1
-                            class="heading-font text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
-                            <span>Library</span>
-                        </h1>
-                        <span id="activeCollectionBadge"
-                            class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-200"></span>
-                    </div>
-                </div>
+            <!-- Main Title Row -->
+            <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+                <h1
+                    class="heading-font text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
+                    <span>Library</span>
+                </h1>
+                <span id="activeCollectionBadge"
+                    class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-200">Default Collection</span>
+            </div>
 
-                <!-- Action Controls (Sync, Add Item, Switcher) -->
+            <!-- Action Controls, Search & View Controls Row -->
+            <div class="pt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+                <!-- Left: Action Controls (Sync, Folder, Note, Link, Switcher) -->
                 <div class="flex flex-wrap items-center gap-2.5">
 
                     <!-- Collection Selector -->
@@ -337,52 +351,6 @@
                         <span>Add Link</span>
                     </button>
                 </div>
-            </div>
-
-            <!-- Search, Filter Tabs & View Controls -->
-            <div class="pt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-
-                <!-- Left: Filter Type Pills & Breadcrumbs -->
-                <div class="flex flex-col gap-3">
-
-                    <!-- Breadcrumbs & Back Navigation -->
-                    <div class="flex items-center gap-2 flex-wrap text-xs sm:text-sm">
-                        <button id="backFolderBtn"
-                            class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-semibold text-white transition active:scale-95 cursor-pointer">
-                            <i class="fas fa-arrow-left text-[11px] text-pink-300"></i>
-                            <span>Back</span>
-                        </button>
-                        <nav id="breadcrumbsContainer"
-                            class="flex items-center flex-wrap gap-2 text-gray-300 font-medium"></nav>
-                    </div>
-
-                    <!-- Type Filter Tabs -->
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <button
-                            class="filter-type-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/20 text-white border border-white/30 transition cursor-pointer"
-                            data-type="all">
-                            <i class="fas fa-border-all text-[11px] mr-1"></i> All (<span id="countAll">0</span>)
-                        </button>
-                        <button
-                            class="filter-type-btn px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
-                            data-type="link">
-                            <i class="fas fa-link text-[11px] mr-1 text-cyan-300"></i> Links (<span
-                                id="countLinks">0</span>)
-                        </button>
-                        <button
-                            class="filter-type-btn px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
-                            data-type="note">
-                            <i class="fas fa-sticky-note text-[11px] mr-1 text-amber-300"></i> Notes (<span
-                                id="countNotes">0</span>)
-                        </button>
-                        <button
-                            class="filter-type-btn px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
-                            data-type="folder">
-                            <i class="fas fa-folder text-[11px] mr-1 text-pink-300"></i> Folders (<span
-                                id="countFolders">0</span>)
-                        </button>
-                    </div>
-                </div>
 
                 <!-- Right: Search Input & View Toggle -->
                 <div class="flex items-center gap-3">
@@ -414,6 +382,20 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Breadcrumbs & Back Navigation Row (Path on Left, Scrollable; Back Button on Right) -->
+            <div class="pt-4 flex items-center justify-between gap-3 w-full">
+                <!-- Scrollable Path Container -->
+                <nav id="breadcrumbsContainer"
+                    class="breadcrumb-scroll flex items-center gap-2 text-xs sm:text-sm text-gray-300 font-medium overflow-x-auto whitespace-nowrap flex-1 min-w-0 py-1"></nav>
+
+                <!-- Fixed Right Back Button -->
+                <button id="backFolderBtn"
+                    class="hidden flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-semibold text-white transition active:scale-95 cursor-pointer shadow-sm">
+                    <i class="fas fa-arrow-left text-[11px] text-pink-300"></i>
+                    <span>Back</span>
+                </button>
             </div>
 
             <!-- Tag Chips Bar -->
@@ -698,9 +680,8 @@
         let allTags = [];
 
         // View & Navigation State
-        let folderHistory = [{ id: null, name: 'Library Root' }];
+        let folderHistory = [{ id: null, name: 'My Library' }];
         let currentFolderId = null;
-        let activeTypeFilter = 'all'; // 'all', 'link', 'note', 'folder'
         let activeTagFilter = null;
         let searchQuery = '';
         let viewMode = 'grid'; // 'grid' | 'list'
@@ -729,11 +710,6 @@
         const clearSearchBtn = document.getElementById('clearSearchBtn');
         const tagsFilterContainer = document.getElementById('tagsFilterContainer');
         const tagChipsList = document.getElementById('tagChipsList');
-
-        const countAll = document.getElementById('countAll');
-        const countLinks = document.getElementById('countLinks');
-        const countNotes = document.getElementById('countNotes');
-        const countFolders = document.getElementById('countFolders');
 
         const viewGridBtn = document.getElementById('viewGridBtn');
         const viewListBtn = document.getElementById('viewListBtn');
@@ -1018,17 +994,14 @@
         function renderCollectionSelector() {
             if (collectionsList.length > 1) {
                 collectionSelect.innerHTML = collectionsList.map(c =>
-                    `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Collection')}</option>`
+                    `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Default Collection')}</option>`
                 ).join('');
                 collectionSelectorWrapper.classList.remove('hidden');
                 activeCollectionBadge.classList.add('hidden');
-            } else if (activeCollectionData) {
-                collectionSelectorWrapper.classList.add('hidden');
-                activeCollectionBadge.textContent = activeCollectionData.name || 'Personal Collection';
-                activeCollectionBadge.classList.remove('hidden');
             } else {
                 collectionSelectorWrapper.classList.add('hidden');
-                activeCollectionBadge.classList.add('hidden');
+                activeCollectionBadge.textContent = 'Default Collection';
+                activeCollectionBadge.classList.remove('hidden');
             }
         }
 
@@ -1036,17 +1009,21 @@
             breadcrumbsContainer.innerHTML = folderHistory.map((step, idx) => {
                 const isLast = idx === folderHistory.length - 1;
                 if (isLast) {
-                    return `<span class="text-white font-bold">${escapeHtml(step.name)}</span>`;
+                    return `<span class="text-white font-bold flex-shrink-0">${escapeHtml(step.name)}</span>`;
                 }
                 return `
-                    <button class="breadcrumb-nav-btn text-gray-400 hover:text-white transition cursor-pointer" data-idx="${idx}">
+                    <button class="breadcrumb-nav-btn text-gray-400 hover:text-white transition cursor-pointer flex-shrink-0" data-idx="${idx}">
                         ${escapeHtml(step.name)}
                     </button>
-                    <i class="fas fa-chevron-right text-[10px] text-gray-500"></i>
+                    <i class="fas fa-chevron-right text-[10px] text-gray-500 flex-shrink-0"></i>
                 `;
             }).join('');
 
             backFolderBtn.classList.toggle('hidden', folderHistory.length <= 1);
+            // Smoothly keep current active folder in view
+            setTimeout(() => {
+                breadcrumbsContainer.scrollLeft = breadcrumbsContainer.scrollWidth;
+            }, 0);
         }
 
         function renderTagsBar() {
@@ -1097,17 +1074,6 @@
                 return parent === currentFolderId;
             });
 
-            // Update Counts
-            const totalLinkCount = allItems.filter(i => i.type === 'link').length;
-            const totalNoteCount = allItems.filter(i => i.type === 'note').length;
-            const totalFolderCount = allFolders.length;
-            const totalCount = totalLinkCount + totalNoteCount + totalFolderCount;
-
-            countAll.textContent = totalCount;
-            countLinks.textContent = totalLinkCount;
-            countNotes.textContent = totalNoteCount;
-            countFolders.textContent = totalFolderCount;
-
             // Apply Search Query Filter if active
             const q = searchQuery.trim().toLowerCase();
             if (q) {
@@ -1128,9 +1094,8 @@
                 currentFolders = []; // Tags apply to items
             }
 
-            // Apply Type Filter
-            let displayFolders = activeTypeFilter === 'all' || activeTypeFilter === 'folder' ? currentFolders : [];
-            let displayItems = activeTypeFilter === 'all' ? currentItems : currentItems.filter(i => i.type === activeTypeFilter);
+            let displayFolders = currentFolders;
+            let displayItems = currentItems;
 
             const totalDisplayCount = displayFolders.length + displayItems.length;
 
@@ -1543,24 +1508,10 @@
             collectionSelect.addEventListener('change', (e) => {
                 activeCollectionId = e.target.value;
                 activeCollectionData = collectionsList.find(c => c.id === activeCollectionId) || null;
-                folderHistory = [{ id: null, name: activeCollectionData?.name || 'Library Root' }];
+                folderHistory = [{ id: null, name: activeCollectionData?.name || 'My Library' }];
                 currentFolderId = null;
                 saveLocalCachedData();
                 renderCurrentView();
-            });
-
-            // Filter Type Pills
-            document.querySelectorAll('.filter-type-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-type-btn').forEach(b => {
-                        b.classList.remove('bg-white/20', 'text-white', 'border', 'border-white/30', 'font-semibold');
-                        b.classList.add('text-gray-300');
-                    });
-                    btn.classList.add('bg-white/20', 'text-white', 'border', 'border-white/30', 'font-semibold');
-                    btn.classList.remove('text-gray-300');
-                    activeTypeFilter = btn.dataset.type;
-                    renderCurrentView();
-                });
             });
 
             // Tag Chips Filter (delegated)
