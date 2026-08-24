@@ -347,14 +347,19 @@
                                 <div class="py-1">
                                     <a href="speed-dials.html" class="flex items-center justify-between px-3 py-2 text-xs rounded-lg transition ${window.location.pathname.includes('speed-dials') ? 'bg-purple-600/30 text-white font-semibold border border-purple-500/30' : 'text-gray-200 hover:text-white hover:bg-white/10'}">
                                         <div class="flex items-center gap-2.5">
-                                            <i class="fas fa-th-large text-purple-400 w-4 text-center"></i>
+                                            <svg class="w-4 h-4 text-purple-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <rect x="2" y="2" width="9" height="9" rx="2.5" />
+                                                <rect x="13" y="2" width="9" height="9" rx="2.5" />
+                                                <rect x="2" y="13" width="9" height="9" rx="2.5" />
+                                                <rect x="13" y="13" width="9" height="9" rx="2.5" />
+                                            </svg>
                                             <span>Speed Dials</span>
                                         </div>
                                         ${window.location.pathname.includes('speed-dials') ? '<span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>' : ''}
                                     </a>
                                     <a href="library.html" class="flex items-center justify-between px-3 py-2 text-xs rounded-lg transition mt-0.5 ${window.location.pathname.includes('library') ? 'bg-pink-600/30 text-white font-semibold border border-pink-500/30' : 'text-gray-200 hover:text-white hover:bg-white/10'}">
                                         <div class="flex items-center gap-2.5">
-                                            <i class="fas fa-bookmark text-pink-400 w-4 text-center"></i>
+                                            <i class="fas fa-book-bookmark text-pink-400 w-4 text-center"></i>
                                             <span>Library</span>
                                         </div>
                                         ${window.location.pathname.includes('library') ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span>' : ''}
