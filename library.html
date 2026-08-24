@@ -459,14 +459,14 @@
 
         <!-- Loading Skeleton Grid -->
         <div id="loadingSkeleton" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
-            <div class="library-item-card p-5 h-36 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
         </div>
 
         <!-- Empty State Container -->
@@ -548,6 +548,11 @@
                     <label class="block text-xs font-semibold text-gray-300 mb-1">Title <span
                             class="text-pink-400">*</span></label>
                     <input type="text" id="linkTitleInput" required placeholder="Page Title"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-400" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Thumbnail / Image URL (Optional)</label>
+                    <input type="url" id="linkImageInput" placeholder="https://example.com/cover.png (auto-generated if empty)"
                         class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-400" />
                 </div>
                 <div>
@@ -770,6 +775,58 @@
             } catch {
                 return urlStr;
             }
+        }
+
+        const GRADIENT_PALETTES = [
+            'from-pink-600 to-purple-600',
+            'from-blue-600 to-cyan-600',
+            'from-emerald-600 to-teal-600',
+            'from-amber-600 to-orange-600',
+            'from-violet-600 to-fuchsia-600',
+            'from-rose-600 to-orange-500',
+            'from-teal-600 to-emerald-500',
+            'from-indigo-600 to-pink-500'
+        ];
+
+        function getDeterministicGradient(str) {
+            if (!str) return GRADIENT_PALETTES[0];
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % GRADIENT_PALETTES.length;
+            return GRADIENT_PALETTES[index];
+        }
+
+        function getInitials(name) {
+            if (!name) return 'LK';
+            const clean = name.trim();
+            const words = clean.split(/\s+/);
+            if (words.length >= 2) {
+                return (words[0][0] + words[1][0]).toUpperCase();
+            }
+            return clean.substring(0, 2).toUpperCase();
+        }
+
+        function getItemThumbnail(item) {
+            if (item.image && typeof item.image === 'string' && item.image.trim() !== '') {
+                return item.image.trim();
+            }
+            if (item.thumbnail && typeof item.thumbnail === 'string' && item.thumbnail.trim() !== '') {
+                return item.thumbnail.trim();
+            }
+            if (item.preview && typeof item.preview === 'string' && item.preview.trim() !== '') {
+                return item.preview.trim();
+            }
+            if (item.url) {
+                try {
+                    const parsed = new URL(item.url);
+                    if (parsed.protocol.startsWith('http')) {
+                        return `https://image.thum.io/get/width/600/crop/400/${encodeURI(item.url)}`;
+                    }
+                } catch (e) {}
+            }
+            return null;
         }
 
         // =========================================================================
@@ -1105,28 +1162,51 @@
             // 1. Render Folders First
             displayFolders.forEach(folder => {
                 const folderItemCount = allItems.filter(i => (i.parentId || null) === folder.id).length;
-                html += `
-                    <div class="library-item-card folder-card p-4 sm:p-5 flex flex-col justify-between group cursor-pointer" data-folder-id="${folder.id}" data-folder-name="${escapeHtml(folder.name)}">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300 text-lg group-hover:scale-105 transition">
+                if (viewMode === 'grid') {
+                    html += `
+                        <div class="library-item-card folder-card p-4 sm:p-5 flex flex-col justify-between group cursor-pointer" data-folder-id="${folder.id}" data-folder-name="${escapeHtml(folder.name)}">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300 text-lg group-hover:scale-105 transition">
+                                        <i class="fas fa-folder"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate max-w-[150px]">${escapeHtml(folder.name)}</h4>
+                                        <span class="text-[11px] text-gray-400">${folderItemCount} item${folderItemCount === 1 ? '' : 's'}</span>
+                                    </div>
+                                </div>
+                                <button class="delete-folder-btn text-gray-400 hover:text-rose-400 text-xs p-1.5 transition opacity-0 group-hover:opacity-100" data-id="${folder.id}" title="Delete folder">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-pink-300 font-semibold">
+                                <span>Open Folder</span>
+                                <i class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition"></i>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="library-item-card folder-card p-3 sm:p-4 flex items-center justify-between gap-4 group cursor-pointer" data-folder-id="${folder.id}" data-folder-name="${escapeHtml(folder.name)}">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-12 h-12 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300 text-lg group-hover:scale-105 transition flex-shrink-0">
                                     <i class="fas fa-folder"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate max-w-[150px]">${escapeHtml(folder.name)}</h4>
+                                    <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate">${escapeHtml(folder.name)}</h4>
                                     <span class="text-[11px] text-gray-400">${folderItemCount} item${folderItemCount === 1 ? '' : 's'}</span>
                                 </div>
                             </div>
-                            <button class="delete-folder-btn text-gray-400 hover:text-rose-400 text-xs p-1.5 transition opacity-0 group-hover:opacity-100" data-id="${folder.id}" title="Delete folder">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs text-pink-300 font-semibold hidden sm:inline">Open Folder</span>
+                                <i class="fas fa-chevron-right text-xs text-pink-300"></i>
+                                <button class="delete-folder-btn text-gray-400 hover:text-rose-400 text-xs p-1.5 transition opacity-0 group-hover:opacity-100 ml-2" data-id="${folder.id}" title="Delete folder">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-pink-300 font-semibold">
-                            <span>Open Folder</span>
-                            <i class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition"></i>
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             });
 
             // 2. Render Items (Links & Notes)
@@ -1134,66 +1214,166 @@
                 if (item.type === 'note') {
                     // Note Card
                     const noteSnippet = typeof item.content === 'string' ? item.content : (Array.isArray(item.content) ? (item.content[0]?.html || 'Note text') : 'Empty note');
-                    html += `
-                        <div class="library-item-card note-card p-4 sm:p-5 flex flex-col justify-between group">
-                            <div>
-                                <div class="flex items-start justify-between gap-2 mb-2">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center text-xs">
-                                            <i class="fas fa-sticky-note"></i>
+                    if (viewMode === 'grid') {
+                        html += `
+                            <div class="library-item-card note-card p-4 sm:p-5 flex flex-col justify-between group h-full">
+                                <div>
+                                    <div class="flex items-start justify-between gap-2 mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center text-xs">
+                                                <i class="fas fa-sticky-note"></i>
+                                            </div>
+                                            <h4 class="text-sm font-bold text-white truncate max-w-[160px]">${escapeHtml(item.title || 'Untitled Note')}</h4>
                                         </div>
-                                        <h4 class="text-sm font-bold text-white truncate max-w-[160px]">${escapeHtml(item.title || 'Untitled Note')}</h4>
+                                        <button class="delete-item-btn text-gray-400 hover:text-rose-400 text-xs p-1 transition opacity-0 group-hover:opacity-100 cursor-pointer" data-id="${item.id}" title="Delete note">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                     </div>
-                                    <button class="delete-item-btn text-gray-400 hover:text-rose-400 text-xs p-1 transition opacity-0 group-hover:opacity-100 cursor-pointer" data-id="${item.id}" title="Delete note">
+                                    <p class="text-xs text-gray-300 line-clamp-4 leading-relaxed mb-3">${escapeHtml(noteSnippet)}</p>
+                                </div>
+                                <div>
+                                    ${renderItemTagsHtml(item.tags)}
+                                    <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-300">
+                                        <button class="copy-note-btn text-gray-400 hover:text-white transition text-xs cursor-pointer" data-text="${escapeHtml(noteSnippet)}" title="Copy text">
+                                            <i class="fas fa-copy mr-1"></i> Copy
+                                        </button>
+                                        <span class="text-[10px] text-gray-400">${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Note'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="library-item-card note-card p-3 sm:p-4 flex items-center justify-between gap-4 group">
+                                <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-lg flex-shrink-0">
+                                        <i class="fas fa-sticky-note"></i>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <h4 class="text-sm font-bold text-white truncate">${escapeHtml(item.title || 'Untitled Note')}</h4>
+                                        <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">${escapeHtml(noteSnippet)}</p>
+                                        <div class="mt-1">${renderItemTagsHtml(item.tags)}</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <button class="copy-note-btn text-gray-400 hover:text-white transition text-xs cursor-pointer p-2" data-text="${escapeHtml(noteSnippet)}" title="Copy text">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <button class="delete-item-btn text-gray-400 hover:text-rose-400 text-xs p-2 transition cursor-pointer" data-id="${item.id}" title="Delete note">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </div>
-                                <p class="text-xs text-gray-300 line-clamp-3 leading-relaxed mb-3">${escapeHtml(noteSnippet)}</p>
                             </div>
-                            <div>
-                                ${renderItemTagsHtml(item.tags)}
-                                <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-300">
-                                    <button class="copy-note-btn text-gray-400 hover:text-white transition text-xs cursor-pointer" data-text="${escapeHtml(noteSnippet)}" title="Copy text">
-                                        <i class="fas fa-copy mr-1"></i> Copy
-                                    </button>
-                                    <span class="text-[10px] text-gray-400">${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Note'}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                        `;
+                    }
                 } else {
-                    // Link Card
+                    // Link Card with Thumbnail
                     const domain = extractDomain(item.url);
                     const faviconUrl = item.favicon || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-                    html += `
-                        <div class="library-item-card p-4 sm:p-5 flex flex-col justify-between group">
-                            <div>
-                                <div class="flex items-start justify-between gap-2 mb-2">
-                                    <div class="flex items-center gap-2.5 min-w-0">
-                                        <img src="${faviconUrl}" alt="" class="w-6 h-6 rounded object-cover flex-shrink-0 bg-slate-800" onerror="this.src='assets/favicon.svg'" />
-                                        <h4 class="text-sm font-bold text-white truncate group-hover:text-pink-300 transition">${escapeHtml(item.title || domain || 'Untitled Link')}</h4>
+                    const thumbnailUrl = getItemThumbnail(item);
+                    const gradientClass = getDeterministicGradient(item.title || domain || item.url);
+                    const initials = getInitials(item.title || domain);
+
+                    if (viewMode === 'grid') {
+                        html += `
+                            <div class="library-item-card flex flex-col justify-between group h-full overflow-hidden">
+                                <div>
+                                    <!-- Card Thumbnail Banner -->
+                                    <div class="relative w-full aspect-[16/10] overflow-hidden bg-slate-950/60 bg-gradient-to-tr ${gradientClass} flex items-center justify-center">
+                                        ${thumbnailUrl ? `
+                                            <img src="${escapeHtml(thumbnailUrl)}" alt="${escapeHtml(item.title || domain)}"
+                                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                loading="lazy"
+                                                onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+                                            <div class="hidden w-full h-full absolute inset-0 flex items-center justify-center">
+                                                <span class="text-2xl font-black text-white/90 drop-shadow">${initials}</span>
+                                            </div>
+                                        ` : `
+                                            <span class="text-2xl font-black text-white/90 drop-shadow">${initials}</span>
+                                        `}
+                                        <!-- Bottom Gradient Shade -->
+                                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent pointer-events-none"></div>
+
+                                        <!-- Domain & Favicon Pill on bottom-left -->
+                                        <div class="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+                                            <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[10px] text-white/90 font-mono truncate max-w-[75%] shadow-sm">
+                                                <img src="${faviconUrl}" alt="" class="w-3.5 h-3.5 rounded object-contain flex-shrink-0" onerror="this.src='assets/favicon.svg'" />
+                                                <span class="truncate">${escapeHtml(domain)}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Delete Button Floating on Hover -->
+                                        <button class="delete-item-btn absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/60 hover:bg-rose-500 text-white/80 hover:text-white backdrop-blur-md border border-white/15 flex items-center justify-center text-xs transition opacity-0 group-hover:opacity-100 cursor-pointer shadow-md" data-id="${item.id}" title="Delete link">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                     </div>
-                                    <button class="delete-item-btn text-gray-400 hover:text-rose-400 text-xs p-1 transition opacity-0 group-hover:opacity-100 cursor-pointer" data-id="${item.id}" title="Delete link">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+
+                                    <!-- Card Body -->
+                                    <div class="p-4">
+                                        <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition line-clamp-2 leading-snug mb-1.5" title="${escapeHtml(item.title || domain || 'Untitled Link')}">
+                                            ${escapeHtml(item.title || domain || 'Untitled Link')}
+                                        </h4>
+                                        ${item.description ? `<p class="text-xs text-gray-300 line-clamp-2 leading-relaxed mb-2.5">${escapeHtml(item.description)}</p>` : ''}
+                                        ${renderItemTagsHtml(item.tags)}
+                                    </div>
                                 </div>
-                                <p class="text-[11px] text-pink-300/80 truncate font-mono mb-2">${escapeHtml(domain)}</p>
-                                ${item.description ? `<p class="text-xs text-gray-300 line-clamp-2 leading-relaxed mb-3">${escapeHtml(item.description)}</p>` : ''}
-                            </div>
-                            <div>
-                                ${renderItemTagsHtml(item.tags)}
-                                <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px]">
+
+                                <!-- Card Footer -->
+                                <div class="px-4 pb-3.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
                                     <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="text-pink-300 hover:text-white font-semibold flex items-center gap-1.5 transition">
                                         <span>Visit Site</span>
                                         <i class="fas fa-external-link-alt text-[10px]"></i>
                                     </a>
-                                    <button class="copy-link-btn text-gray-400 hover:text-white transition cursor-pointer" data-url="${escapeHtml(item.url)}" title="Copy URL">
+                                    <button class="copy-link-btn text-gray-400 hover:text-white transition cursor-pointer p-1" data-url="${escapeHtml(item.url)}" title="Copy URL">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        // List View Mode
+                        html += `
+                            <div class="library-item-card p-3 sm:p-4 flex items-center justify-between gap-4 group">
+                                <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                                    <!-- Compact Thumbnail -->
+                                    <div class="w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden bg-slate-950/60 bg-gradient-to-tr ${gradientClass} flex-shrink-0 relative flex items-center justify-center border border-white/10">
+                                        ${thumbnailUrl ? `
+                                            <img src="${escapeHtml(thumbnailUrl)}" alt="" class="w-full h-full object-cover" loading="lazy"
+                                                onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+                                            <div class="hidden w-full h-full absolute inset-0 flex items-center justify-center">
+                                                <span class="text-xs font-black text-white">${initials}</span>
+                                            </div>
+                                        ` : `
+                                            <span class="text-xs font-black text-white">${initials}</span>
+                                        `}
+                                    </div>
+
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <img src="${faviconUrl}" alt="" class="w-4 h-4 rounded object-cover flex-shrink-0 bg-slate-800" onerror="this.src='assets/favicon.svg'" />
+                                            <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate">${escapeHtml(item.title || domain || 'Untitled Link')}</h4>
+                                        </div>
+                                        <p class="text-[11px] text-pink-300/80 truncate font-mono">${escapeHtml(domain)}</p>
+                                        ${item.description ? `<p class="text-xs text-gray-300 line-clamp-1 mt-0.5">${escapeHtml(item.description)}</p>` : ''}
+                                        <div class="mt-1">${renderItemTagsHtml(item.tags)}</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-pink-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition">
+                                        <span class="hidden sm:inline">Visit</span>
+                                        <i class="fas fa-external-link-alt text-[10px]"></i>
+                                    </a>
+                                    <button class="copy-link-btn p-2 text-gray-400 hover:text-white transition cursor-pointer" data-url="${escapeHtml(item.url)}" title="Copy URL">
+                                        <i class="fas fa-copy text-xs"></i>
+                                    </button>
+                                    <button class="delete-item-btn p-2 text-gray-400 hover:text-rose-400 text-xs transition cursor-pointer" data-id="${item.id}" title="Delete link">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
                 }
             });
 
@@ -1212,7 +1392,8 @@
         // =========================================================================
         // ITEM & FOLDER MUTATIONS (OPTIMISTIC + SYNC)
         // =========================================================================
-        async function createNewLink(url, title, description, tags) {
+        async function createNewLink(url, title, description, tags, image = null) {
+            const domain = extractDomain(url);
             const newItem = {
                 id: generateUUID(),
                 type: 'link',
@@ -1222,8 +1403,9 @@
                 url,
                 title,
                 description: description || null,
-                favicon: `https://www.google.com/s2/favicons?domain=${extractDomain(url)}&sz=64`,
-                tags: tags.split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+                image: image || null,
+                favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+                tags: tags ? tags.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [],
                 createdAt: new Date().toISOString()
             };
 
@@ -1543,10 +1725,11 @@
                 e.preventDefault();
                 const url = document.getElementById('linkUrlInput').value;
                 const title = document.getElementById('linkTitleInput').value;
+                const image = document.getElementById('linkImageInput')?.value?.trim() || null;
                 const desc = document.getElementById('linkDescInput').value;
                 const tags = document.getElementById('linkTagsInput').value;
                 closeModals();
-                await createNewLink(url, title, desc, tags);
+                await createNewLink(url, title, desc, tags, image);
             });
 
             noteForm.addEventListener('submit', async (e) => {
