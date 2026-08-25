@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloud Library – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Tabsome Cloud Library - Manage, organize, and sync your speed dials, widget collections, notes, and dashboard bookmarks across devices.">
+    <meta name="keywords"
+        content="tabsome library, cloud sync, speed dials backup, bookmark manager, notes, widget presets, new tab dashboard">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Tabsome Cloud Library">
+    <meta property="og:description"
+        content="Access, search, and manage your synced bookmarks, folders, and notes across all your devices.">
+    <meta property="og:image" content="https://tabsome.github.io/assets/social-preview.png">
+    <meta property="og:url" content="https://tabsome.github.io/library.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tabsome Cloud Library">
+    <meta name="twitter:description"
+        content="Access, search, and manage your synced bookmarks, folders, and notes across all your devices.">
+    <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
+
+    <!-- Tailwind & Fonts & Icons & Supabase Auth -->
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image:
+                linear-gradient(rgba(15, 17, 26, 0.45), rgba(15, 17, 26, 0.65)),
+                url('image/library.webp'),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+
+
+        .heading-font {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        header,
+        section,
+        main,
+        footer,
+        .modal-layer {
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass-header {
+            background: rgba(30, 41, 59, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Consistent Dark Glass Inputs */
+        #librarySearchInput,
+        #collectionSelect,
+        input[type="text"],
+        input[type="url"],
+        textarea,
+        select {
+            background-color: rgba(15, 23, 42, 0.65) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        #librarySearchInput::placeholder,
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(156, 163, 175, 0.9) !important;
+        }
+
+        #librarySearchInput:hover,
+        #collectionSelect:hover,
+        input[type="text"]:hover,
+        input[type="url"]:hover,
+        textarea:hover,
+        select:hover {
+            background-color: rgba(15, 23, 42, 0.85) !important;
+            border-color: rgba(255, 255, 255, 0.35) !important;
+        }
+
+        #librarySearchInput:focus,
+        #collectionSelect:focus,
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus {
+            background-color: rgba(15, 23, 42, 0.95) !important;
+            border-color: rgba(192, 132, 252, 0.8) !important;
+            box-shadow: 0 0 0 2px rgba(192, 132, 252, 0.3) !important;
+            outline: none !important;
+        }
+
+        .library-item-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .library-item-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+            border-color: rgba(255, 255, 255, 0.32);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.45), 0 0 24px rgba(236, 72, 153, 0.15);
+        }
+
+        .folder-card {
+            background: linear-gradient(145deg, rgba(244, 114, 182, 0.12), rgba(255, 255, 255, 0.03));
+            border: 1px solid rgba(244, 114, 182, 0.25);
+        }
+
+        .folder-card:hover {
+            border-color: rgba(244, 114, 182, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.45), 0 0 25px rgba(244, 114, 182, 0.22);
+        }
+
+        .note-card {
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.1), rgba(255, 255, 255, 0.03));
+            border: 1px solid rgba(251, 191, 36, 0.22);
+        }
+
+        .note-card:hover {
+            border-color: rgba(251, 191, 36, 0.45);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.45), 0 0 25px rgba(251, 191, 36, 0.2);
+        }
+
+        .skeleton-pulse {
+            animation: skeletonPulse 1.6s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes skeletonPulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 0.85;
+            }
+        }
+
+        /* Ambient floating glow circles */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            opacity: 0.3;
+            animation: floatOrb 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translateY(0px) scale(1);
+            }
+
+            100% {
+                transform: translateY(-30px) scale(1.1);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .breadcrumb-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+        }
+
+        .breadcrumb-scroll::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .breadcrumb-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen">
+
+    <!-- Ambient floating glow effects -->
+    <div class="ambient-orb w-96 h-96 bg-pink-500 top-16 -left-20"></div>
+    <div class="ambient-orb w-96 h-96 bg-purple-600 top-1/3 -right-20" style="animation-delay: -3s;"></div>
+    <div class="ambient-orb w-80 h-80 bg-indigo-500 bottom-20 left-1/3" style="animation-delay: -6s;"></div>
+
+    <!-- Header / Navbar -->
+    <header class="fixed w-full glass-header z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="assets/logo-white.png" alt="Tabsome Logo"
+                    class="w-8 h-8 group-hover:scale-105 transition transform">
+                <span class="text-2xl font-bold tracking-tight">Tabsome</span>
+            </a>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="marketplace.html"
+                    class="text-sm text-gray-200 hover:text-white transition font-medium">Marketplace</a>
+                <a href="roadmap.html" class="text-sm text-gray-200 hover:text-white transition font-medium">Roadmap</a>
+                <a href="changelogs.html"
+                    class="text-sm text-gray-200 hover:text-white transition font-medium">Changelogs</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+                    target="_blank" rel="noopener noreferrer"
+                    class="border border-white/30 hover:border-white px-3.5 py-1.5 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">
+                    Install
+                </a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Dashboard Header & Controls -->
+    <section class="pt-28 pb-4 flex-shrink-0">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <!-- Centered Cloud Library Tag -->
+            <div class="flex justify-center mb-4">
+                <div
+                    class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 shadow-sm">
+                    <i class="fas fa-cloud-arrow-up text-pink-300"></i>
+                    <span>Cloud Library</span>
+                </div>
+            </div>
+
+            <!-- Main Title Row -->
+            <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+                <h1
+                    class="heading-font text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
+                    <span>Library</span>
+                </h1>
+                <span id="activeCollectionBadge"
+                    class="hidden text-xs sm:text-sm font-semibold px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-200">Default Collection</span>
+            </div>
+
+            <!-- Action Controls, Search & View Controls Row -->
+            <div class="pt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+                <!-- Left: Action Controls (Sync, Folder, Note, Link, Switcher) -->
+                <div class="flex flex-wrap items-center gap-2.5">
+
+                    <!-- Collection Selector -->
+                    <div id="collectionSelectorWrapper" class="hidden relative">
+                        <i
+                            class="fas fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-pink-300 text-xs pointer-events-none"></i>
+                        <select id="collectionSelect"
+                            class="bg-slate-900/80 hover:bg-slate-900 border border-white/20 text-white text-xs sm:text-sm font-semibold rounded-xl pl-9 pr-8 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-400 appearance-none cursor-pointer transition">
+                        </select>
+                        <i
+                            class="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
+                    </div>
+
+                    <!-- Sync Status & Manual Sync Button -->
+                    <button id="syncNowBtn" type="button"
+                        class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition active:scale-95 cursor-pointer shadow-sm"
+                        title="Synchronize with /api/v3/users/me/library/sync">
+                        <i id="syncIcon" class="fas fa-arrows-rotate text-pink-300 text-xs"></i>
+                        <span id="syncStatusText">Sync</span>
+                    </button>
+
+                    <!-- Add Folder Button -->
+                    <button id="openNewFolderModalBtn" type="button"
+                        class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition active:scale-95 cursor-pointer shadow-sm">
+                        <i class="fas fa-folder-plus text-yellow-300"></i>
+                        <span class="hidden sm:inline">New Folder</span>
+                    </button>
+
+                    <!-- Add Note Button -->
+                    <button id="openNewNoteModalBtn" type="button"
+                        class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition active:scale-95 cursor-pointer shadow-sm">
+                        <i class="fas fa-note-sticky text-amber-300"></i>
+                        <span class="hidden sm:inline">Add Note</span>
+                    </button>
+
+                    <!-- Add Link Button -->
+                    <button id="openNewLinkModalBtn" type="button"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-xs font-bold text-white transition transform active:scale-95 shadow-md cursor-pointer">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Link</span>
+                    </button>
+                </div>
+
+                <!-- Right: Search Input & View Toggle -->
+                <div class="flex items-center gap-3">
+
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:w-72">
+                        <i
+                            class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                        <input type="text" id="librarySearchInput" placeholder="Search links, notes, folders, tags..."
+                            class="w-full bg-slate-900/60 hover:bg-slate-900/80 border border-white/20 rounded-xl pl-9 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 transition" />
+                        <button id="clearSearchBtn"
+                            class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs cursor-pointer">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- View Mode Toggle (Grid / List) -->
+                    <div class="flex items-center bg-slate-900/60 border border-white/20 rounded-xl p-1">
+                        <button id="viewGridBtn"
+                            class="px-2.5 py-1.5 rounded-lg text-xs bg-white/20 text-white font-bold transition cursor-pointer"
+                            title="Grid View">
+                            <i class="fas fa-grip"></i>
+                        </button>
+                        <button id="viewListBtn"
+                            class="px-2.5 py-1.5 rounded-lg text-xs text-gray-400 hover:text-white transition cursor-pointer"
+                            title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Breadcrumbs & Back Navigation Row (Path on Left, Scrollable; Back Button on Right) -->
+            <div class="pt-4 flex items-center justify-between gap-3 w-full">
+                <!-- Scrollable Path Container -->
+                <nav id="breadcrumbsContainer"
+                    class="breadcrumb-scroll flex items-center gap-2 text-xs sm:text-sm text-gray-300 font-medium overflow-x-auto whitespace-nowrap flex-1 min-w-0 py-1"></nav>
+
+                <!-- Fixed Right Back Button -->
+                <button id="backFolderBtn"
+                    class="hidden flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-semibold text-white transition active:scale-95 cursor-pointer shadow-sm">
+                    <i class="fas fa-arrow-left text-[11px] text-pink-300"></i>
+                    <span>Back</span>
+                </button>
+            </div>
+
+            <!-- Tag Chips Bar -->
+            <div id="tagsFilterContainer" class="pt-3 hidden flex items-center gap-1.5 flex-wrap">
+                <span class="text-[11px] text-gray-400 font-semibold mr-1">Tags:</span>
+                <div id="tagChipsList" class="flex items-center gap-1.5 flex-wrap"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-4">
+
+        <!-- Unauthenticated Prompt -->
+        <div id="unauthPrompt" class="hidden text-center py-16 px-4" data-aos="zoom-in">
+            <div class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl border border-white/20">
+                <div
+                    class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 border border-pink-400/30 mx-auto flex items-center justify-center text-2xl text-pink-300 mb-5 shadow-inner">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-white mb-2">Sign in to access your Library</h2>
+                <p class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+                    Connect your Tabsome account to store, organize, and sync your bookmarks, notes, and folders
+                    securely in the cloud.
+                </p>
+                <button id="unauthSignInBtn"
+                    class="w-full justify-center bg-white text-purple-800 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-[1.02] shadow-lg inline-flex items-center gap-3 text-sm cursor-pointer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#EA4335"
+                            d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                        <path fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                        <path fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    </svg>
+                    <span>Sign in with Google</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Skeleton Grid -->
+        <div id="loadingSkeleton" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+            <div class="library-item-card h-64 skeleton-pulse rounded-2xl"></div>
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="emptyState" class="hidden text-center py-16 px-4">
+            <div class="glass-card max-w-md mx-auto rounded-3xl p-8 border border-white/15">
+                <div
+                    class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-3xl text-pink-300 mb-4">
+                    <i id="emptyIcon" class="fas fa-box-open"></i>
+                </div>
+                <h3 id="emptyTitle" class="text-xl font-bold text-white mb-2">No Items Found</h3>
+                <p id="emptyDesc" class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+                    This folder is currently empty. Add your first link, note, or subfolder to get organized.
+                </p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button id="emptyAddLinkBtn"
+                        class="px-4 py-2 rounded-xl bg-pink-500 hover:bg-pink-600 text-white text-xs font-bold transition">
+                        <i class="fas fa-plus mr-1"></i> Add Link
+                    </button>
+                    <button id="emptyAddNoteBtn"
+                        class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition">
+                        <i class="fas fa-note-sticky mr-1"></i> Add Note
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Library Items Grid / List Container -->
+        <div id="libraryContainer"
+            class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+            <!-- Dynamically populated -->
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-header py-8 text-xs text-white/70 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <img src="assets/logo-white.png" alt="Tabsome" class="w-5 h-5">
+                <span>&copy; 2025 Tabsome. All rights reserved.</span>
+            </div>
+            <div class="flex items-center flex-wrap gap-6 font-medium">
+                <a href="speed-dials.html" class="hover:text-white transition">Speed Dials</a>
+                <a href="marketplace.html" class="hover:text-white transition">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-white transition">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-white transition">Changelogs</a>
+                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+                <a href="support.html" class="hover:text-white transition">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================================================= -->
+    <!-- MODALS SECTION -->
+    <!-- ========================================================================= -->
+
+    <!-- Add / Edit Link Modal -->
+    <div id="linkModal"
+        class="modal-layer hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="linkModalTitle" class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <i class="fas fa-link text-pink-400"></i>
+                    <span>Add New Link</span>
+                </h3>
+                <button type="button" class="close-modal-btn text-gray-400 hover:text-white text-lg cursor-pointer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="linkForm" class="space-y-4">
+                <input type="hidden" id="linkEditId" value="" />
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">URL <span
+                            class="text-pink-400">*</span></label>
+                    <input type="url" id="linkUrlInput" required placeholder="https://example.com"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-400" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Title <span
+                            class="text-pink-400">*</span></label>
+                    <input type="text" id="linkTitleInput" required placeholder="Page Title"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-400" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Thumbnail / Image URL (Optional)</label>
+                    <input type="url" id="linkImageInput" placeholder="https://example.com/cover.png (auto-generated if empty)"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-pink-400" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Description (Optional)</label>
+                    <textarea id="linkDescInput" rows="2" placeholder="Brief note or bookmark excerpt"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-pink-400"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Tags (Comma-separated)</label>
+                    <input type="text" id="linkTagsInput" placeholder="dev, tools, reference"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-pink-400" />
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                    <button type="button"
+                        class="close-modal-btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-gray-200 transition">Cancel</button>
+                    <button type="submit"
+                        class="px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-xs font-bold text-white transition shadow-md">
+                        Save Link
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add / Edit Note Modal -->
+    <div id="noteModal"
+        class="modal-layer hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="noteModalTitle" class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <i class="fas fa-note-sticky text-amber-400"></i>
+                    <span>Add Note</span>
+                </h3>
+                <button type="button" class="close-modal-btn text-gray-400 hover:text-white text-lg cursor-pointer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="noteForm" class="space-y-4">
+                <input type="hidden" id="noteEditId" value="" />
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Title <span
+                            class="text-amber-400">*</span></label>
+                    <input type="text" id="noteTitleInput" required placeholder="Note Title"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Content <span
+                            class="text-amber-400">*</span></label>
+                    <textarea id="noteContentInput" rows="5" required
+                        placeholder="Write your note, code snippets, or thoughts..."
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 font-mono"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Color Theme</label>
+                    <div class="flex items-center gap-3">
+                        <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs">
+                            <input type="radio" name="noteColor" value="default" checked class="accent-pink-500" />
+                            Default
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-amber-300">
+                            <input type="radio" name="noteColor" value="yellow" class="accent-amber-500" /> Yellow
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-blue-300">
+                            <input type="radio" name="noteColor" value="blue" class="accent-blue-500" /> Blue
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-emerald-300">
+                            <input type="radio" name="noteColor" value="emerald" class="accent-emerald-500" /> Emerald
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-purple-300">
+                            <input type="radio" name="noteColor" value="purple" class="accent-purple-500" /> Purple
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Tags (Comma-separated)</label>
+                    <input type="text" id="noteTagsInput" placeholder="meeting, ideas, research"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-400" />
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                    <button type="button"
+                        class="close-modal-btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-gray-200 transition">Cancel</button>
+                    <button type="submit"
+                        class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-xs font-bold text-white transition shadow-md">
+                        Save Note
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add New Folder Modal -->
+    <div id="folderModal"
+        class="modal-layer hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <i class="fas fa-folder-plus text-yellow-400"></i>
+                    <span>Create Folder</span>
+                </h3>
+                <button type="button" class="close-modal-btn text-gray-400 hover:text-white text-lg cursor-pointer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="folderForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Folder Name <span
+                            class="text-pink-400">*</span></label>
+                    <input type="text" id="folderNameInput" required placeholder="e.g. Work, Frontend, AI Papers"
+                        class="w-full bg-slate-900/80 border border-white/20 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-yellow-400" />
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-white/10">
+                    <button type="button"
+                        class="close-modal-btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-gray-200 transition">Cancel</button>
+                    <button type="submit"
+                        class="px-5 py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-xs font-bold text-white transition shadow-md">
+                        Create Folder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Init Scripts & Library Engine -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+
+        // =========================================================================
+        // CLIENT STATE & SYNC CONTROLLER
+        // =========================================================================
+        const API_BASE_URL = window.TabsomeConfig?.API_BASE_URL || window.API_BASE_URL || 'https://tabsome.vercel.app';
+
+        let currentUser = null;
+        let storedCursor = null;
+        let isSyncing = false;
+
+        // In-memory Library Database
+        let collectionsList = [];
+        let activeCollectionId = null;
+        let activeCollectionData = null;
+        let allFolders = [];
+        let allItems = [];
+        let allTags = [];
+
+        // View & Navigation State
+        let folderHistory = [{ id: null, name: 'My Library' }];
+        let currentFolderId = null;
+        let activeTagFilter = null;
+        let searchQuery = '';
+        let viewMode = 'grid'; // 'grid' | 'list'
+
+        // Local Storage Keys
+        const STORAGE_KEY_DATA = 'tabsome_library_data';
+        const STORAGE_KEY_CURSOR = 'tabsome_library_cursor';
+
+        // DOM Element References
+        const unauthPrompt = document.getElementById('unauthPrompt');
+        const unauthSignInBtn = document.getElementById('unauthSignInBtn');
+        const loadingSkeleton = document.getElementById('loadingSkeleton');
+        const emptyState = document.getElementById('emptyState');
+        const emptyTitle = document.getElementById('emptyTitle');
+        const emptyDesc = document.getElementById('emptyDesc');
+        const libraryContainer = document.getElementById('libraryContainer');
+        const activeCollectionBadge = document.getElementById('activeCollectionBadge');
+        const collectionSelectorWrapper = document.getElementById('collectionSelectorWrapper');
+        const collectionSelect = document.getElementById('collectionSelect');
+        const syncNowBtn = document.getElementById('syncNowBtn');
+        const syncIcon = document.getElementById('syncIcon');
+        const syncStatusText = document.getElementById('syncStatusText');
+        const breadcrumbsContainer = document.getElementById('breadcrumbsContainer');
+        const backFolderBtn = document.getElementById('backFolderBtn');
+        const librarySearchInput = document.getElementById('librarySearchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const tagsFilterContainer = document.getElementById('tagsFilterContainer');
+        const tagChipsList = document.getElementById('tagChipsList');
+
+        const viewGridBtn = document.getElementById('viewGridBtn');
+        const viewListBtn = document.getElementById('viewListBtn');
+
+        // Modals
+        const linkModal = document.getElementById('linkModal');
+        const noteModal = document.getElementById('noteModal');
+        const folderModal = document.getElementById('folderModal');
+        const linkForm = document.getElementById('linkForm');
+        const noteForm = document.getElementById('noteForm');
+        const folderForm = document.getElementById('folderForm');
+
+        // Helper UUID generator
+        function generateUUID() {
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                return crypto.randomUUID();
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function extractDomain(urlStr) {
+            if (!urlStr) return '';
+            try {
+                const u = new URL(urlStr);
+                return u.hostname.replace(/^www\./, '');
+            } catch {
+                return urlStr;
+            }
+        }
+
+        const GRADIENT_PALETTES = [
+            'from-pink-600 to-purple-600',
+            'from-blue-600 to-cyan-600',
+            'from-emerald-600 to-teal-600',
+            'from-amber-600 to-orange-600',
+            'from-violet-600 to-fuchsia-600',
+            'from-rose-600 to-orange-500',
+            'from-teal-600 to-emerald-500',
+            'from-indigo-600 to-pink-500'
+        ];
+
+        function getDeterministicGradient(str) {
+            if (!str) return GRADIENT_PALETTES[0];
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % GRADIENT_PALETTES.length;
+            return GRADIENT_PALETTES[index];
+        }
+
+        function getInitials(name) {
+            if (!name) return 'LK';
+            const clean = name.trim();
+            const words = clean.split(/\s+/);
+            if (words.length >= 2) {
+                return (words[0][0] + words[1][0]).toUpperCase();
+            }
+            return clean.substring(0, 2).toUpperCase();
+        }
+
+        function getItemThumbnail(item) {
+            if (item.image && typeof item.image === 'string' && item.image.trim() !== '') {
+                return item.image.trim();
+            }
+            if (item.thumbnail && typeof item.thumbnail === 'string' && item.thumbnail.trim() !== '') {
+                return item.thumbnail.trim();
+            }
+            if (item.preview && typeof item.preview === 'string' && item.preview.trim() !== '') {
+                return item.preview.trim();
+            }
+            if (item.url) {
+                try {
+                    const parsed = new URL(item.url);
+                    if (parsed.protocol.startsWith('http')) {
+                        return `https://image.thum.io/get/width/600/crop/400/${encodeURI(item.url)}`;
+                    }
+                } catch (e) {}
+            }
+            return null;
+        }
+
+        // =========================================================================
+        // LOCAL PERSISTENCE & RECOVERY
+        // =========================================================================
+        function loadLocalCachedData() {
+            try {
+                storedCursor = JSON.parse(localStorage.getItem(STORAGE_KEY_CURSOR) || 'null');
+                const cached = JSON.parse(localStorage.getItem(STORAGE_KEY_DATA) || '{}');
+                if (cached.collections && Array.isArray(cached.collections)) collectionsList = cached.collections;
+                if (cached.folders && Array.isArray(cached.folders)) allFolders = cached.folders;
+                if (cached.items && Array.isArray(cached.items)) allItems = cached.items;
+                if (cached.tags && Array.isArray(cached.tags)) allTags = cached.tags;
+                if (cached.activeCollectionId) activeCollectionId = cached.activeCollectionId;
+            } catch (err) {
+                console.warn('Failed to load local cached library data', err);
+            }
+        }
+
+        function saveLocalCachedData() {
+            try {
+                localStorage.setItem(STORAGE_KEY_CURSOR, JSON.stringify(storedCursor));
+                localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify({
+                    collections: collectionsList,
+                    folders: allFolders,
+                    items: allItems,
+                    tags: allTags,
+                    activeCollectionId
+                }));
+            } catch (err) {
+                console.warn('Failed to persist library data to localStorage', err);
+            }
+        }
+
+        // =========================================================================
+        // SYNC ENGINE (/api/v3/users/me/library/sync)
+        // =========================================================================
+        async function performLibrarySync(localChanges = null) {
+            if (!currentUser) return;
+            if (isSyncing) return;
+
+            isSyncing = true;
+            syncIcon.classList.add('fa-spin');
+            syncStatusText.textContent = 'Syncing...';
+
+            try {
+                const payload = {
+                    cursor: storedCursor,
+                    changes: localChanges || {
+                        upserts: { collections: [], folders: [], items: [], tags: [] },
+                        deletes: { collection_ids: [], folder_ids: [], item_ids: [], tag_ids: [] }
+                    }
+                };
+
+                // Single Bidirectional Sync Request
+                const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/library/sync`, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.status === 401) {
+                    console.warn('Sync received 401 Unauthorized');
+                    return;
+                }
+
+                if (res.ok) {
+                    const result = await res.json();
+                    if (result.success && result.data) {
+                        const { nextCursor, applied, updates, deleted } = result.data;
+
+                        if (typeof nextCursor !== 'undefined' && nextCursor !== null) {
+                            storedCursor = nextCursor;
+                        }
+
+                        // Apply remote updates & applied snapshots
+                        const incomingUpserts = [
+                            ...(applied?.collections || []),
+                            ...(updates?.collections || [])
+                        ];
+                        incomingUpserts.forEach(col => {
+                            const idx = collectionsList.findIndex(c => c.id === col.id);
+                            if (idx >= 0) collectionsList[idx] = col;
+                            else collectionsList.push(col);
+                        });
+
+                        const incomingFolders = [
+                            ...(applied?.folders || []),
+                            ...(updates?.folders || [])
+                        ];
+                        incomingFolders.forEach(fol => {
+                            const idx = allFolders.findIndex(f => f.id === fol.id);
+                            if (idx >= 0) allFolders[idx] = fol;
+                            else allFolders.push(fol);
+                        });
+
+                        const incomingItems = [
+                            ...(applied?.items || []),
+                            ...(updates?.items || [])
+                        ];
+                        incomingItems.forEach(it => {
+                            const idx = allItems.findIndex(i => i.id === it.id);
+                            if (idx >= 0) allItems[idx] = it;
+                            else allItems.push(it);
+                        });
+
+                        // Process deletions
+                        if (deleted?.collection_ids) {
+                            collectionsList = collectionsList.filter(c => !deleted.collection_ids.includes(c.id));
+                        }
+                        if (deleted?.folder_ids) {
+                            allFolders = allFolders.filter(f => !deleted.folder_ids.includes(f.id));
+                        }
+                        if (deleted?.item_ids) {
+                            allItems = allItems.filter(i => !deleted.item_ids.includes(i.id));
+                        }
+
+                        saveLocalCachedData();
+                    }
+                } else if (res.status === 404) {
+                    // Fallback to REST Collections API if Sync endpoint is in fallback mode
+                    await fallbackFetchCollections();
+                }
+
+                // Update active collection if needed
+                if (!activeCollectionId && collectionsList.length > 0) {
+                    activeCollectionId = collectionsList[0].id;
+                }
+                activeCollectionData = collectionsList.find(c => c.id === activeCollectionId) || null;
+
+                renderCollectionSelector();
+                renderCurrentView();
+
+                syncStatusText.textContent = 'Synced';
+            } catch (err) {
+                console.error('Library Sync Error:', err);
+                syncStatusText.textContent = 'Offline';
+            } finally {
+                isSyncing = false;
+                syncIcon.classList.remove('fa-spin');
+                setTimeout(() => {
+                    if (syncStatusText.textContent === 'Synced') {
+                        syncStatusText.textContent = 'Sync';
+                    }
+                }, 3000);
+            }
+        }
+
+        // Fallback REST fetcher
+        async function fallbackFetchCollections() {
+            try {
+                const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/library/collections`);
+                if (res.ok) {
+                    const result = await res.json();
+                    if (result.success && Array.isArray(result.data)) {
+                        collectionsList = result.data;
+                        if (!activeCollectionId && collectionsList.length > 0) {
+                            activeCollectionId = collectionsList[0].id;
+                        }
+                        if (activeCollectionId) {
+                            await fallbackFetchCollectionDetails(activeCollectionId);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Fallback collections fetch failed', err);
+            }
+        }
+
+        async function fallbackFetchCollectionDetails(colId) {
+            try {
+                const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/library/collections/${colId}`);
+                if (res.ok) {
+                    const result = await res.json();
+                    if (result.success && result.data) {
+                        activeCollectionData = result.data.collection || result.data;
+                        if (Array.isArray(result.data.folders)) allFolders = result.data.folders;
+                        if (Array.isArray(result.data.items)) allItems = result.data.items;
+                        saveLocalCachedData();
+                    }
+                }
+            } catch (err) {
+                console.warn('Fallback collection details fetch failed', err);
+            }
+        }
+
+        // =========================================================================
+        // UI RENDERING & FILTERING
+        // =========================================================================
+        function renderCollectionSelector() {
+            if (collectionsList.length > 1) {
+                collectionSelect.innerHTML = collectionsList.map(c =>
+                    `<option value="${c.id}" ${c.id === activeCollectionId ? 'selected' : ''}>${escapeHtml(c.name || 'Default Collection')}</option>`
+                ).join('');
+                collectionSelectorWrapper.classList.remove('hidden');
+                activeCollectionBadge.classList.add('hidden');
+            } else {
+                collectionSelectorWrapper.classList.add('hidden');
+                activeCollectionBadge.textContent = 'Default Collection';
+                activeCollectionBadge.classList.remove('hidden');
+            }
+        }
+
+        function renderBreadcrumbs() {
+            breadcrumbsContainer.innerHTML = folderHistory.map((step, idx) => {
+                const isLast = idx === folderHistory.length - 1;
+                if (isLast) {
+                    return `<span class="text-white font-bold flex-shrink-0">${escapeHtml(step.name)}</span>`;
+                }
+                return `
+                    <button class="breadcrumb-nav-btn text-gray-400 hover:text-white transition cursor-pointer flex-shrink-0" data-idx="${idx}">
+                        ${escapeHtml(step.name)}
+                    </button>
+                    <i class="fas fa-chevron-right text-[10px] text-gray-500 flex-shrink-0"></i>
+                `;
+            }).join('');
+
+            backFolderBtn.classList.toggle('hidden', folderHistory.length <= 1);
+            // Smoothly keep current active folder in view
+            setTimeout(() => {
+                breadcrumbsContainer.scrollLeft = breadcrumbsContainer.scrollWidth;
+            }, 0);
+        }
+
+        function renderTagsBar() {
+            // Aggregate all tags from current active items
+            const tagCounts = {};
+            allItems.forEach(item => {
+                if (Array.isArray(item.tags)) {
+                    item.tags.forEach(t => {
+                        tagCounts[t] = (tagCounts[t] || 0) + 1;
+                    });
+                }
+            });
+
+            const tagKeys = Object.keys(tagCounts);
+            if (tagKeys.length === 0) {
+                tagsFilterContainer.classList.add('hidden');
+                return;
+            }
+
+            tagsFilterContainer.classList.remove('hidden');
+            tagChipsList.innerHTML = tagKeys.map(tag => {
+                const isSelected = activeTagFilter === tag;
+                return `
+                    <button class="tag-chip-btn px-2.5 py-1 rounded-full text-[11px] font-semibold transition cursor-pointer ${isSelected
+                        ? 'bg-pink-500 text-white border border-pink-400'
+                        : 'bg-white/10 hover:bg-white/20 text-gray-300 border border-white/10'
+                    }" data-tag="${escapeHtml(tag)}">
+                        #${escapeHtml(tag)} <span class="opacity-70 text-[9px]">${tagCounts[tag]}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderCurrentView() {
+            renderBreadcrumbs();
+            renderTagsBar();
+
+            // Filter items by parent folder
+            let currentItems = allItems.filter(item => {
+                if (activeCollectionId && item.collectionId && item.collectionId !== activeCollectionId) return false;
+                const parent = item.parentId || null;
+                return parent === currentFolderId;
+            });
+
+            let currentFolders = allFolders.filter(folder => {
+                if (activeCollectionId && folder.collectionId && folder.collectionId !== activeCollectionId) return false;
+                const parent = folder.parentId || null;
+                return parent === currentFolderId;
+            });
+
+            // Apply Search Query Filter if active
+            const q = searchQuery.trim().toLowerCase();
+            if (q) {
+                currentItems = allItems.filter(item => {
+                    const matchTitle = (item.title || '').toLowerCase().includes(q);
+                    const matchUrl = (item.url || '').toLowerCase().includes(q);
+                    const matchDesc = (item.description || '').toLowerCase().includes(q);
+                    const matchTags = Array.isArray(item.tags) && item.tags.some(t => t.toLowerCase().includes(q));
+                    return matchTitle || matchUrl || matchDesc || matchTags;
+                });
+
+                currentFolders = allFolders.filter(f => (f.name || '').toLowerCase().includes(q));
+            }
+
+            // Apply Tag Filter
+            if (activeTagFilter) {
+                currentItems = currentItems.filter(item => Array.isArray(item.tags) && item.tags.includes(activeTagFilter));
+                currentFolders = []; // Tags apply to items
+            }
+
+            let displayFolders = currentFolders;
+            let displayItems = currentItems;
+
+            const totalDisplayCount = displayFolders.length + displayItems.length;
+
+            if (totalDisplayCount === 0) {
+                libraryContainer.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                if (q) {
+                    emptyTitle.textContent = 'No matching items';
+                    emptyDesc.textContent = `No links, notes, or folders matched "${searchQuery}".`;
+                } else {
+                    emptyTitle.textContent = 'This folder is empty';
+                    emptyDesc.textContent = 'Add your first link, note, or subfolder to get organized.';
+                }
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            libraryContainer.classList.remove('hidden');
+
+            // Apply Grid or List styling
+            if (viewMode === 'grid') {
+                libraryContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5';
+            } else {
+                libraryContainer.className = 'flex flex-col gap-3 max-w-4xl mx-auto';
+            }
+
+            let html = '';
+
+            // 1. Render Folders First
+            displayFolders.forEach(folder => {
+                const folderItemCount = allItems.filter(i => (i.parentId || null) === folder.id).length;
+                if (viewMode === 'grid') {
+                    html += `
+                        <div class="library-item-card folder-card p-4 sm:p-5 flex flex-col justify-between group cursor-pointer" data-folder-id="${folder.id}" data-folder-name="${escapeHtml(folder.name)}">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300 text-lg group-hover:scale-105 transition">
+                                        <i class="fas fa-folder"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate max-w-[150px]">${escapeHtml(folder.name)}</h4>
+                                        <span class="text-[11px] text-gray-400">${folderItemCount} item${folderItemCount === 1 ? '' : 's'}</span>
+                                    </div>
+                                </div>
+                                <button class="delete-folder-btn text-gray-400 hover:text-rose-400 text-xs p-1.5 transition opacity-0 group-hover:opacity-100" data-id="${folder.id}" title="Delete folder">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-pink-300 font-semibold">
+                                <span>Open Folder</span>
+                                <i class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-1 transition"></i>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="library-item-card folder-card p-3 sm:p-4 flex items-center justify-between gap-4 group cursor-pointer" data-folder-id="${folder.id}" data-folder-name="${escapeHtml(folder.name)}">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-12 h-12 rounded-xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300 text-lg group-hover:scale-105 transition flex-shrink-0">
+                                    <i class="fas fa-folder"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate">${escapeHtml(folder.name)}</h4>
+                                    <span class="text-[11px] text-gray-400">${folderItemCount} item${folderItemCount === 1 ? '' : 's'}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs text-pink-300 font-semibold hidden sm:inline">Open Folder</span>
+                                <i class="fas fa-chevron-right text-xs text-pink-300"></i>
+                                <button class="delete-folder-btn text-gray-400 hover:text-rose-400 text-xs p-1.5 transition opacity-0 group-hover:opacity-100 ml-2" data-id="${folder.id}" title="Delete folder">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            // 2. Render Items (Links & Notes)
+            displayItems.forEach(item => {
+                if (item.type === 'note') {
+                    // Note Card
+                    const noteSnippet = typeof item.content === 'string' ? item.content : (Array.isArray(item.content) ? (item.content[0]?.html || 'Note text') : 'Empty note');
+                    if (viewMode === 'grid') {
+                        html += `
+                            <div class="library-item-card note-card p-4 sm:p-5 flex flex-col justify-between group h-full">
+                                <div>
+                                    <div class="flex items-start justify-between gap-2 mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center text-xs">
+                                                <i class="fas fa-sticky-note"></i>
+                                            </div>
+                                            <h4 class="text-sm font-bold text-white truncate max-w-[160px]">${escapeHtml(item.title || 'Untitled Note')}</h4>
+                                        </div>
+                                        <button class="delete-item-btn text-gray-400 hover:text-rose-400 text-xs p-1 transition opacity-0 group-hover:opacity-100 cursor-pointer" data-id="${item.id}" title="Delete note">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-300 line-clamp-4 leading-relaxed mb-3">${escapeHtml(noteSnippet)}</p>
+                                </div>
+                                <div>
+                                    ${renderItemTagsHtml(item.tags)}
+                                    <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-300">
+                                        <button class="copy-note-btn text-gray-400 hover:text-white transition text-xs cursor-pointer" data-text="${escapeHtml(noteSnippet)}" title="Copy text">
+                                            <i class="fas fa-copy mr-1"></i> Copy
+                                        </button>
+                                        <span class="text-[10px] text-gray-400">${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Note'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="library-item-card note-card p-3 sm:p-4 flex items-center justify-between gap-4 group">
+                                <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-lg flex-shrink-0">
+                                        <i class="fas fa-sticky-note"></i>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <h4 class="text-sm font-bold text-white truncate">${escapeHtml(item.title || 'Untitled Note')}</h4>
+                                        <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">${escapeHtml(noteSnippet)}</p>
+                                        <div class="mt-1">${renderItemTagsHtml(item.tags)}</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <button class="copy-note-btn text-gray-400 hover:text-white transition text-xs cursor-pointer p-2" data-text="${escapeHtml(noteSnippet)}" title="Copy text">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <button class="delete-item-btn text-gray-400 hover:text-rose-400 text-xs p-2 transition cursor-pointer" data-id="${item.id}" title="Delete note">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    // Link Card with Thumbnail
+                    const domain = extractDomain(item.url);
+                    const faviconUrl = item.favicon || `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+                    const thumbnailUrl = getItemThumbnail(item);
+                    const gradientClass = getDeterministicGradient(item.title || domain || item.url);
+                    const initials = getInitials(item.title || domain);
+
+                    if (viewMode === 'grid') {
+                        html += `
+                            <div class="library-item-card flex flex-col justify-between group h-full overflow-hidden">
+                                <div>
+                                    <!-- Card Thumbnail Banner -->
+                                    <div class="relative w-full aspect-[16/10] overflow-hidden bg-slate-950/60 bg-gradient-to-tr ${gradientClass} flex items-center justify-center">
+                                        ${thumbnailUrl ? `
+                                            <img src="${escapeHtml(thumbnailUrl)}" alt="${escapeHtml(item.title || domain)}"
+                                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                loading="lazy"
+                                                onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+                                            <div class="hidden w-full h-full absolute inset-0 flex items-center justify-center">
+                                                <span class="text-2xl font-black text-white/90 drop-shadow">${initials}</span>
+                                            </div>
+                                        ` : `
+                                            <span class="text-2xl font-black text-white/90 drop-shadow">${initials}</span>
+                                        `}
+                                        <!-- Bottom Gradient Shade -->
+                                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent pointer-events-none"></div>
+
+                                        <!-- Domain & Favicon Pill on bottom-left -->
+                                        <div class="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+                                            <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-[10px] text-white/90 font-mono truncate max-w-[75%] shadow-sm">
+                                                <img src="${faviconUrl}" alt="" class="w-3.5 h-3.5 rounded object-contain flex-shrink-0" onerror="this.src='assets/favicon.svg'" />
+                                                <span class="truncate">${escapeHtml(domain)}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Delete Button Floating on Hover -->
+                                        <button class="delete-item-btn absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/60 hover:bg-rose-500 text-white/80 hover:text-white backdrop-blur-md border border-white/15 flex items-center justify-center text-xs transition opacity-0 group-hover:opacity-100 cursor-pointer shadow-md" data-id="${item.id}" title="Delete link">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="p-4">
+                                        <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition line-clamp-2 leading-snug mb-1.5" title="${escapeHtml(item.title || domain || 'Untitled Link')}">
+                                            ${escapeHtml(item.title || domain || 'Untitled Link')}
+                                        </h4>
+                                        ${item.description ? `<p class="text-xs text-gray-300 line-clamp-2 leading-relaxed mb-2.5">${escapeHtml(item.description)}</p>` : ''}
+                                        ${renderItemTagsHtml(item.tags)}
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer -->
+                                <div class="px-4 pb-3.5 pt-2 border-t border-white/10 flex items-center justify-between text-[11px]">
+                                    <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="text-pink-300 hover:text-white font-semibold flex items-center gap-1.5 transition">
+                                        <span>Visit Site</span>
+                                        <i class="fas fa-external-link-alt text-[10px]"></i>
+                                    </a>
+                                    <button class="copy-link-btn text-gray-400 hover:text-white transition cursor-pointer p-1" data-url="${escapeHtml(item.url)}" title="Copy URL">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // List View Mode
+                        html += `
+                            <div class="library-item-card p-3 sm:p-4 flex items-center justify-between gap-4 group">
+                                <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                                    <!-- Compact Thumbnail -->
+                                    <div class="w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden bg-slate-950/60 bg-gradient-to-tr ${gradientClass} flex-shrink-0 relative flex items-center justify-center border border-white/10">
+                                        ${thumbnailUrl ? `
+                                            <img src="${escapeHtml(thumbnailUrl)}" alt="" class="w-full h-full object-cover" loading="lazy"
+                                                onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+                                            <div class="hidden w-full h-full absolute inset-0 flex items-center justify-center">
+                                                <span class="text-xs font-black text-white">${initials}</span>
+                                            </div>
+                                        ` : `
+                                            <span class="text-xs font-black text-white">${initials}</span>
+                                        `}
+                                    </div>
+
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <img src="${faviconUrl}" alt="" class="w-4 h-4 rounded object-cover flex-shrink-0 bg-slate-800" onerror="this.src='assets/favicon.svg'" />
+                                            <h4 class="text-sm font-bold text-white group-hover:text-pink-300 transition truncate">${escapeHtml(item.title || domain || 'Untitled Link')}</h4>
+                                        </div>
+                                        <p class="text-[11px] text-pink-300/80 truncate font-mono">${escapeHtml(domain)}</p>
+                                        ${item.description ? `<p class="text-xs text-gray-300 line-clamp-1 mt-0.5">${escapeHtml(item.description)}</p>` : ''}
+                                        <div class="mt-1">${renderItemTagsHtml(item.tags)}</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 flex-shrink-0">
+                                    <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-pink-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition">
+                                        <span class="hidden sm:inline">Visit</span>
+                                        <i class="fas fa-external-link-alt text-[10px]"></i>
+                                    </a>
+                                    <button class="copy-link-btn p-2 text-gray-400 hover:text-white transition cursor-pointer" data-url="${escapeHtml(item.url)}" title="Copy URL">
+                                        <i class="fas fa-copy text-xs"></i>
+                                    </button>
+                                    <button class="delete-item-btn p-2 text-gray-400 hover:text-rose-400 text-xs transition cursor-pointer" data-id="${item.id}" title="Delete link">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+
+            libraryContainer.innerHTML = html;
+        }
+
+        function renderItemTagsHtml(tags) {
+            if (!Array.isArray(tags) || tags.length === 0) return '';
+            return `
+                <div class="flex items-center gap-1 flex-wrap">
+                    ${tags.map(t => `<span class="px-2 py-0.5 rounded-md bg-white/10 text-[10px] text-gray-300 font-medium">#${escapeHtml(t)}</span>`).join('')}
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // ITEM & FOLDER MUTATIONS (OPTIMISTIC + SYNC)
+        // =========================================================================
+        async function createNewLink(url, title, description, tags, image = null) {
+            const domain = extractDomain(url);
+            const newItem = {
+                id: generateUUID(),
+                type: 'link',
+                collectionId: activeCollectionId,
+                parentId: currentFolderId,
+                sortOrder: allItems.length,
+                url,
+                title,
+                description: description || null,
+                image: image || null,
+                favicon: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+                tags: tags ? tags.split(',').map(t => t.trim().toLowerCase()).filter(Boolean) : [],
+                createdAt: new Date().toISOString()
+            };
+
+            allItems.unshift(newItem);
+            saveLocalCachedData();
+            renderCurrentView();
+
+            // Sync upsert to server
+            await performLibrarySync({
+                upserts: { items: [newItem], collections: [], folders: [], tags: [] },
+                deletes: { item_ids: [], folder_ids: [], collection_ids: [], tag_ids: [] }
+            });
+        }
+
+        async function createNewNote(title, content, color, tags) {
+            const newItem = {
+                id: generateUUID(),
+                type: 'note',
+                collectionId: activeCollectionId,
+                parentId: currentFolderId,
+                sortOrder: allItems.length,
+                title,
+                content: content,
+                color: color || 'default',
+                tags: tags.split(',').map(t => t.trim().toLowerCase()).filter(Boolean),
+                createdAt: new Date().toISOString()
+            };
+
+            allItems.unshift(newItem);
+            saveLocalCachedData();
+            renderCurrentView();
+
+            // Sync upsert to server
+            await performLibrarySync({
+                upserts: { items: [newItem], collections: [], folders: [], tags: [] },
+                deletes: { item_ids: [], folder_ids: [], collection_ids: [], tag_ids: [] }
+            });
+        }
+
+        async function createNewFolder(name) {
+            const newFolder = {
+                id: generateUUID(),
+                name,
+                collectionId: activeCollectionId,
+                parentId: currentFolderId,
+                sortOrder: allFolders.length,
+                createdAt: new Date().toISOString()
+            };
+
+            allFolders.unshift(newFolder);
+            saveLocalCachedData();
+            renderCurrentView();
+
+            // Sync folder upsert to server
+            await performLibrarySync({
+                upserts: { folders: [newFolder], collections: [], items: [], tags: [] },
+                deletes: { item_ids: [], folder_ids: [], collection_ids: [], tag_ids: [] }
+            });
+        }
+
+        async function deleteItem(itemId) {
+            if (!confirm('Are you sure you want to delete this item?')) return;
+            allItems = allItems.filter(i => i.id !== itemId);
+            saveLocalCachedData();
+            renderCurrentView();
+
+            await performLibrarySync({
+                upserts: { collections: [], folders: [], items: [], tags: [] },
+                deletes: { item_ids: [itemId], folder_ids: [], collection_ids: [], tag_ids: [] }
+            });
+        }
+
+        async function deleteFolder(folderId) {
+            if (!confirm('Delete this folder and all items inside it?')) return;
+            allFolders = allFolders.filter(f => f.id !== folderId);
+            allItems = allItems.filter(i => (i.parentId || null) !== folderId);
+            saveLocalCachedData();
+            renderCurrentView();
+
+            await performLibrarySync({
+                upserts: { collections: [], folders: [], items: [], tags: [] },
+                deletes: { folder_ids: [folderId], item_ids: [], collection_ids: [], tag_ids: [] }
+            });
+        }
+
+        // =========================================================================
+        // EVENT HANDLERS & INITIALIZATION
+        // =========================================================================
+        let initialSyncPerformed = false;
+        let lastSyncedUserId = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadLocalCachedData();
+
+            // Initialize Authentication
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+
+                TabsomeAuth.onAuthStateChange(async (user) => {
+                    currentUser = user;
+                    const userId = user ? (user.id || user.email) : null;
+
+                    if (!user) {
+                        lastSyncedUserId = null;
+                        initialSyncPerformed = false;
+                        loadingSkeleton.classList.add('hidden');
+                        libraryContainer.classList.add('hidden');
+                        emptyState.classList.add('hidden');
+                        unauthPrompt.classList.remove('hidden');
+                    } else {
+                        unauthPrompt.classList.add('hidden');
+                        // Only perform automatic sync once on initial session discovery / login
+                        if (!initialSyncPerformed || lastSyncedUserId !== userId) {
+                            initialSyncPerformed = true;
+                            lastSyncedUserId = userId;
+                            loadingSkeleton.classList.remove('hidden');
+                            await performLibrarySync();
+                            loadingSkeleton.classList.add('hidden');
+                        } else {
+                            renderCurrentView();
+                        }
+                    }
+                });
+            }
+
+            // Unauth Sign In
+            unauthSignInBtn.addEventListener('click', () => {
+                if (window.TabsomeAuth) TabsomeAuth.signInWithGoogle();
+            });
+
+            // Manual Sync Trigger
+            syncNowBtn.addEventListener('click', () => performLibrarySync());
+
+            // Collection Switcher
+            collectionSelect.addEventListener('change', (e) => {
+                activeCollectionId = e.target.value;
+                activeCollectionData = collectionsList.find(c => c.id === activeCollectionId) || null;
+                folderHistory = [{ id: null, name: activeCollectionData?.name || 'My Library' }];
+                currentFolderId = null;
+                saveLocalCachedData();
+                renderCurrentView();
+            });
+
+            // Tag Chips Filter (delegated)
+            tagChipsList.addEventListener('click', (e) => {
+                const chip = e.target.closest('.tag-chip-btn');
+                if (chip) {
+                    const tag = chip.dataset.tag;
+                    activeTagFilter = activeTagFilter === tag ? null : tag;
+                    renderCurrentView();
+                }
+            });
+
+            // Search Bar Input
+            librarySearchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                clearSearchBtn.classList.toggle('hidden', !searchQuery);
+                renderCurrentView();
+            });
+
+            clearSearchBtn.addEventListener('click', () => {
+                librarySearchInput.value = '';
+                searchQuery = '';
+                clearSearchBtn.classList.add('hidden');
+                renderCurrentView();
+            });
+
+            // View Mode Toggle
+            viewGridBtn.addEventListener('click', () => {
+                viewMode = 'grid';
+                viewGridBtn.classList.add('bg-white/20', 'text-white', 'font-bold');
+                viewGridBtn.classList.remove('text-gray-400');
+                viewListBtn.classList.remove('bg-white/20', 'text-white', 'font-bold');
+                viewListBtn.classList.add('text-gray-400');
+                renderCurrentView();
+            });
+
+            viewListBtn.addEventListener('click', () => {
+                viewMode = 'list';
+                viewListBtn.classList.add('bg-white/20', 'text-white', 'font-bold');
+                viewListBtn.classList.remove('text-gray-400');
+                viewGridBtn.classList.remove('bg-white/20', 'text-white', 'font-bold');
+                viewGridBtn.classList.add('text-gray-400');
+                renderCurrentView();
+            });
+
+            // Folder Click Navigation (delegated)
+            libraryContainer.addEventListener('click', (e) => {
+                const folderCard = e.target.closest('.folder-card');
+                if (folderCard && !e.target.closest('.delete-folder-btn')) {
+                    const fid = folderCard.dataset.folderId;
+                    const fname = folderCard.dataset.folderName;
+                    folderHistory.push({ id: fid, name: fname });
+                    currentFolderId = fid;
+                    renderCurrentView();
+                    return;
+                }
+
+                // Delete Item
+                const delItemBtn = e.target.closest('.delete-item-btn');
+                if (delItemBtn) {
+                    deleteItem(delItemBtn.dataset.id);
+                    return;
+                }
+
+                // Delete Folder
+                const delFolderBtn = e.target.closest('.delete-folder-btn');
+                if (delFolderBtn) {
+                    deleteFolder(delFolderBtn.dataset.id);
+                    return;
+                }
+
+                // Copy Link URL
+                const copyLinkBtn = e.target.closest('.copy-link-btn');
+                if (copyLinkBtn) {
+                    navigator.clipboard.writeText(copyLinkBtn.dataset.url);
+                    copyLinkBtn.innerHTML = '<i class="fas fa-check text-emerald-400"></i>';
+                    setTimeout(() => copyLinkBtn.innerHTML = '<i class="fas fa-copy"></i>', 1800);
+                    return;
+                }
+
+                // Copy Note Text
+                const copyNoteBtn = e.target.closest('.copy-note-btn');
+                if (copyNoteBtn) {
+                    navigator.clipboard.writeText(copyNoteBtn.dataset.text);
+                    copyNoteBtn.innerHTML = '<i class="fas fa-check text-emerald-400 mr-1"></i> Copied';
+                    setTimeout(() => copyNoteBtn.innerHTML = '<i class="fas fa-copy mr-1"></i> Copy', 1800);
+                    return;
+                }
+            });
+
+            // Breadcrumb Navigation (delegated)
+            breadcrumbsContainer.addEventListener('click', (e) => {
+                const navBtn = e.target.closest('.breadcrumb-nav-btn');
+                if (navBtn) {
+                    const idx = parseInt(navBtn.dataset.idx, 10);
+                    folderHistory = folderHistory.slice(0, idx + 1);
+                    currentFolderId = folderHistory[folderHistory.length - 1].id;
+                    renderCurrentView();
+                }
+            });
+
+            backFolderBtn.addEventListener('click', () => {
+                if (folderHistory.length > 1) {
+                    folderHistory.pop();
+                    currentFolderId = folderHistory[folderHistory.length - 1].id;
+                    renderCurrentView();
+                }
+            });
+
+            // Modal Controls
+            const openNewLinkModalBtn = document.getElementById('openNewLinkModalBtn');
+            const openNewNoteModalBtn = document.getElementById('openNewNoteModalBtn');
+            const openNewFolderModalBtn = document.getElementById('openNewFolderModalBtn');
+            const emptyAddLinkBtn = document.getElementById('emptyAddLinkBtn');
+            const emptyAddNoteBtn = document.getElementById('emptyAddNoteBtn');
+
+            function openModal(modal) {
+                modal.classList.remove('hidden');
+            }
+            function closeModals() {
+                linkModal.classList.add('hidden');
+                noteModal.classList.add('hidden');
+                folderModal.classList.add('hidden');
+            }
+
+            openNewLinkModalBtn?.addEventListener('click', () => {
+                linkForm.reset();
+                openModal(linkModal);
+            });
+            emptyAddLinkBtn?.addEventListener('click', () => {
+                linkForm.reset();
+                openModal(linkModal);
+            });
+
+            openNewNoteModalBtn?.addEventListener('click', () => {
+                noteForm.reset();
+                openModal(noteModal);
+            });
+            emptyAddNoteBtn?.addEventListener('click', () => {
+                noteForm.reset();
+                openModal(noteModal);
+            });
+
+            openNewFolderModalBtn?.addEventListener('click', () => {
+                folderForm.reset();
+                openModal(folderModal);
+            });
+
+            document.querySelectorAll('.close-modal-btn').forEach(btn => {
+                btn.addEventListener('click', closeModals);
+            });
+
+            // Close on backdrop click
+            [linkModal, noteModal, folderModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModals();
+                });
+            });
+
+            // Forms Submit Handlers
+            linkForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const url = document.getElementById('linkUrlInput').value;
+                const title = document.getElementById('linkTitleInput').value;
+                const image = document.getElementById('linkImageInput')?.value?.trim() || null;
+                const desc = document.getElementById('linkDescInput').value;
+                const tags = document.getElementById('linkTagsInput').value;
+                closeModals();
+                await createNewLink(url, title, desc, tags, image);
+            });
+
+            noteForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const title = document.getElementById('noteTitleInput').value;
+                const content = document.getElementById('noteContentInput').value;
+                const color = document.querySelector('input[name="noteColor"]:checked')?.value || 'default';
+                const tags = document.getElementById('noteTagsInput').value;
+                closeModals();
+                await createNewNote(title, content, color, tags);
+            });
+
+            folderForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('folderNameInput').value;
+                closeModals();
+                await createNewFolder(name);
+            });
+        });
+    </script>
+</body>
+
+</html>

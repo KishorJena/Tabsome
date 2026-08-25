@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Roadmap & Community Hub – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Explore the official Tabsome roadmap. See what features are planned, in progress, or under review, upvote your favorite ideas, and submit your own feature requests.">
+    <meta name="keywords"
+        content="tabsome roadmap, feature requests, community suggestions, chrome extension roadmap, tabsome features, upvote ideas">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Product Roadmap & Community Hub – Tabsome">
+    <meta property="og:description"
+        content="Explore upcoming features, upvote your favorite ideas, and submit suggestions to help shape Tabsome.">
+    <meta property="og:image" content="https://tabsome.github.io/assets/social-preview.png">
+    <meta property="og:url" content="https://tabsome.github.io/roadmap.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Product Roadmap & Community Hub – Tabsome">
+    <meta name="twitter:description"
+        content="Explore upcoming features, upvote your favorite ideas, and submit suggestions to help shape Tabsome.">
+    <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
+
+    <!-- Tailwind & Fonts & Icons & Supabase Auth -->
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image:
+                linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        section,
+        main,
+        footer {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(55, 71, 79, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.25s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+        }
+
+        .glass-header {
+            background: rgba(55, 71, 79, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Reaction Buttons */
+        .reaction-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 9999px;
+            padding: 0.25rem 0.55rem;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            color: #e2e8f0;
+        }
+
+        .reaction-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .reaction-btn.active {
+            background: linear-gradient(135deg, rgba(255, 87, 87, 0.35), rgba(140, 82, 255, 0.45));
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 10px rgba(140, 82, 255, 0.35);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .reaction-popover {
+            background: rgba(20, 27, 45, 0.96);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+        }
+
+        .emoji-pick-btn {
+            transition: all 0.15s ease;
+        }
+
+        .emoji-pick-btn:hover {
+            transform: scale(1.25);
+        }
+
+        .todo-row {
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .todo-row:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .todo-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Skeleton Animation */
+        @keyframes pulse-subtle {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
+        }
+
+        .skeleton-pulse {
+            animation: pulse-subtle 1.8s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Google Continue Button */
+        .btn-google {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            font-weight: 700;
+        }
+
+        .btn-google:hover {
+            background-color: #f1f5f9 !important;
+            color: #020617 !important;
+        }
+
+        .btn-google span {
+            color: #0f172a !important;
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <header class="fixed w-full glass-header z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
+                <span class="text-2xl font-bold">Tabsome</span>
+            </a>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="marketplace.html" class="hover:text-gray-200 transition text-sm">Marketplace</a>
+                <a href="roadmap.html"
+                    class="hover:text-gray-200 transition text-sm text-white font-bold border-b-2 border-white pb-0.5">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Header Intro / Top Tag, Heading & Caption -->
+    <section class="pt-28 pb-4 text-center flex-shrink-0">
+        <div class="max-w-4xl mx-auto px-6" data-aos="fade-up">
+            <div
+                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider mb-3">
+                <i class="fas fa-compass text-yellow-300"></i>
+                <span>Roadmap</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-3 tracking-tight text-amber-100/90">
+                What’s coming to Tabsome
+            </h1>
+            <p class="text-sm md:text-base text-gray-300 max-w-2xl mx-auto">
+                Explore possible future features, vote for what you’d like to see, and share your own ideas.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Roadmap Content Area -->
+    <main class="py-4 pb-16 flex-grow">
+        <div class="max-w-7xl mx-auto px-6" data-aos="fade-up">
+            <div class="glass-card rounded-2xl p-6 md:p-8">
+                <!-- Surface Header -->
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2 text-white">
+                            <i class="fas fa-layer-group text-purple-400"></i>
+                            <span>Upcoming Features & Improvements</span>
+                        </h2>
+                        <p class="text-gray-300 text-sm mt-1">
+                            Your feedback helps us decide which features to prioritize. Let’s shape the future of
+                            Tabsome together.
+                        </p>
+                    </div>
+                    <button id="surfaceSuggestBtn"
+                        class="bg-white text-purple-700 font-bold px-5 py-2.5 rounded-xl text-xs hover:bg-opacity-95 transition transform hover:scale-105 shadow-lg inline-flex items-center gap-2 flex-shrink-0 cursor-pointer"
+                        title="Sign in to suggest idea">
+                        <i class="fas fa-right-to-bracket"></i>
+                        <span>Sign in to suggest idea</span>
+                    </button>
+                </div>
+
+                <!-- Loading State (Post Card Skeletons inside Surface) -->
+                <div id="loadingState" class="space-y-4 mt-6">
+                    <div class="bg-black/20 rounded-xl p-5 border border-white/5 space-y-3 skeleton-pulse">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20"></div>
+                            <div class="h-4 w-32 bg-white/20 rounded"></div>
+                        </div>
+                        <div class="h-5 w-3/4 bg-white/25 rounded"></div>
+                        <div class="h-12 w-full bg-white/10 rounded"></div>
+                    </div>
+                    <div class="bg-black/20 rounded-xl p-5 border border-white/5 space-y-3 skeleton-pulse">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-white/20"></div>
+                            <div class="h-4 w-32 bg-white/20 rounded"></div>
+                        </div>
+                        <div class="h-5 w-3/4 bg-white/25 rounded"></div>
+                        <div class="h-12 w-full bg-white/10 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div id="errorState" class="hidden mt-6">
+                    <div class="bg-black/20 rounded-xl p-8 text-center max-w-lg mx-auto border border-rose-500/30">
+                        <i class="fas fa-triangle-exclamation text-4xl text-rose-400 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Unable to Load Roadmap</h3>
+                        <p id="errorMessage" class="text-gray-300 text-sm mb-6">
+                            An error occurred while communicating with the roadmap API.
+                        </p>
+                        <button id="retryBtn"
+                            class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2">
+                            <i class="fas fa-rotate-right"></i>
+                            <span>Try Again</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden mt-6">
+                    <div class="bg-black/20 rounded-xl p-10 text-center max-w-lg mx-auto border border-white/5">
+                        <div
+                            class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-4 text-2xl text-yellow-300">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">No Roadmap Items Yet</h3>
+                        <p class="text-gray-300 text-sm mb-6">
+                            Be the first to share an idea and shape the future of Tabsome!
+                        </p>
+                        <button id="emptySuggestBtn"
+                            class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl hover:bg-opacity-95 transition transform hover:scale-105 inline-flex items-center gap-2 cursor-pointer"
+                            title="Sign in to suggest idea">
+                            <i class="fas fa-right-to-bracket"></i>
+                            <span>Sign in to suggest idea</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Roadmap Posts Feed Container -->
+                <div id="roadmapTableContainer" class="hidden mt-6">
+                    <div id="roadmapListRows" class="space-y-4">
+                        <!-- Populated dynamically as post cards -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Suggestion Submission Modal -->
+    <div id="suggestModal"
+        class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card w-full max-w-lg rounded-2xl p-6 sm:p-8 relative transform scale-95 transition-transform duration-200"
+            id="suggestModalContent">
+
+            <!-- Close Button -->
+            <button id="closeSuggestModalBtn" class="absolute right-5 top-5 text-gray-400 hover:text-white text-lg">
+                <i class="fas fa-xmark"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="mb-6">
+                <div
+                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-yellow-300 uppercase tracking-wider mb-2">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Community Proposal</span>
+                </div>
+                <h2 class="text-2xl font-bold text-white">Suggest a Feature or Fix</h2>
+                <p class="text-xs text-gray-300 mt-1">
+                    Have an idea that would make Tabsome even better? Submit it to the public board for community
+                    upvoting and team review!
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form id="suggestForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-200 mb-1.5" for="formTitle">
+                        Title <span class="text-rose-400">*</span>
+                    </label>
+                    <input type="text" id="formTitle" required maxlength="120"
+                        placeholder="e.g. Keyboard shortcuts for switching speed dial folders"
+                        class="w-full bg-black/40 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 transition">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-200 mb-1.5" for="formType">
+                            Category <span class="text-rose-400">*</span>
+                        </label>
+                        <select id="formType" required
+                            class="w-full bg-black/40 text-white text-sm rounded-xl px-3 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 cursor-pointer">
+                            <option value="feature" class="bg-gray-800 text-white">✨ New Feature</option>
+                            <option value="improvement" class="bg-gray-800 text-white">🚀 Improvement</option>
+                            <option value="fix" class="bg-gray-800 text-white">🐛 Bug / Fix</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-200 mb-1.5" for="formAuthorName">
+                            Your Display Name
+                        </label>
+                        <input type="text" id="formAuthorName" maxlength="50" placeholder="e.g. Alex"
+                            class="w-full bg-black/40 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-200 mb-1.5" for="formDescription">
+                        Description & Use Case <span class="text-rose-400">*</span>
+                    </label>
+                    <textarea id="formDescription" rows="4" required maxlength="1500"
+                        placeholder="Explain your idea, why it's helpful, and how you envision it working in Tabsome..."
+                        class="w-full bg-black/40 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-2.5 border border-white/15 focus:outline-none focus:border-purple-400 transition resize-none"></textarea>
+                </div>
+
+                <!-- Submission alert/error if any -->
+                <div id="formFeedback" class="hidden p-3 rounded-xl text-xs"></div>
+
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" id="cancelSuggestBtn"
+                        class="px-5 py-2.5 rounded-xl text-xs font-semibold text-gray-300 hover:text-white transition">
+                        Cancel
+                    </button>
+                    <button type="submit" id="submitSuggestBtn"
+                        class="bg-white text-purple-700 font-bold px-6 py-2.5 rounded-xl text-xs hover:bg-opacity-95 transition transform hover:scale-105 shadow-md inline-flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Submit to Roadmap</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Item Detail & Discussion Modal -->
+    <div id="detailModal"
+        class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card w-full max-w-xl rounded-2xl p-6 sm:p-8 relative transform scale-95 transition-transform duration-200"
+            id="detailModalContent">
+            <button id="closeDetailModalBtn" class="absolute right-5 top-5 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fas fa-xmark"></i>
+            </button>
+
+            <div id="detailModalBody">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In Required Dialog -->
+    <div id="authRequiredModal"
+        class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card w-full max-w-md rounded-2xl p-6 sm:p-8 relative transform scale-95 transition-transform duration-200 text-center"
+            id="authRequiredModalContent">
+            <button id="closeAuthRequiredModalBtn" class="absolute right-5 top-5 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fas fa-xmark"></i>
+            </button>
+
+            <!-- Icon Header -->
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-4 text-purple-400 text-2xl shadow-lg">
+                <i class="fas fa-right-to-bracket"></i>
+            </div>
+
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Sign in to Continue</h3>
+            <p class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
+                Sign in with Google to react, vote on features, and access other community actions.
+            </p>
+
+            <!-- Continue with Google Button -->
+            <button id="modalContinueWithGoogleBtn"
+                class="w-full inline-flex items-center justify-center gap-3 btn-google py-3 px-5 rounded-xl shadow-lg transition transform hover:scale-[1.02] cursor-pointer text-sm font-bold"
+                style="background-color: #ffffff !important; color: #0f172a !important;">
+                <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span class="font-bold text-slate-900" style="color: #0f172a !important;">Continue with Google</span>
+            </button>
+
+            <button type="button" id="cancelAuthRequiredModalBtn"
+                class="mt-4 text-xs font-semibold text-gray-400 hover:text-white transition cursor-pointer">
+                Maybe later
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastNotification"
+        class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-card rounded-xl px-5 py-3 border border-white/20 shadow-2xl flex items-center gap-3 text-sm">
+            <i id="toastIcon" class="fas fa-check-circle text-emerald-400"></i>
+            <span id="toastMessage">Action successful</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center text-gray-300 text-sm border-t border-white/10 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-6 h-6 opacity-80">
+                <span class="font-bold text-white">Tabsome</span>
+                <span class="text-xs text-gray-400">© 2026</span>
+            </div>
+            <div class="space-x-6 text-xs text-gray-300">
+                <a href="index.html" class="hover:text-white transition">Home</a>
+                <a href="marketplace.html" class="hover:text-white transition">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-white transition text-white font-semibold">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-white transition">Changelogs</a>
+                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 700, once: true });
+
+        // Configuration
+        const STORAGE_KEY_INSTALLATION_ID = 'tabsome_installation_id';
+
+        // Auto-cleanup legacy cached storage items so UI strictly matches database
+        try {
+            localStorage.removeItem('tabsome_local_suggestions');
+            localStorage.removeItem('tabsome_user_reactions');
+        } catch { }
+
+        // Stage, Source and Type Meta
+        const STATUS_CONFIG = {
+            under_review: {
+                label: 'Under Review',
+                badgeClass: 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
+                textColor: 'text-amber-300',
+                dotClass: 'bg-amber-400',
+                icon: 'fa-lightbulb'
+            },
+            considering: {
+                label: 'Considering',
+                badgeClass: 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30',
+                textColor: 'text-indigo-300',
+                dotClass: 'bg-indigo-400',
+                icon: 'fa-compass'
+            },
+            planned: {
+                label: 'Planned',
+                badgeClass: 'bg-sky-500/20 text-sky-300 border border-sky-500/30',
+                textColor: 'text-sky-300',
+                dotClass: 'bg-sky-400',
+                icon: 'fa-clipboard-list'
+            },
+            in_progress: {
+                label: 'In Progress',
+                badgeClass: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30',
+                textColor: 'text-emerald-300',
+                dotClass: 'bg-emerald-400',
+                icon: 'fa-code'
+            },
+            completed: {
+                label: 'Completed',
+                badgeClass: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+                textColor: 'text-purple-300',
+                dotClass: 'bg-purple-400',
+                icon: 'fa-check-circle'
+            },
+            closed: {
+                label: 'Closed',
+                badgeClass: 'bg-gray-500/20 text-gray-300 border border-gray-500/30',
+                textColor: 'text-gray-400',
+                dotClass: 'bg-gray-400',
+                icon: 'fa-box-archive'
+            }
+        };
+
+        const SOURCE_CONFIG = {
+            official: {
+                label: 'Official',
+                badgeClass: 'bg-violet-500/20 text-violet-300 border border-violet-500/30',
+                icon: 'fa-shield-halved'
+            },
+            community: {
+                label: 'Community',
+                badgeClass: 'bg-amber-500/15 text-amber-200 border border-amber-500/25',
+                icon: 'fa-users'
+            }
+        };
+
+        const TYPE_CONFIG = {
+            feature: {
+                label: 'Feature',
+                badgeClass: 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/25',
+                icon: 'fa-wand-magic-sparkles'
+            },
+            improvement: {
+                label: 'Improvement',
+                badgeClass: 'bg-sky-500/15 text-sky-300 border border-sky-500/25',
+                icon: 'fa-arrow-trend-up'
+            },
+            fix: {
+                label: 'Fix',
+                badgeClass: 'bg-rose-500/15 text-rose-300 border border-rose-500/25',
+                icon: 'fa-bug'
+            }
+        };
+
+        const SUPPORTED_REACTIONS = [
+            { type: 'upvote', emoji: '👍', label: 'Upvote' },
+            { type: 'fire', emoji: '🔥', label: 'Fire' },
+            { type: 'rocket', emoji: '🚀', label: 'Rocket' },
+            { type: 'like', emoji: '❤️', label: 'Love' },
+            { type: 'bulb', emoji: '💡', label: 'Idea' }
+        ];
+
+        // State
+        let allRoadmapItems = [];
+        let installationId = getOrCreateInstallationId();
+        let currentAuthUser = null;
+
+        // DOM Elements
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+        const retryBtn = document.getElementById('retryBtn');
+        const emptyState = document.getElementById('emptyState');
+        const roadmapTableContainer = document.getElementById('roadmapTableContainer');
+        const roadmapListRows = document.getElementById('roadmapListRows');
+
+        // Modal Elements
+        const suggestModal = document.getElementById('suggestModal');
+        const suggestModalContent = document.getElementById('suggestModalContent');
+        const surfaceSuggestBtn = document.getElementById('surfaceSuggestBtn');
+        const emptySuggestBtn = document.getElementById('emptySuggestBtn');
+        const closeSuggestModalBtn = document.getElementById('closeSuggestModalBtn');
+        const cancelSuggestBtn = document.getElementById('cancelSuggestBtn');
+        const suggestForm = document.getElementById('suggestForm');
+        const formFeedback = document.getElementById('formFeedback');
+        const submitSuggestBtn = document.getElementById('submitSuggestBtn');
+
+        // Detail Modal Elements
+        const detailModal = document.getElementById('detailModal');
+        const detailModalContent = document.getElementById('detailModalContent');
+        const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
+        const detailModalBody = document.getElementById('detailModalBody');
+
+        // Auth Required Modal Elements
+        const authRequiredModal = document.getElementById('authRequiredModal');
+        const authRequiredModalContent = document.getElementById('authRequiredModalContent');
+        const closeAuthRequiredModalBtn = document.getElementById('closeAuthRequiredModalBtn');
+        const cancelAuthRequiredModalBtn = document.getElementById('cancelAuthRequiredModalBtn');
+        const modalContinueWithGoogleBtn = document.getElementById('modalContinueWithGoogleBtn');
+        let pendingAuthItemId = null;
+
+        // Installation ID Helper
+        function getOrCreateInstallationId() {
+            let id = localStorage.getItem(STORAGE_KEY_INSTALLATION_ID);
+            if (!id) {
+                id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+                localStorage.setItem(STORAGE_KEY_INSTALLATION_ID, id);
+            }
+            return id;
+        }
+
+
+
+        // Sanitization
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return dateStr;
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            } catch {
+                return dateStr;
+            }
+        }
+
+        // Toast Helper
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMessage.textContent = message;
+            if (isError) {
+                toastIcon.className = 'fas fa-triangle-exclamation text-rose-400';
+            } else {
+                toastIcon.className = 'fas fa-check-circle text-emerald-400';
+            }
+
+            toast.classList.remove('opacity-0', 'translate-y-20');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-20');
+            }, 3000);
+        }
+
+        // Auth Required Dialog Handlers
+        function openAuthRequiredModal(itemId = null) {
+            pendingAuthItemId = itemId;
+            authRequiredModal.classList.remove('hidden');
+            setTimeout(() => {
+                authRequiredModal.classList.remove('opacity-0');
+                authRequiredModalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeAuthRequiredModal() {
+            authRequiredModal.classList.add('opacity-0');
+            authRequiredModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                authRequiredModal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Reaction Toggle Handler
+        async function handleReactionToggle(itemId, reactionType) {
+            // User must be signed in to react on the web site
+            const user = currentAuthUser || (window.TabsomeAuth ? await TabsomeAuth.getUser() : null);
+            if (!user) {
+                openAuthRequiredModal(itemId);
+                return;
+            }
+
+            const item = allRoadmapItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (!item.reactionsCount || typeof item.reactionsCount !== 'object') {
+                item.reactionsCount = {};
+            }
+
+            const currentReaction = item.userReaction;
+            const isRemoving = currentReaction === reactionType;
+            const newReaction = isRemoving ? null : reactionType;
+
+            // Optimistic updates
+            if (isRemoving) {
+                item.reactionsCount[reactionType] = Math.max(0, (item.reactionsCount[reactionType] || 1) - 1);
+                item.userReaction = null;
+                item.hasVoted = false;
+                item.voteCount = Math.max(0, (item.voteCount || 1) - 1);
+            } else {
+                if (currentReaction && item.reactionsCount[currentReaction]) {
+                    item.reactionsCount[currentReaction] = Math.max(0, item.reactionsCount[currentReaction] - 1);
+                } else {
+                    item.voteCount = (item.voteCount || 0) + 1;
+                    item.hasVoted = true;
+                }
+                item.reactionsCount[reactionType] = (item.reactionsCount[reactionType] || 0) + 1;
+                item.userReaction = reactionType;
+            }
+
+            // Re-render
+            renderFilteredItems();
+
+            // Fire remote User Scope API call
+            try {
+                if (isRemoving) {
+                    const res = await TabsomeAuth.apiFetch(
+                        `${API_BASE_URL}/api/v3/users/me/roadmap/${encodeURIComponent(itemId)}/react?reactionType=${encodeURIComponent(reactionType)}`,
+                        { method: 'DELETE' }
+                    );
+                    if (!res.ok) {
+                        throw new Error(`Failed to remove reaction (${res.status})`);
+                    }
+                    showToast('Reaction removed.');
+                } else {
+                    const res = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/users/me/roadmap/${encodeURIComponent(itemId)}/react`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            reactionType
+                        })
+                    });
+                    if (!res.ok) {
+                        throw new Error(`Failed to save reaction (${res.status})`);
+                    }
+                    const rObj = SUPPORTED_REACTIONS.find(r => r.type === reactionType);
+                    showToast(`Reacted with ${rObj ? rObj.emoji : reactionType}!`);
+                }
+            } catch (err) {
+                console.warn('Sync error', err);
+                showToast('Unable to update reaction. Please try again.', true);
+                fetchRoadmapData();
+            }
+        }
+
+        function createTableRow(item) {
+            const card = document.createElement('article');
+            card.className = 'bg-black/25 hover:bg-black/35 rounded-xl p-5 sm:p-6 border border-white/10 hover:border-white/20 transition-all duration-200 group flex flex-col gap-3.5';
+            card.setAttribute('data-id', item.id);
+
+            const dateStr = formatDate(item.createdAt);
+            const showAuthor = item.source !== 'official';
+            const authorName = item.authorName || 'Community Member';
+            const authorInitial = authorName.charAt(0).toUpperCase();
+
+            const authorHtml = showAuthor ? `
+                    <!-- Author Info (By [Avatar] [Name] on Right) -->
+                    <div class="flex items-center gap-2 flex-shrink-0 pt-0.5">
+                        <span class="text-xs text-gray-300">By</span>
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm flex-shrink-0">
+                            ${escapeHtml(authorInitial)}
+                        </div>
+                        <span class="text-xs font-semibold text-white">
+                            ${escapeHtml(authorName)}
+                        </span>
+                    </div>
+            ` : '';
+
+            const versionBadge = item.targetVersion
+                ? `<span class="text-xs bg-white/10 text-white px-2.5 py-0.5 rounded-md font-semibold border border-white/15">🎯 ${escapeHtml(item.targetVersion)}</span>`
+                : '';
+
+            const pinnedBadge = item.isPinned
+                ? `<span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-md font-bold border border-amber-500/30 flex items-center gap-1"><i class="fas fa-thumbtack text-[10px]"></i> Pinned</span>`
+                : '';
+
+            const isUnpublished = item.isPublished === false || item.is_published === false;
+
+            // Render reaction pills
+            const reactionsMap = item.reactionsCount || {};
+            if (Object.keys(reactionsMap).length === 0 && item.voteCount) {
+                reactionsMap['upvote'] = item.voteCount;
+            }
+
+            let renderedReactionButtons = '';
+            let hasAnyReaction = false;
+
+            SUPPORTED_REACTIONS.forEach(r => {
+                const count = reactionsMap[r.type] || 0;
+                const isActive = item.userReaction === r.type || (r.type === 'upvote' && item.hasVoted && !item.userReaction);
+                if (count > 0 || isActive) {
+                    hasAnyReaction = true;
+                    renderedReactionButtons += `
+                        <button class="reaction-btn ${isActive ? 'active' : ''} reaction-toggle-btn px-3 py-1.5 text-xs font-medium"
+                            data-reaction="${r.type}" title="${r.label} (${count})">
+                            <span class="text-sm">${r.emoji}</span>
+                            <span class="font-bold text-xs">${count}</span>
+                        </button>
+                    `;
+                }
+            });
+
+            // Default upvote button if no reactions exist
+            if (!hasAnyReaction) {
+                renderedReactionButtons = `
+                    <button class="reaction-btn reaction-toggle-btn px-3 py-1.5 text-xs font-medium" data-reaction="upvote" title="Upvote">
+                        <span class="text-sm">👍</span>
+                        <span class="font-bold text-xs">0</span>
+                    </button>
+                `;
+            }
+
+            card.innerHTML = `
+                ${isUnpublished ? `
+                    <!-- Awaiting Review Banner Above Title & Author -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-md font-semibold border border-amber-500/30 inline-flex items-center gap-1.5 cursor-help" title="Not public yet. We'll review it before publishing.">
+                            <i class="fas fa-clock text-[10px]"></i> Awaiting review
+                        </span>
+                    </div>
+                ` : ''}
+
+                <!-- Post Top Row: Title + Badges + View more (Left) & Author Info (Right) -->
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-2.5 flex-wrap flex-grow">
+                        <h3 class="font-bold text-white text-lg leading-snug cursor-pointer item-title-trigger hover:text-yellow-200 transition">
+                            ${escapeHtml(item.title)}
+                        </h3>
+                        ${pinnedBadge}
+                        ${versionBadge}
+                        <button type="button" class="text-purple-400 hover:text-purple-300 font-semibold text-xs inline-flex items-center gap-1 item-view-more cursor-pointer transition" title="View details">
+                            <span>View more</span>
+                            <i class="fas fa-arrow-right text-[9px]"></i>
+                        </button>
+                    </div>
+
+                    ${authorHtml}
+                </div>
+
+                <!-- Bottom Row: Reactions (Left) & Date (Right) -->
+                <div class="pt-2.5 border-t border-white/10 flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-2 flex-wrap relative">
+                        ${renderedReactionButtons}
+
+                        <!-- Quick Add Reaction (+) Trigger -->
+                        <div class="relative inline-block add-reaction-container">
+                            <button class="reaction-btn text-gray-400 hover:text-white add-reaction-btn px-2.5 py-1.5 text-xs" title="Add reaction">
+                                <i class="fas fa-plus text-[9px]"></i>
+                                <i class="far fa-face-smile text-xs"></i>
+                            </button>
+                            <div class="reaction-popover hidden absolute left-0 bottom-full mb-1.5 z-40 p-1.5 rounded-xl flex items-center gap-1 shadow-2xl">
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="upvote" title="Upvote">👍</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="fire" title="Fire">🔥</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="rocket" title="Rocket">🚀</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="like" title="Love">❤️</button>
+                                <button class="emoji-pick-btn hover:bg-white/20 p-1.5 rounded-lg text-sm" data-reaction="bulb" title="Idea">💡</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date on the Right -->
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="text-[11px] text-gray-400 font-medium flex items-center gap-1.5">
+                            <i class="far fa-calendar-alt text-[10px]"></i>
+                            <span>${dateStr ? dateStr : 'Recently'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // View More & Title Click Listeners to open Modal
+            const viewMoreBtn = card.querySelector('.item-view-more');
+            const titleTrigger = card.querySelector('.item-title-trigger');
+            [viewMoreBtn, titleTrigger].forEach(el => {
+                if (el) {
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openItemDetailModal(item.id);
+                    });
+                }
+            });
+
+            // Reaction Pill Buttons Listeners
+            card.querySelectorAll('.reaction-toggle-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const reaction = btn.getAttribute('data-reaction');
+                    handleReactionToggle(item.id, reaction);
+                });
+            });
+
+            // Popover Add Reaction Handlers
+            const addBtn = card.querySelector('.add-reaction-btn');
+            const popover = card.querySelector('.reaction-popover');
+            if (addBtn && popover) {
+                addBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.reaction-popover').forEach(p => {
+                        if (p !== popover) p.classList.add('hidden');
+                    });
+                    popover.classList.toggle('hidden');
+                });
+
+                popover.querySelectorAll('.emoji-pick-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        popover.classList.add('hidden');
+                        const reaction = btn.getAttribute('data-reaction');
+                        handleReactionToggle(item.id, reaction);
+                    });
+                });
+            }
+
+            return card;
+        }
+
+        // Close reaction emoji popovers on outside click
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.reaction-popover').forEach(p => p.classList.add('hidden'));
+        });
+
+        // Fetch Roadmap Items from API
+        async function fetchRoadmapData() {
+            loadingState.classList.remove('hidden');
+            errorState.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            roadmapTableContainer.classList.add('hidden');
+
+            try {
+                const url = `${API_BASE_URL}/api/v3/roadmap?limit=100`;
+                const response = await TabsomeAuth.apiFetch(url, {
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (!result.success || !Array.isArray(result.data)) {
+                    throw new Error(result.error?.message || 'Invalid API response');
+                }
+
+                allRoadmapItems = result.data;
+
+                loadingState.classList.add('hidden');
+                renderFilteredItems();
+
+            } catch (err) {
+                console.error('Fetch error');
+                loadingState.classList.add('hidden');
+                errorMessage.textContent = err.message || 'Unable to connect to roadmap server.';
+                errorState.classList.remove('hidden');
+            }
+        }
+
+        // Render Items
+        function renderFilteredItems() {
+            let filtered = [...allRoadmapItems];
+
+            // Sort: Pinned first, then high votes/reactions, then date
+            filtered.sort((a, b) => {
+                if (a.isPinned && !b.isPinned) return -1;
+                if (!a.isPinned && b.isPinned) return 1;
+
+                const voteA = a.voteCount || 0;
+                const voteB = b.voteCount || 0;
+                if (voteB !== voteA) return voteB - voteA;
+
+                const dateA = new Date(a.createdAt || 0).getTime();
+                const dateB = new Date(b.createdAt || 0).getTime();
+                return dateB - dateA;
+            });
+
+            // Empty check
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                roadmapTableContainer.classList.add('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                roadmapTableContainer.classList.remove('hidden');
+            }
+
+            // Render Table Rows
+            roadmapListRows.innerHTML = '';
+            filtered.forEach(item => {
+                const row = createTableRow(item);
+                roadmapListRows.appendChild(row);
+            });
+        }
+
+        // Open Detail Modal with Complete Reactions Bar
+        function openItemDetailModal(itemId) {
+            const item = allRoadmapItems.find(i => String(i.id) === String(itemId));
+            if (!item) return;
+
+            const statusMeta = STATUS_CONFIG[item.status] || STATUS_CONFIG.under_review;
+            const typeMeta = TYPE_CONFIG[item.type] || TYPE_CONFIG.feature;
+            const sourceMeta = (item.source && SOURCE_CONFIG[item.source]) ? SOURCE_CONFIG[item.source] : SOURCE_CONFIG.community;
+            const isUnpublished = item.isPublished === false || item.is_published === false;
+            const dateStr = formatDate(item.createdAt);
+
+            const reactionsMap = item.reactionsCount || {};
+            if (Object.keys(reactionsMap).length === 0 && item.voteCount) {
+                reactionsMap['upvote'] = item.voteCount;
+            }
+
+            let modalReactionsHtml = '';
+            SUPPORTED_REACTIONS.forEach(r => {
+                const count = reactionsMap[r.type] || 0;
+                const isActive = item.userReaction === r.type || (r.type === 'upvote' && item.hasVoted && !item.userReaction);
+                modalReactionsHtml += `
+                    <button class="reaction-btn ${isActive ? 'active' : ''} px-3 py-2 text-xs modal-reaction-toggle"
+                        data-reaction="${r.type}">
+                        <span class="text-base">${r.emoji}</span>
+                        <span>${r.label}</span>
+                        <span class="font-bold bg-black/30 px-1.5 py-0.5 rounded-md text-[10px]">${count}</span>
+                    </button>
+                `;
+            });
+
+            detailModalBody.innerHTML = `
+                <!-- Meta tags -->
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 ${typeMeta.badgeClass}">
+                        <i class="fas ${typeMeta.icon}"></i>
+                        ${escapeHtml(typeMeta.label)}
+                    </span>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 ${sourceMeta.badgeClass}">
+                        <i class="fas ${sourceMeta.icon}"></i>
+                        ${escapeHtml(sourceMeta.label)}
+                    </span>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 ${statusMeta.badgeClass}">
+                        <span class="w-2 h-2 rounded-full ${statusMeta.dotClass}"></span>
+                        ${escapeHtml(statusMeta.label)}
+                    </span>
+                    ${isUnpublished ? `<span class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 cursor-help" title="Not public yet. We'll review it before publishing."><i class="fas fa-clock text-xs"></i> Awaiting review</span>` : ''}
+                    ${item.targetVersion ? `<span class="text-xs bg-white/10 text-white px-2.5 py-1 rounded-md font-semibold border border-white/15">🎯 Target: ${escapeHtml(item.targetVersion)}</span>` : ''}
+                    ${item.isPinned ? `<span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-md font-semibold border border-amber-500/30">📌 Pinned</span>` : ''}
+                </div>
+
+                <!-- Title -->
+                <h3 class="text-2xl font-bold text-white mb-3 leading-tight">${escapeHtml(item.title)}</h3>
+
+                <!-- Author & Date -->
+                <div class="flex items-center gap-2 text-xs text-gray-400 mb-6 pb-4 border-b border-white/10">
+                    <i class="fas fa-user-circle text-gray-300"></i>
+                    <span>Proposed by <strong>${escapeHtml(item.authorName || (item.source === 'official' ? 'Tabsome Team' : 'Community Member'))}</strong></span>
+                    ${dateStr ? `<span>•</span><span>${dateStr}</span>` : ''}
+                </div>
+
+                <!-- Full Description -->
+                <div class="text-sm text-gray-200 leading-relaxed mb-6 whitespace-pre-wrap bg-black/20 p-4 rounded-xl border border-white/5">
+                    ${escapeHtml(item.description || 'No extended details provided for this roadmap task.')}
+                </div>
+
+                <!-- Modal Actions & Full Reactions Bar -->
+                <div class="pt-4 border-t border-white/10 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Leave a reaction:</span>
+                        <button id="copyShareLinkBtn"
+                            class="bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-white/20 transition inline-flex items-center gap-1.5">
+                            <i class="fas fa-link text-[10px]"></i>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2 flex-wrap">
+                        ${modalReactionsHtml}
+                    </div>
+                </div>
+            `;
+
+            // Modal Reaction Click Listeners
+            detailModalBody.querySelectorAll('.modal-reaction-toggle').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const reaction = btn.getAttribute('data-reaction');
+                    await handleReactionToggle(item.id, reaction, btn);
+                    if (currentAuthUser) {
+                        openItemDetailModal(item.id); // Refresh modal state if logged in
+                    }
+                });
+            });
+
+            // Copy Link Button Listener
+            document.getElementById('copyShareLinkBtn').addEventListener('click', () => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('item', item.id);
+                navigator.clipboard.writeText(url.toString()).then(() => {
+                    showToast('Link copied to clipboard!');
+                }).catch(() => {
+                    showToast('Unable to copy link.');
+                });
+            });
+
+            // Open Modal
+            detailModal.classList.remove('hidden');
+            setTimeout(() => {
+                detailModal.classList.remove('opacity-0');
+                detailModalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeDetailModal() {
+            detailModal.classList.add('opacity-0');
+            detailModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                detailModal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Update Suggest buttons according to Auth state
+        function updateSuggestButtons(user) {
+            currentAuthUser = user || null;
+            const surfaceBtn = document.getElementById('surfaceSuggestBtn');
+            const emptyBtn = document.getElementById('emptySuggestBtn');
+
+            if (user) {
+                if (surfaceBtn) {
+                    surfaceBtn.innerHTML = `<i class="fas fa-plus"></i><span>Suggest Idea</span>`;
+                    surfaceBtn.setAttribute('title', 'Suggest a feature or improvement');
+                }
+                if (emptyBtn) {
+                    emptyBtn.innerHTML = `<i class="fas fa-plus"></i><span>Suggest Idea</span>`;
+                    emptyBtn.setAttribute('title', 'Suggest a feature or improvement');
+                }
+            } else {
+                if (surfaceBtn) {
+                    surfaceBtn.innerHTML = `<i class="fas fa-right-to-bracket"></i><span>Sign in to suggest idea</span>`;
+                    surfaceBtn.setAttribute('title', 'Sign in with Google to suggest an idea');
+                }
+                if (emptyBtn) {
+                    emptyBtn.innerHTML = `<i class="fas fa-right-to-bracket"></i><span>Sign in to suggest idea</span>`;
+                    emptyBtn.setAttribute('title', 'Sign in with Google to suggest an idea');
+                }
+            }
+        }
+
+        async function handleSuggestClick() {
+            if (currentAuthUser) {
+                openSuggestModal();
+            } else {
+                openAuthRequiredModal();
+            }
+        }
+
+        // Suggestion Modal Handlers
+        async function openSuggestModal() {
+            if (!currentAuthUser) {
+                handleSuggestClick();
+                return;
+            }
+
+            formFeedback.classList.add('hidden');
+            suggestForm.reset();
+
+            try {
+                const user = currentAuthUser || await TabsomeAuth.getUser();
+                if (user) {
+                    const metadata = user.user_metadata || {};
+                    const fullName = metadata.full_name || metadata.name || '';
+                    if (fullName) document.getElementById('formAuthorName').value = fullName;
+                }
+            } catch (err) {
+                console.warn('User error');
+            }
+
+            suggestModal.classList.remove('hidden');
+            setTimeout(() => {
+                suggestModal.classList.remove('opacity-0');
+                suggestModalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeSuggestModal() {
+            suggestModal.classList.add('opacity-0');
+            suggestModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                suggestModal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Submit Suggestion Form
+        suggestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('formTitle').value.trim();
+            const type = document.getElementById('formType').value;
+            const description = document.getElementById('formDescription').value.trim();
+            const authorName = document.getElementById('formAuthorName').value.trim() || 'Community Contributor';
+            const authorEmail = currentAuthUser?.email || (window.TabsomeAuth ? (await TabsomeAuth.getUser())?.email : null) || null;
+
+            if (!title || !description) {
+                formFeedback.textContent = 'Please fill out all required fields.';
+                formFeedback.className = 'p-3 rounded-xl text-xs bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                formFeedback.classList.remove('hidden');
+                return;
+            }
+
+            submitSuggestBtn.disabled = true;
+            submitSuggestBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i><span>Submitting...</span>`;
+            formFeedback.classList.add('hidden');
+
+            const payload = {
+                title,
+                type,
+                description,
+                authorName,
+                authorEmail,
+                installationId,
+                metadata: { source: 'roadmap_web_page' }
+            };
+
+            try {
+                const response = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/roadmap/suggestions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error?.message || result.message || 'Failed to submit suggestion.');
+                }
+
+                closeSuggestModal();
+                showToast('Suggestion submitted successfully! Thank you.');
+                await fetchRoadmapData();
+            } catch (err) {
+                console.error('Submission error', err);
+                formFeedback.textContent = err.message || 'Unable to submit suggestion. Please try again.';
+                formFeedback.className = 'p-3 rounded-xl text-xs bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                formFeedback.classList.remove('hidden');
+            } finally {
+                submitSuggestBtn.disabled = false;
+                submitSuggestBtn.innerHTML = `<i class="fas fa-paper-plane"></i><span>Submit to Roadmap</span>`;
+            }
+        });
+
+        // Event Listeners: Modals Trigger & Close
+        [surfaceSuggestBtn, emptySuggestBtn].forEach(btn => {
+            if (btn) btn.addEventListener('click', handleSuggestClick);
+        });
+
+        [closeSuggestModalBtn, cancelSuggestBtn].forEach(btn => {
+            if (btn) btn.addEventListener('click', closeSuggestModal);
+        });
+
+        closeDetailModalBtn.addEventListener('click', closeDetailModal);
+
+        [closeAuthRequiredModalBtn, cancelAuthRequiredModalBtn].forEach(btn => {
+            if (btn) btn.addEventListener('click', closeAuthRequiredModal);
+        });
+
+        if (modalContinueWithGoogleBtn) {
+            modalContinueWithGoogleBtn.addEventListener('click', () => {
+                if (window.TabsomeAuth) {
+                    const redirectUrl = new URL(window.location.href);
+                    if (pendingAuthItemId) {
+                        redirectUrl.searchParams.set('item', pendingAuthItemId);
+                    }
+                    TabsomeAuth.signInWithGoogle(redirectUrl.toString());
+                }
+            });
+        }
+
+        // Close on modal backdrop click
+        [suggestModal, detailModal, authRequiredModal].forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        if (modal === suggestModal) closeSuggestModal();
+                        if (modal === detailModal) closeDetailModal();
+                        if (modal === authRequiredModal) closeAuthRequiredModal();
+                    }
+                });
+            }
+        });
+
+        retryBtn.addEventListener('click', fetchRoadmapData);
+
+        // Initialize Authentication UI and Load Data
+        document.addEventListener('DOMContentLoaded', () => {
+            let initialLoadDone = false;
+
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+                TabsomeAuth.onAuthStateChange((user, session, event) => {
+                    const prevUserId = currentAuthUser?.id || null;
+                    const nextUserId = user?.id || null;
+                    const authStateChanged = prevUserId !== nextUserId;
+
+                    currentAuthUser = user || null;
+                    updateSuggestButtons(user);
+
+                    // Re-fetch roadmap data when user logs in or out to refresh personalized reaction states
+                    if (initialLoadDone && authStateChanged && (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'INITIAL_USER')) {
+                        fetchRoadmapData();
+                    }
+
+                    const params = new URLSearchParams(window.location.search);
+                    if (user && params.get('suggest') === 'true') {
+                        const cleanUrl = new URL(window.location.href);
+                        cleanUrl.searchParams.delete('suggest');
+                        window.history.replaceState({}, document.title, cleanUrl.toString());
+                        openSuggestModal();
+                    }
+                });
+            }
+
+            fetchRoadmapData().then(() => {
+                initialLoadDone = true;
+                const params = new URLSearchParams(window.location.search);
+                const itemId = params.get('item');
+                if (itemId) {
+                    openItemDetailModal(itemId);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

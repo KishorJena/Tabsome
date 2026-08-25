@@ -30,12 +30,15 @@
     <meta name="twitter:title" content="Changelogs – Tabsome Version History">
     <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tailwind.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
 
     <style>
         html {
@@ -45,8 +48,22 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #9333ea;
-            background-image: linear-gradient(to right, #ff5757, #8c52ff);
+            background-image:
+                linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             min-height: 100vh;
+            position: relative;
+        }
+
+        header,
+        main,
+        section,
+        footer {
+            position: relative;
+            z-index: 10;
         }
 
         .version-card {
@@ -122,15 +139,15 @@
                 <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
                 <h1 class="text-2xl font-bold">Tabsome</h1>
             </a>
-            <nav class="space-x-8 hidden md:block">
-                <a href="index.html#features" class="hover:text-gray-200 transition">Features</a>
-                <a href="index.html#preview" class="hover:text-gray-200 transition">Preview</a>
-                <a href="index.html#download" class="hover:text-gray-200 transition">Download</a>
-                <a href="changelogs.html" class="hover:text-gray-200 transition text-white font-semibold">Changelogs</a>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="marketplace.html" class="hover:text-gray-200 transition text-sm">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="text-white font-semibold border-b-2 border-white pb-0.5 text-sm">Changelogs</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
             </nav>
-            <a href="index.html#download"
-                class="bg-white text-purple-600 font-semibold px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105">Get
-                Tabsome</a>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
         </div>
     </header>
 
@@ -141,6 +158,19 @@
                 <i class="fas fa-scroll mr-3 text-yellow-300"></i>Changelogs
             </h2>
             <p class="text-lg text-white/80">Track every update, new feature, and improvement in Tabsome.</p>
+
+            <!-- Roadmap Promotion CTA -->
+            <div class="mt-6 flex justify-center">
+                <a href="roadmap.html"
+                    class="group inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 backdrop-blur-md text-sm font-medium text-white transition-all transform hover:scale-105 shadow-lg shadow-black/20">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                    </span>
+                    <span>See what's coming next on our <strong class="inline-flex items-center gap-1.5"><i class="fas fa-compass group-hover:rotate-45 transition-transform duration-300"></i>Roadmap</strong></span>
+                    <i class="fas fa-arrow-right text-xs text-white/70 group-hover:translate-x-1 transition-transform duration-200"></i>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -234,11 +264,6 @@
         AOS.init({ duration: 800, once: true });
 
         // Configuration
-        const API_ENDPOINTS = [
-            'https://tabsome.vercel.app',
-            'https://tabsome-widgets.vercel.app'
-        ];
-        let activeApiUrl = API_ENDPOINTS[0];
         const PAGE_LIMIT = 20;
 
         // Section Badges & Labels Definition according to API doc
@@ -434,61 +459,52 @@
 
             let lastError = null;
             let fetchedSuccess = false;
-            const endpointsToTry = [activeApiUrl, ...API_ENDPOINTS.filter(u => u !== activeApiUrl)];
 
-            for (const endpoint of endpointsToTry) {
-                try {
-                    const response = await fetch(`${endpoint}/api/v3/changelogs?page=${page}&limit=${PAGE_LIMIT}`, {
-                        mode: 'cors',
-                        headers: { 'Accept': 'application/json' }
+            try {
+                const response = await TabsomeAuth.apiFetch(`${API_BASE_URL}/api/v3/changelogs?page=${page}&limit=${PAGE_LIMIT}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.success || !Array.isArray(result.data)) {
+                    throw new Error(result.error?.message || 'Invalid API response format');
+                }
+
+                fetchedSuccess = true;
+
+                const changelogs = result.data;
+                const pagination = result.pagination || {};
+                totalPages = pagination.totalPages || 1;
+                currentPage = pagination.page || page;
+
+                if (page === 1 && changelogs.length === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    changelogs.forEach((item, index) => {
+                        const card = createChangelogCard(item, (page - 1) * PAGE_LIMIT + index === 0);
+                        changelogsList.appendChild(card);
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error ${response.status}`);
+                    if (typeof AOS !== 'undefined') {
+                        AOS.refresh();
                     }
 
-                    const result = await response.json();
-
-                    if (!result.success || !Array.isArray(result.data)) {
-                        throw new Error(result.error?.message || 'Invalid API response format');
-                    }
-
-                    activeApiUrl = endpoint;
-                    fetchedSuccess = true;
-
-                    const changelogs = result.data;
-                    const pagination = result.pagination || {};
-                    totalPages = pagination.totalPages || 1;
-                    currentPage = pagination.page || page;
-
-                    if (page === 1 && changelogs.length === 0) {
-                        emptyState.classList.remove('hidden');
+                    if (currentPage < totalPages) {
+                        paginationContainer.classList.remove('hidden');
+                        loadMoreBtn.classList.remove('hidden');
+                        loadingMoreSpinner.classList.add('hidden');
                     } else {
-                        changelogs.forEach((item, index) => {
-                            const isLatest = (page === 1 && index === 0);
-                            const card = createChangelogCard(item, isLatest);
-                            changelogsList.appendChild(card);
-                        });
-
-                        // Re-initialize or refresh AOS animations
-                        if (window.AOS) {
-                            AOS.refresh();
-                        }
-
-                        // Manage Pagination Button
-                        if (pagination.hasNextPage || currentPage < totalPages) {
-                            paginationContainer.classList.remove('hidden');
-                            loadMoreBtn.classList.remove('hidden');
-                            loadingMoreSpinner.classList.add('hidden');
-                        } else {
-                            paginationContainer.classList.add('hidden');
-                        }
+                        paginationContainer.classList.add('hidden');
                     }
-                    break;
-                } catch (err) {
-                    console.warn(`Failed to fetch changelogs from ${endpoint}:`, err);
-                    lastError = err;
                 }
+            } catch (err) {
+                lastError = err;
+                console.warn('Fetch changelogs error:', err);
             }
 
             if (!fetchedSuccess) {
@@ -519,6 +535,9 @@
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+            }
             fetchChangelogs(1);
         });
     </script>

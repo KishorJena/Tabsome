@@ -10,7 +10,7 @@
   <meta name="description"
     content="Transform your Chrome tab into a sleek dashboard with AI widgets, speed dials, and interactive tools. Create custom widgets without coding.">
   <meta name="keywords"
-    content="chrome extension, new tab, speed dials, AI widgets, opera like speed dials, browser customization, productivity, chrome dashboard, custom widgets, omnisearch, browser tools, chrome addon, tab customization, AI-powered browser, smart dashboard, browser enhancement, best new tab replacement for chrome">
+    content="chrome extension, new tab, speed dials, AI widgets, opera like speed dials, browser customization, productivity, chrome dashboard, custom widgets, AI bar, browser tools, chrome addon, tab customization, AI-powered browser, smart dashboard, browser enhancement, best new tab replacement for chrome">
   <meta name="author" content="Kishor Jena">
   <meta name="robots" content="index, follow">
 
@@ -49,7 +49,7 @@
     content="Transform your Chrome tab into a sleek dashboard with AI widgets, speed dials, and interactive tools.">
   <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
   <meta name="twitter:site" content="@kishorjena">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/tailwind.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,6 +59,10 @@
   <!-- GSAP CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Supabase Auth -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/auth.js"></script>
   <style>
     html {
       scroll-behavior: smooth;
@@ -67,12 +71,19 @@
     body {
       font-family: 'Inter', sans-serif;
       background-color: #9333ea;
-      /* Fallback color */
-      /* Applying the Aura primary gradient */
-      background-image: linear-gradient(to right, #ff5757, #8c52ff);
+      /* Applying the Aura primary gradient with integrated background overlay */
+      background-image:
+        linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%),
+        linear-gradient(to right, #ff5757, #8c52ff);
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
+
+    /* Parallax Container stays behind content */
 
     /* Updated gradient-text to solid white */
     .gradient-text {
@@ -142,28 +153,28 @@
       transition: transform 0.1s ease-out;
     }
 
-    /* Front Layer Shapes - Crystal Clear */
+    /* Front Layer Shapes - Subdued, low contrast */
     .shape-front {
-      background: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
     }
 
     /* Mid-Front Layer Shapes */
     .shape-mid-front {
-      background: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 6px 24px rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
     }
 
     /* Mid-Back Layer Shapes */
     .shape-mid-back {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: none;
     }
 
     /* Back Layer Shapes */
     .shape-back {
-      background: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: none;
     }
 
     /* Shape Variants */
@@ -211,7 +222,7 @@
       height: 0;
       border-left: 40px solid transparent;
       border-right: 40px solid transparent;
-      border-bottom: 70px solid rgba(255, 255, 255, 0.3);
+      border-bottom: 70px solid rgba(255, 255, 255, 0.08);
       background: none;
     }
 
@@ -343,82 +354,63 @@
         <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
         <h1 class="text-2xl font-bold gradient-text">Tabsome</h1>
       </div>
-      <nav class="space-x-8 hidden md:block">
-        <a href="#features" class="hover:text-gray-200 transition">Features</a>
-        <a href="#preview" class="hover:text-gray-200 transition">Preview</a>
-        <a href="#download" class="hover:text-gray-200 transition">Download</a>
-        <a href="marketplace.html" class="hover:text-gray-200 transition">Marketplace</a>
-        <a href="changelogs.html" class="hover:text-gray-200 transition">Changelogs</a>
+      <nav class="space-x-8 hidden md:flex items-center">
+        <a href="marketplace.html" class="hover:text-gray-200 transition text-sm">Marketplace</a>
+        <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
+        <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
+        <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
       </nav>
-      <!-- Primary button style from Aura -->
-      <a href="#download"
-        class="bg-white text-purple-600 font-semibold px-5 py-2 rounded-lg hover:bg-opacity-90 transition transform hover:scale-105">Get
-        Tabsome</a>
+      <div class="flex items-center space-x-3">
+        <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+      </div>
     </div>
   </header>
 
   <!-- Hero -->
-  <section class="pt-40 pb-20 text-center section-container" id="hero">
+  <section class="pt-40 pb-12 mb-12 text-center section-container" id="hero">
     <div class="max-w-4xl mx-auto px-6 content-layer" data-aos="fade-up">
       <h2 class="text-4xl md:text-6xl font-bold mb-4 gradient-text">Make Your New Tab Awesome</h2>
       <p class="text-lg md:text-xl text-white mb-8">
         Transform your boring Chrome tab into a sleek, smart dashboard with AI-powered features and stunning speed
         dials.
       </p>
-      <!-- Primary button style from Aura -->
-      <a href="#download"
-        class="bg-white text-purple-600 font-semibold px-8 py-4 rounded-lg text-lg hover:bg-opacity-90 transition transform hover:scale-105 inline-block">Add
-        to Chrome</a>
-      <a href="marketplace.html"
-        class="bg-transparent border-2 border-white text-white font-semibold px-8 py-4 rounded-lg text-lg hover:bg-white hover:text-purple-600 transition transform hover:scale-105 inline-block ml-4">
-        <i class="fas fa-puzzle-piece mr-2"></i>Explore Widgets
+      <!-- Feature Badges Row -->
+      <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-4 mb-8">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
+          <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <rect x="2" y="2" width="9" height="9" rx="2.5" />
+            <rect x="13" y="2" width="9" height="9" rx="2.5" />
+            <rect x="2" y="13" width="9" height="9" rx="2.5" />
+            <rect x="13" y="13" width="9" height="9" rx="2.5" />
+          </svg>
+          <span>Speed Dials</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
+          <i class="fas fa-book-bookmark text-amber-400"></i>
+          <span>Library</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
+          <i class="fas fa-puzzle-piece text-purple-400"></i>
+          <span>Widgets</span>
+        </div>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
+          <i class="fas fa-robot text-green-400"></i>
+          <span>AI Bar</span>
+        </div>
+      </div>
+
+      <!-- Primary CTA -->
+      <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+        target="_blank" rel="noopener noreferrer"
+        class="bg-blue-600 hover:bg-blue-500 text-white border-2 border-white/60 hover:border-white font-semibold px-8 py-4 rounded-xl text-lg shadow-lg shadow-blue-900/30 hover:shadow-blue-600/40 transition transform hover:scale-105 inline-flex items-center gap-2">
+        <i class="fab fa-chrome"></i>
+        <span>Add to Chrome</span>
       </a>
     </div>
   </section>
 
-  <!-- Features -->
-  <section id="features" class="py-20 section-container">
-    <div class="max-w-6xl mx-auto px-6 text-center content-layer">
-      <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Why You'll Love Tabsome</h3>
-      <div class="grid md:grid-cols-3 gap-10">
-        <!-- Material Design blue-gray cards -->
-        <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);"
-          data-aos="fade-up">
-          <h4 class="font-semibold text-xl mb-2 flex items-center">
-            <i class="fas fa-rocket text-blue-400 mr-3"></i>
-            Speed Dials
-          </h4>
-          <p class="text-gray-300 text-left">
-            Bookmarks are dead. Meet Speed Dials... instant, visual launchpads for the sites that matter.
-          </p>
-        </div>
-        <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);"
-          data-aos="fade-up" data-aos-delay="100">
-          <h4 class="font-semibold text-xl mb-2 flex items-center">
-            <i class="fas fa-brain text-purple-400 mr-3"></i>
-            AI Widgets
-          </h4>
-          <p class="text-gray-300 text-left">
-            Use AI to design widgets that inform, inspire, or just look ridiculously cool... all without writing a
-            single line of code
-          </p>
-        </div>
-        <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);"
-          data-aos="fade-up" data-aos-delay="200">
-          <h4 class="font-semibold text-xl mb-2 flex items-center">
-            <i class="fas fa-search text-green-400 mr-3"></i>
-            Omnisearch
-          </h4>
-          <p class="text-gray-300 text-left">
-            The universal search bar your browser was missing. One place for web results to AI responses.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Preview -->
-  <section id="preview" class="py-20 section-container">
+  <section id="preview" class="pt-10 pb-20 section-container">
     <div class="max-w-6xl mx-auto px-6 text-center content-layer">
       <h3 class="text-3xl font-bold mb-12 gradient-text" data-aos="fade-up">Your New Tab, Upgraded</h3>
       <img src="assets/screenshots/new-tab.png" alt="Tabsome Preview"
@@ -426,13 +418,13 @@
     </div>
   </section>
 
-  <!-- AI Widgets description -->
+  <!-- Widgets description -->
   <section class="py-20 section-container">
     <div class="max-w-6xl mx-auto px-6 content-layer">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <!-- Text Content -->
         <div class="order-2 md:order-1 text-left" data-aos="fade-right">
-          <h3 class="text-3xl font-bold mb-6 gradient-text">AI Widgets: Build Stunning Widgets without Coding</h3>
+          <h3 class="text-3xl font-bold mb-6 gradient-text">Widgets</h3>
           <p class="text-lg text-white leading-relaxed">
             Tabsome lets you create fully custom widgets with simple AI prompts.
             Craft visually stunning and interactive widgets that are completely your own. Widgets are dynamic and
@@ -448,119 +440,66 @@
     </div>
   </section>
 
-  <!-- Omnisearch Feature -->
+  <!-- AI Bar Feature -->
   <section class="py-20 section-container">
     <div class="max-w-6xl mx-auto px-6 content-layer">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <!-- Image -->
         <div class="order-1" data-aos="fade-right">
-          <img src="assets/screenshots/omni-search.webp" alt="Omnisearch Feature"
+          <img src="assets/screenshots/ai-bar.png" alt="AI Bar Feature"
             class="rounded-3xl shadow-lg w-full border border-gray-700/50">
         </div>
         <!-- Text Content -->
         <div class="order-2 text-left" data-aos="fade-left">
-          <h3 class="text-3xl font-bold mb-6 gradient-text">Omnisearch</h3>
+          <h3 class="text-3xl font-bold mb-6 gradient-text">AI Bar</h3>
           <p class="text-lg text-white leading-relaxed">
-            Search smarter, faster. Switch engines or get AI answers with simple shortcuts, right from your new tab.
-            Supports Google, Bing, Yadnex, DuckduckGo, Yahoo and AI.
-          </p>
-          <p class="text-lg text-white leading-relaxed">
-            <li> /g for Google, /b for Bing</li>
-            <li> /y for Yandex, /d for DuckduckGo, /yh for Yahoo</li>
-            <li> /ai for AI.</li>
-
+            Your AI-powered command bar for getting things done right from your new tab. Create and manage widgets, organize your Speed Dials, get quick answers, run calculations, convert currencies, brainstorm ideas, and more, all with simple commands, without leaving your dashboard.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Speed Dials & Settings -->
+  <!-- Library Feature -->
   <section class="py-20 section-container">
     <div class="max-w-6xl mx-auto px-6 content-layer">
-      <div class="text-center mb-16" data-aos="fade-up">
-        <h3 class="text-3xl font-bold mb-6 gradient-text">Built for Control Freaks and Minimalists Alike</h3>
-        <p class="text-lg text-white max-w-3xl mx-auto">
-          Customize every aspect of your new tab experience with powerful settings and intuitive controls.
-        </p>
-      </div>
-
-      <!-- All Features List -->
-      <div class="p-8 rounded-2xl backdrop-blur-sm" style="background-color: rgba(55, 71, 79, 0.9);" data-aos="fade-up">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Speed Dial Customization -->
-          <div class="text-center hover:transform hover:scale-105 transition-all duration-300 cursor-pointer group">
-            <div class="mb-4">
-              <i
-                class="fas fa-th text-blue-400 text-2xl group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300"></i>
-            </div>
-            <h4 class="font-semibold text-lg mb-3 text-white">Speed Dial Customization</h4>
-            <p class="text-gray-300 text-sm group-hover:text-white transition-colors duration-300">Set tile images,
-              choose favicons, pick or paste your own images, or apply background colors — make each speed dial uniquely
-              yours.</p>
-          </div>
-
-          <!-- Layout & Appearance -->
-          <div class="text-center hover:transform hover:scale-105 transition-all duration-300 cursor-pointer group">
-            <div class="mb-4">
-              <i
-                class="fas fa-palette text-purple-400 text-2xl group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300"></i>
-            </div>
-            <h4 class="font-semibold text-lg mb-3 text-white">Layout & Appearance</h4>
-            <p class="text-gray-300 text-sm group-hover:text-white transition-colors duration-300">Drag and sort tiles,
-              organize into folders and tags, and toggle labels for a clean, intuitive layout and set wallpaper to
-              enhance the visuals.</p>
-          </div>
-
-          <!-- Smart AI Control -->
-          <div class="text-center hover:transform hover:scale-105 transition-all duration-300 cursor-pointer group">
-            <div class="mb-4">
-              <i
-                class="fas fa-robot text-green-400 text-2xl group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300"></i>
-            </div>
-            <h4 class="font-semibold text-lg mb-3 text-white">Smart AI Control</h4>
-            <p class="text-gray-300 text-sm group-hover:text-white transition-colors duration-300">AI in your new tab
-              doesn't just answer questions - it helps manage speed dials, update widgets, change wallpapers, and
-              customize your setup instantly, doing everything you can do manually.</p>
-          </div>
-
-          <!-- Built in widgets -->
-          <div class="text-center hover:transform hover:scale-105 transition-all duration-300 cursor-pointer group">
-            <div class="mb-4">
-              <i
-                class="fas fa-puzzle-piece text-orange-400 text-2xl group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300"></i>
-            </div>
-            <h4 class="font-semibold text-lg mb-3 text-white">Built in widgets</h4>
-            <p class="text-gray-300 text-sm group-hover:text-white transition-colors duration-300">Built-in clock and
-              weather widgets give you glanceable info at a glance, with dynamic visuals and extra details on hover —
-              smart, interactive, and always up to date.</p>
-          </div>
-
-          <!-- Quick Add from Anywhere -->
-          <div class="text-center hover:transform hover:scale-105 transition-all duration-300 cursor-pointer group">
-            <div class="mb-4">
-              <i
-                class="fas fa-plus-circle text-pink-400 text-2xl group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300"></i>
-            </div>
-            <h4 class="font-semibold text-lg mb-3 text-white">Quick Add speed dials</h4>
-            <p class="text-gray-300 text-sm group-hover:text-white transition-colors duration-300">Add new speed dials
-              directly from any tab with a popup and organize them into folders instantly.</p>
-          </div>
-
-          <!-- Import & Export -->
-          <div class="text-center hover:transform hover:scale-105 transition-all duration-300 cursor-pointer group">
-            <div class="mb-4">
-              <i
-                class="fas fa-download text-cyan-400 text-2xl group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-300"></i>
-            </div>
-            <h4 class="font-semibold text-lg mb-3 text-white">Import & Export</h4>
-            <p class="text-gray-300 text-sm group-hover:text-white transition-colors duration-300">Save or load your
-              speed dials, folders, and custom images effortlessly with JSON import/export.</p>
-          </div>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Text Content -->
+        <div class="order-2 md:order-1 text-left" data-aos="fade-right">
+          <h3 class="text-3xl font-bold mb-6 gradient-text">Library</h3>
+          <p class="text-lg text-white leading-relaxed">
+            Keep your favorite content organized and always within reach. Save and manage bookmarks, notes, resources, and more in one centralized library, so everything you need stays just a click away.
+          </p>
+        </div>
+        <!-- Image -->
+        <div class="order-1 md:order-2" data-aos="fade-left">
+          <img src="assets/screenshots/library-screenshot.png" alt="Library Feature"
+            class="rounded-3xl shadow-lg w-full border border-gray-700/50">
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Speed Dials Feature -->
+  <section class="py-20 section-container">
+    <div class="max-w-6xl mx-auto px-6 content-layer">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <!-- Image -->
+        <div class="order-1" data-aos="fade-right">
+          <img src="assets/screenshots/speed-dials-screenshot.png" alt="Speed Dials Feature"
+            class="rounded-3xl shadow-lg w-full border border-gray-700/50">
+        </div>
+        <!-- Text Content -->
+        <div class="order-2 text-left" data-aos="fade-left">
+          <h3 class="text-3xl font-bold mb-6 gradient-text">Speed Dials</h3>
+          <p class="text-lg text-white leading-relaxed">
+            Your favorite websites, always one click away. Organize your Speed Dials into folders, customize them to fit your workflow, and access everything you need right from your new tab.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- CTA -->
   <section id="download" class="py-20 text-center section-container">
@@ -569,53 +508,26 @@
       <p class="text-lg text-white mb-8 max-w-2xl mx-auto">
         Add Tabsome to your browser and turn every new tab into something truly personal.
       </p>
-      <!-- Primary button style from Aura -->
-      <a href="https://chromewebstore.google.com/detail/tabsome-new-tab-with-ai/cibcnchlbnblalcpgjaccapodkmjookf"
-        target="_blank"
-        class="bg-white text-purple-600 font-semibold px-8 py-4 rounded-lg text-lg hover:bg-opacity-90 transition transform hover:scale-105 inline-block"
+      <!-- Primary CTA -->
+      <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+        target="_blank" rel="noopener noreferrer"
+        class="bg-blue-600 hover:bg-blue-500 text-white border-2 border-white/60 hover:border-white font-semibold px-8 py-4 rounded-xl text-lg shadow-lg shadow-blue-900/30 hover:shadow-blue-600/40 transition transform hover:scale-105 inline-flex items-center gap-2"
         data-aos="zoom-in">
-        ➕ Add to Chrome
-      </a>
-      <a href="marketplace.html"
-        class="bg-transparent border-2 border-white text-white font-semibold px-8 py-4 rounded-lg text-lg hover:bg-white hover:text-purple-600 transition transform hover:scale-105 inline-block ml-4"
-        data-aos="zoom-in" data-aos-delay="100">
-        <i class="fas fa-puzzle-piece mr-2"></i>Explore Widgets
+        <i class="fab fa-chrome"></i>
+        <span>Add to Chrome</span>
       </a>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section class="py-16 text-center section-container">
-    <div class="content-layer">
-      <h3 class="text-2xl font-bold mb-8 gradient-text">Connect With Me</h3>
-      <div class="flex justify-center items-center space-x-6">
-        <!-- X (Twitter) -->
-        <a href="https://x.com/kishorjena01" target="_blank" rel="noopener noreferrer"
-          class="hover:scale-110 transition-transform duration-200">
-          <img src="assets/social/x.svg" alt="X (Twitter)"
-            class="w-6 h-6 opacity-70 hover:opacity-100 transition-opacity">
-        </a>
-
-        <!-- Instagram -->
-        <a href="https://instagram.com/kishorjena01" target="_blank" rel="noopener noreferrer"
-          class="hover:scale-110 transition-transform duration-200">
-          <img src="assets/social/instagram.svg" alt="Instagram"
-            class="w-6 h-6 opacity-70 hover:opacity-100 transition-opacity">
-        </a>
-
-        <!-- LinkedIn -->
-        <a href="https://linkedin.com/in/kishorjena" target="_blank" rel="noopener noreferrer"
-          class="hover:scale-110 transition-transform duration-200">
-          <img src="assets/social/in.png" alt="LinkedIn"
-            class="w-6 h-6 opacity-70 hover:opacity-100 transition-opacity">
-        </a>
-      </div>
-    </div>
-  </section>
 
   <!-- Footer -->
-  <footer class="py-10 text-center text-gray-300 text-sm">
-    © 2025 Tabsome. <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a>
+  <footer class="py-10 text-center text-white/80 text-sm relative z-10">
+    <div class="flex justify-center items-center space-x-4">
+      <span>© 2025 Tabsome.</span>
+      <a href="privacy.html" class="text-white hover:underline transition-colors">Privacy Policy</a>
+      <span>•</span>
+      <a href="contact.html" class="text-white hover:underline transition-colors font-medium">Contact</a>
+    </div>
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -729,7 +641,12 @@
     }
 
     // Initialize parallax when DOM is loaded
-    document.addEventListener('DOMContentLoaded', initParallax);
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.TabsomeAuth) {
+        TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+      }
+      initParallax();
+    });
 
     // Refresh ScrollTrigger on window resize
     window.addEventListener('resize', () => {
