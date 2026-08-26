@@ -168,34 +168,26 @@
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="flex-grow pt-32 pb-20 px-4 sm:px-6">
-        <div class="max-w-4xl mx-auto">
-            
-            <!-- Hero Coming Soon Section -->
-            <div class="text-center space-y-6 mb-12" data-aos="fade-up">
-                <!-- Status Badge -->
-                <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-pink-500/30 text-xs sm:text-sm font-semibold tracking-wide badge-glow">
-                    <span class="relative flex h-2.5 w-2.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-pink-500"></span>
-                    </span>
-                    <span class="gradient-text bg-gradient-to-r from-pink-300 to-amber-300 uppercase">Under Development</span>
-                    <span class="text-white/40">•</span>
-                    <span class="text-pink-200">Coming Soon</span>
+    <!-- Top Dashboard Header -->
+    <section class="pt-28 pb-4 flex-shrink-0">
+        <div class="max-w-4xl mx-auto px-6">
+
+            <!-- Centered Account & Profile Tag -->
+            <div class="flex justify-center mb-4">
+                <div
+                    class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 shadow-sm">
+                    <i class="fas fa-user-circle text-pink-300"></i>
+                    <span>Account &amp; Profile</span>
                 </div>
-
-                <!-- Main Heading -->
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight heading-font">
-                    Account & Profile <span class="gradient-text bg-gradient-to-r from-purple-300 via-pink-300 to-amber-200">Hub</span>
-                </h1>
-
-                <!-- Subtitle -->
-                <p class="text-base sm:text-lg md:text-xl text-gray-200/90 max-w-2xl mx-auto font-normal leading-relaxed">
-                    We are building a unified control center for your Tabsome account. Soon, you'll be able to manage your sync settings, profiles, backups, and preferences all in one place.
-                </p>
             </div>
 
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-4 pb-20 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto">
+            
             <!-- Main Interactive Status Card -->
             <div class="glass-card rounded-3xl p-6 sm:p-10 mb-10" data-aos="fade-up" data-aos-delay="100">
                 
@@ -204,7 +196,7 @@
                     <!-- Default Loading / Logged Out Skeleton -->
                     <div id="accountUserStateLoggedOut" class="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600/40 to-pink-600/40 border border-white/15 flex items-center justify-center text-2xl text-pink-300 shadow-inner flex-shrink-0">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-600/40 to-pink-600/40 border border-white/15 flex items-center justify-center text-2xl text-pink-300 shadow-inner flex-shrink-0">
                                 <i class="fas fa-user-astronaut"></i>
                             </div>
                             <div>
@@ -229,23 +221,13 @@
                     <!-- Logged In Template (Initially hidden, revealed dynamically by auth.js) -->
                     <div id="accountUserStateLoggedIn" class="hidden flex-col sm:flex-row items-center justify-between gap-6">
                         <div class="flex items-center gap-4 min-w-0">
-                            <div id="accountAvatarContainer" class="w-14 h-14 rounded-2xl overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
+                            <div id="accountAvatarContainer" class="w-14 h-14 rounded-full overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
                                 <i class="fas fa-user text-2xl text-purple-200"></i>
                             </div>
                             <div class="min-w-0">
-                                <div class="flex items-center gap-2">
-                                    <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer</h2>
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                                        <i class="fas fa-check-circle text-[9px]"></i> Active User
-                                    </span>
-                                </div>
+                                <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer</h2>
                                 <p id="accountUserEmail" class="text-xs sm:text-sm text-gray-300 truncate mt-0.5">user@example.com</p>
                             </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-xs px-3 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-200 font-medium">
-                                <i class="fas fa-sparkles text-amber-300 mr-1"></i> Early Access Enrolled
-                            </span>
                         </div>
                     </div>
 
@@ -286,80 +268,14 @@
                     </div>
                 </div>
 
-                <!-- Sneak Peek Title -->
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-lg font-bold text-white heading-font">What's Coming to Your Account</h3>
-                        <p class="text-xs sm:text-sm text-gray-300">A sneak peek of the upcoming account tools and capabilities</p>
-                    </div>
-                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white/80 border border-white/10 hidden sm:inline-block">
-                        Roadmap Preview
-                    </span>
-                </div>
-
-                <!-- Feature Grid Preview -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Feature 1 -->
-                    <div class="feature-card p-5 rounded-2xl flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center flex-shrink-0 text-lg border border-purple-500/30">
-                            <i class="fas fa-cloud-arrow-up"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">Automated Cloud Sync</h4>
-                            <p class="text-xs text-gray-300 mt-1 leading-relaxed">
-                                Keep all your speed dial groups, custom widgets, notes, and wallpapers synchronized across all your computers automatically.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Feature 2 -->
-                    <div class="feature-card p-5 rounded-2xl flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center flex-shrink-0 text-lg border border-pink-500/30">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">Multi-Device Profiles</h4>
-                            <p class="text-xs text-gray-300 mt-1 leading-relaxed">
-                                Switch seamlessly between Work, Personal, and Study dashboard setups with customizable isolated environments.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Feature 3 -->
-                    <div class="feature-card p-5 rounded-2xl flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0 text-lg border border-amber-500/30">
-                            <i class="fas fa-shield-halved"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">Security & Backup History</h4>
-                            <p class="text-xs text-gray-300 mt-1 leading-relaxed">
-                                One-click snapshot backups, export/import JSON configurations, and version rollback for your dashboard state.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Feature 4 -->
-                    <div class="feature-card p-5 rounded-2xl flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center flex-shrink-0 text-lg border border-blue-500/30">
-                            <i class="fas fa-plug-circle-bolt"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-white">API Keys & Integrations</h4>
-                            <p class="text-xs text-gray-300 mt-1 leading-relaxed">
-                                Securely store your custom OpenAI, Gemini, or Webhook tokens to power custom AI widgets on your new tab.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Action Footer Inside Card -->
                 <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="text-xs text-gray-300 flex items-center gap-2">
                         <i class="fas fa-lightbulb text-yellow-300"></i>
-                        <span>Have specific feature requests for your account page?</span>
+                        <span>We'll be adding more features soon, do you have any suggestions?</span>
                     </div>
                     <a href="contact.html" class="text-xs font-semibold text-pink-300 hover:text-pink-200 transition underline underline-offset-4 flex items-center gap-1">
-                        <span>Send us your feedback</span>
+                        <span>Send feedback</span>
                         <i class="fas fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
