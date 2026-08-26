@@ -340,10 +340,10 @@
                             <!-- Dropdown Menu -->
                             <div id="userAuthDropdownMenu"
                                 class="hidden absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-white/15 shadow-2xl p-2 z-50 transform transition-all duration-200">
-                                <div class="px-3 py-2.5 border-b border-white/10">
+                                <a href="account.html" class="block px-3 py-2.5 border-b border-white/10 rounded-t-xl transition hover:bg-white/5 cursor-pointer">
                                     <p class="text-xs font-bold text-white truncate">${safeFullName}</p>
                                     <p class="text-[11px] text-gray-300 truncate mt-0.5">${safeEmail}</p>
-                                </div>
+                                </a>
                                 <div class="py-1">
                                     <a href="speed-dials.html" class="flex items-center justify-between px-3 py-2 text-xs rounded-lg transition ${window.location.pathname.includes('speed-dials') ? 'bg-purple-600/30 text-white font-semibold border border-purple-500/30' : 'text-gray-200 hover:text-white hover:bg-white/10'}">
                                         <div class="flex items-center gap-2.5">

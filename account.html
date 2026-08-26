@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Tabsome Account & Profile Center. Manage your cloud sync preferences, multi-device backup, profile settings, and customized new tab experience. Coming soon!">
+    <meta name="keywords"
+        content="tabsome account, user profile, cloud sync, chrome new tab account, speed dial settings, tabsome pro">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+    <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/assets/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="/assets/favicon-128x128.png" sizes="128x128">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Account – Tabsome">
+    <meta property="og:description"
+        content="Manage your Tabsome cloud sync, extension profiles, custom themes, and integrations. Coming soon.">
+    <meta property="og:image" content="https://tabsome.github.io/assets/social-preview.png">
+    <meta property="og:url" content="https://tabsome.github.io/account.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Account – Tabsome">
+    <meta name="twitter:description"
+        content="Manage your Tabsome cloud sync, extension profiles, custom themes, and integrations. Coming soon.">
+    <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Supabase & Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image:
+                linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(17, 24, 39, 0.55) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .heading-font {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        header,
+        section,
+        main,
+        footer {
+            position: relative;
+            z-index: 10;
+        }
+
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 50px rgba(0, 0, 0, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.22);
+            transform: translateY(-2px);
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .badge-glow {
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.35);
+        }
+
+        .pulse-slow {
+            animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulseSlow {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.85;
+                transform: scale(1.02);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <header class="fixed w-full backdrop-blur-md z-50" style="background-color: rgba(30, 41, 59, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8 transition-transform group-hover:rotate-6">
+                <span class="text-2xl font-bold tracking-tight heading-font">Tabsome</span>
+            </a>
+            <nav class="space-x-8 hidden md:flex items-center font-medium">
+                <a href="marketplace.html" class="hover:text-pink-300 transition text-sm">Marketplace</a>
+                <a href="roadmap.html" class="hover:text-pink-300 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-pink-300 transition text-sm">Changelogs</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+                    target="_blank" rel="noopener noreferrer"
+                    class="border border-white/30 hover:border-white px-3.5 py-1.5 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">
+                    <i class="fab fa-chrome mr-1.5 text-xs"></i>Install
+                </a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Dashboard Header -->
+    <section class="pt-28 pb-4 flex-shrink-0">
+        <div class="max-w-4xl mx-auto px-6">
+
+            <!-- Centered Account & Profile Tag -->
+            <div class="flex justify-center mb-4">
+                <div
+                    class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-pink-200 shadow-sm">
+                    <i class="fas fa-user-circle text-pink-300"></i>
+                    <span>Account &amp; Profile</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-4 pb-20 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Main Interactive Status Card -->
+            <div class="glass-card rounded-3xl p-6 sm:p-10 mb-10" data-aos="fade-up" data-aos-delay="100">
+                
+                <!-- Dynamic Auth Profile Status -->
+                <div id="accountUserSection" class="border-b border-white/10 pb-8 mb-8">
+                    <!-- Default Loading / Logged Out Skeleton -->
+                    <div id="accountUserStateLoggedOut" class="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-600/40 to-pink-600/40 border border-white/15 flex items-center justify-center text-2xl text-pink-300 shadow-inner flex-shrink-0">
+                                <i class="fas fa-user-astronaut"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-white">Sign In to Link Your Account</h2>
+                                <p class="text-xs sm:text-sm text-gray-300 mt-0.5">
+                                    Sign in with your Google account to get early access when the portal goes live.
+                                </p>
+                            </div>
+                        </div>
+                        <button id="accountSignInBtn" type="button"
+                            class="inline-flex items-center gap-2.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold px-5 py-2.5 rounded-xl transition shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer text-sm flex-shrink-0">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24">
+                                <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            </svg>
+                            <span>Sign in with Google</span>
+                        </button>
+                    </div>
+
+                    <!-- Logged In Template (Initially hidden, revealed dynamically by auth.js) -->
+                    <div id="accountUserStateLoggedIn" class="hidden flex-col sm:flex-row items-center justify-between gap-6">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <div id="accountAvatarContainer" class="w-14 h-14 rounded-full overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
+                                <i class="fas fa-user text-2xl text-purple-200"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer</h2>
+                                <p id="accountUserEmail" class="text-xs sm:text-sm text-gray-300 truncate mt-0.5">user@example.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Navigation Access to Speed Dials & Cloud Library -->
+                    <div class="mt-6 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <a href="speed-dials.html"
+                            class="feature-card p-4 rounded-2xl flex items-center justify-between group hover:border-purple-400/50 transition">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition flex-shrink-0">
+                                    <svg class="w-5 h-5 text-purple-300 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                        <rect x="2" y="2" width="9" height="9" rx="2.5" />
+                                        <rect x="13" y="2" width="9" height="9" rx="2.5" />
+                                        <rect x="2" y="13" width="9" height="9" rx="2.5" />
+                                        <rect x="13" y="13" width="9" height="9" rx="2.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white group-hover:text-purple-200 transition">Speed Dials</div>
+                                    <div class="text-xs text-gray-300">Open & manage your bookmark dials</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right text-xs text-white/40 group-hover:text-white group-hover:translate-x-1 transition mr-1"></i>
+                        </a>
+
+                        <a href="library.html"
+                            class="feature-card p-4 rounded-2xl flex items-center justify-between group hover:border-pink-400/50 transition">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center text-lg border border-pink-500/30 group-hover:scale-110 transition flex-shrink-0">
+                                    <i class="fas fa-book-bookmark"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white group-hover:text-pink-200 transition">Cloud Library</div>
+                                    <div class="text-xs text-gray-300">Access synced notes & collections</div>
+                                </div>
+                            </div>
+                            <i class="fas fa-arrow-right text-xs text-white/40 group-hover:text-white group-hover:translate-x-1 transition mr-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action Footer Inside Card -->
+                <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-xs text-gray-300 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-yellow-300"></i>
+                        <span>We'll be adding more features soon, do you have any suggestions?</span>
+                    </div>
+                    <a href="contact.html" class="text-xs font-semibold text-pink-300 hover:text-pink-200 transition underline underline-offset-4 flex items-center gap-1">
+                        <span>Send feedback</span>
+                        <i class="fas fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-300 text-sm border-t border-white/10 mt-auto" style="background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(12px);">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+            <div class="flex items-center space-x-2">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-5 h-5 opacity-80">
+                <span class="font-semibold text-white">Tabsome</span>
+                <span class="text-gray-400">&copy; 2025 Tabsome. All rights reserved.</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a>
+                <span>•</span>
+                <a href="support.html" class="hover:text-white transition-colors">Support</a>
+                <span>•</span>
+                <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+
+        // Auth handling
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.TabsomeAuth) {
+                // Initialize Navbar Auth
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+
+                // Connect Account section signIn button
+                const accountSignInBtn = document.getElementById('accountSignInBtn');
+                if (accountSignInBtn) {
+                    accountSignInBtn.addEventListener('click', () => {
+                        TabsomeAuth.signInWithGoogle();
+                    });
+                }
+
+                // Listen for Auth changes to update the Account page Hero card dynamically
+                TabsomeAuth.onAuthStateChange((user) => {
+                    const loggedOutEl = document.getElementById('accountUserStateLoggedOut');
+                    const loggedInEl = document.getElementById('accountUserStateLoggedIn');
+                    const userNameEl = document.getElementById('accountUserName');
+                    const userEmailEl = document.getElementById('accountUserEmail');
+                    const avatarContainer = document.getElementById('accountAvatarContainer');
+
+                    if (user) {
+                        if (loggedOutEl) loggedOutEl.classList.add('hidden');
+                        if (loggedInEl) loggedInEl.classList.remove('hidden');
+
+                        const meta = user.user_metadata || {};
+                        const fullName = meta.full_name || meta.name || user.email?.split('@')[0] || 'Tabsome Explorer';
+                        const avatarUrl = meta.avatar_url || meta.picture || null;
+                        const initials = (fullName || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+
+                        if (userNameEl) userNameEl.textContent = fullName;
+                        if (userEmailEl) userEmailEl.textContent = user.email || '';
+
+                        if (avatarContainer) {
+                            if (avatarUrl) {
+                                avatarContainer.innerHTML = `<img src="${avatarUrl}" alt="${fullName}" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\\'text-lg font-bold text-white\\\'>${initials}</span>';" />`;
+                            } else {
+                                avatarContainer.innerHTML = `<span class="text-lg font-bold text-white">${initials}</span>`;
+                            }
+                        }
+                    } else {
+                        if (loggedOutEl) loggedOutEl.classList.remove('hidden');
+                        if (loggedInEl) loggedInEl.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
