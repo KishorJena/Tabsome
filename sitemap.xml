@@ -64,6 +64,12 @@
   </url>
 
   <url>
+    <loc>https://tabsome.github.io/account.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <url>
     <loc>https://tabsome.github.io/google910f3ff4c619f3cc.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.10</priority>

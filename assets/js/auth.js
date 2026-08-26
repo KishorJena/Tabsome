@@ -364,6 +364,13 @@
                                         </div>
                                         ${window.location.pathname.includes('library') ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span>' : ''}
                                     </a>
+                                    <a href="account.html" class="flex items-center justify-between px-3 py-2 text-xs rounded-lg transition mt-0.5 ${window.location.pathname.includes('account') ? 'bg-amber-600/30 text-white font-semibold border border-amber-500/30' : 'text-gray-200 hover:text-white hover:bg-white/10'}">
+                                        <div class="flex items-center gap-2.5">
+                                            <i class="fas fa-user-gear text-amber-400 w-4 text-center"></i>
+                                            <span>Account</span>
+                                        </div>
+                                        ${window.location.pathname.includes('account') ? '<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>' : ''}
+                                    </a>
                                 </div>
                                 <div class="pt-1 border-t border-white/10">
                                     <button id="navSignOutBtn" type="button"
