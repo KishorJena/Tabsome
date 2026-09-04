@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widgets – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Discover and install beautiful widgets for your Tabsome new tab. Browse our curated collection of AI-generated widgets.">
+    <meta name="keywords"
+        content="widgets, tabsome, chrome extension, new tab widgets, dashboard widgets, custom widgets, AI widgets">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Widgets – Tabsome">
+    <meta property="og:description" content="Discover and install beautiful widgets for your Tabsome new tab.">
+    <meta property="og:image" content="https://tabsome.github.io/assets/social-preview.png">
+    <meta property="og:url" content="https://tabsome.github.io/widgets.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Widgets – Tabsome">
+    <meta name="twitter:description" content="Discover and install beautiful widgets for your Tabsome new tab.">
+    <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
+
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image:
+                linear-gradient(180deg, rgba(17, 24, 39, 0.35) 0%, rgba(15, 23, 42, 0.45) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        main {
+            position: relative;
+            z-index: 10;
+        }
+
+        .gradient-text {
+            color: white;
+        }
+
+        .glass-card {
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px) saturate(0.8);
+            -webkit-backdrop-filter: blur(12px) saturate(0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .widget-preview-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .widget-preview-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+
+        .widget-preview-placeholder::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .widget-preview-container.loaded .widget-preview-placeholder {
+            display: none;
+        }
+
+        .widget-preview-container iframe {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .widget-preview-container.loaded iframe {
+            opacity: 1;
+        }
+
+        .label-pill {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .label-pill:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .featured-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #1a1a2e;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #8c52ff, #ff5757);
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(140, 82, 255, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Pagination Styles */
+        .pagination-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #ff5757, #8c52ff);
+            border-color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(140, 82, 255, 0.4);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Widget ID Display */
+        .widget-id-display {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .widget-id-display:hover {
+            background: rgba(0, 0, 0, 0.45);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .widget-id-display code {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+    </style>
+</head>
+
+<body class="text-white font-sans">
+
+    <!-- Navbar -->
+    <header class="fixed w-full backdrop-blur-sm z-50" style="background-color: rgba(55, 71, 79, 0.9);">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-8 h-8">
+                    <h1 class="text-2xl font-bold gradient-text">Tabsome</h1>
+                </a>
+            </div>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="widgets.html" class="text-yellow-300 font-medium text-sm">Widgets</a>
+                <a href="roadmap.html" class="hover:text-gray-200 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-gray-200 transition text-sm">Changelogs</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" class="border border-white/40 hover:border-white px-3.5 py-1 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">Install</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-16 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <!-- Hero Section -->
+            <section class="text-center mb-12" data-aos="fade-up">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Widgets</h1>
+                <p class="text-lg text-white/80 max-w-2xl mx-auto">
+                    Discover beautiful, AI-generated widgets to personalize your Tabsome new tab experience.
+                </p>
+            </section>
+
+            <!-- In-Extension Notice -->
+            <section class="mb-8" data-aos="fade-up" data-aos-delay="50">
+                <div class="rounded-xl p-4 flex items-center gap-4 border border-purple-500/30"
+                    style="background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(12px) saturate(0.8); -webkit-backdrop-filter: blur(12px) saturate(0.8); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 48px rgba(0, 0, 0, 0.3);">
+                    <div class="text-3xl">
+                        <i class="fas fa-lightbulb text-yellow-400"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-white mb-1">Better Experience Inside Tabsome</h3>
+                        <p class="text-white/70 text-sm">Use Widgets within the Tabsome extension to browse and
+                            <strong>set widgets directly with one click</strong> – no need to copy IDs!
+                        </p>
+                    </div>
+                    <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+                        target="_blank" class="action-btn action-btn-primary whitespace-nowrap">
+                        <i class="fas fa-download mr-2"></i>Install
+                    </a>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section id="loading-state" class="text-center py-20">
+                <div class="loading-spinner mb-4"></div>
+                <p class="text-white/60">Loading widgets...</p>
+            </section>
+
+            <!-- Empty State -->
+            <section id="empty-state" class="empty-state hidden">
+                <i class="fas fa-box-open"></i>
+                <h3 class="text-xl font-semibold mb-2">No widgets found</h3>
+                <p>No widgets are currently available.</p>
+            </section>
+
+            <!-- Widget Grid -->
+            <section id="widget-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+                <!-- Widget cards will be dynamically inserted here -->
+            </section>
+
+            <!-- Pagination Controls -->
+            <div id="pagination-container" class="mt-12 flex flex-wrap items-center justify-center gap-2 sm:gap-3 hidden" data-aos="fade-up">
+                <button id="prev-page-btn" class="pagination-btn px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                    <span>Previous</span>
+                </button>
+                <div id="pagination-pages" class="flex items-center gap-1.5 sm:gap-2">
+                    <!-- Page buttons dynamically rendered -->
+                </div>
+                <button id="next-page-btn" class="pagination-btn px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed">
+                    <span>Next</span>
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Widget Detail Modal -->
+    <div id="widget-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="p-6">
+                <!-- Modal Header -->
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
+                        <p id="modal-description" class="text-white/70"></p>
+                    </div>
+                    <button id="modal-close" class="text-white/50 hover:text-white text-2xl transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Widget Preview -->
+                <div class="mb-6">
+                    <div id="modal-preview" class="widget-preview-container rounded-lg overflow-hidden"
+                        style="height: 120px;">
+                    </div>
+                </div>
+
+                <!-- Widget Info -->
+                <div class="mb-4 text-sm">
+                    <div>
+                        <span class="text-white/50">Created by:</span>
+                        <span id="modal-author" class="ml-2"></span>
+                    </div>
+                </div>
+
+                <!-- Labels -->
+                <div id="modal-labels" class="flex flex-wrap gap-2 mb-4"></div>
+
+                <!-- Widget ID -->
+                <div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <span class="text-white/50 text-sm font-medium">ID:</span>
+                    <div class="widget-id-display">
+                        <code id="modal-widget-id"></code>
+                    </div>
+                </div>
+
+                <!-- Tip Note -->
+                <div class="mb-4 p-3 rounded-lg bg-blue-500/15 border border-blue-500/30 text-sm">
+                    <p class="text-white/80">
+                        <i class="fas fa-info-circle text-blue-400 mr-2"></i>
+                        <strong>Tip:</strong> Use Widgets inside the Tabsome extension to set this widget
+                        directly with one click!
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center text-white/80 text-sm">
+        © 2025 Tabsome. <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a> • <a href="contact.html" class="hover:text-white transition-colors underline">Contact</a>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // API Configuration
+        let currentApiUrl = window.API_BASE_URL || 'https://tabsome.vercel.app';
+        const PAGE_LIMIT = 12;
+
+        // State
+        let allWidgets = [];
+        let selectedWidget = null;
+        let currentPage = 1;
+        let totalPages = 1;
+        let totalCount = 0;
+        let isFetching = false;
+
+        // DOM Elements
+        const widgetGrid = document.getElementById('widget-grid');
+        const loadingState = document.getElementById('loading-state');
+        const emptyState = document.getElementById('empty-state');
+        const paginationContainer = document.getElementById('pagination-container');
+        const paginationPages = document.getElementById('pagination-pages');
+        const prevPageBtn = document.getElementById('prev-page-btn');
+        const nextPageBtn = document.getElementById('next-page-btn');
+        const modal = document.getElementById('widget-modal');
+        const modalClose = document.getElementById('modal-close');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 600, once: true });
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+            }
+            fetchWidgets(1);
+            setupEventListeners();
+        });
+
+        // Fetch widgets from API (v3 with v2 fallback)
+        async function fetchWidgets(page = 1) {
+            if (isFetching) return;
+            isFetching = true;
+
+            loadingState.classList.remove('hidden');
+            widgetGrid.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            if (paginationContainer) {
+                paginationContainer.classList.add('hidden');
+            }
+
+            try {
+                let response = await fetch(`${API_BASE_URL}/api/v3/widgets?page=${page}&limit=${PAGE_LIMIT}`, {
+                    mode: 'cors',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                // Fallback to /api/v2/widgets if v3 is not yet deployed on the target server
+                if (response.status === 404) {
+                    response = await fetch(`${API_BASE_URL}/api/v2/widgets`, {
+                        mode: 'cors',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentApiUrl = API_BASE_URL;
+                    allWidgets = data.data || [];
+
+                    const pagination = data.pagination || {};
+                    currentPage = pagination.page || page;
+                    totalPages = pagination.totalPages || Math.ceil((pagination.totalCount || allWidgets.length) / PAGE_LIMIT) || 1;
+                    totalCount = pagination.totalCount ?? allWidgets.length;
+
+                    // Sort to show featured widgets first
+                    allWidgets.sort((a, b) => {
+                        const aFeatured = a.isFeatured ?? a.is_featured;
+                        const bFeatured = b.isFeatured ?? b.is_featured;
+                        if (aFeatured && !bFeatured) return -1;
+                        if (!aFeatured && bFeatured) return 1;
+                        return 0;
+                    });
+
+                    renderWidgets();
+                    renderPagination();
+
+                    // Scroll up to widget section if changing pages
+                    if (page > 1) {
+                        window.scrollTo({ top: 220, behavior: 'smooth' });
+                    }
+                    return;
+                } else {
+                    throw new Error(data.error || 'API returned failure');
+                }
+            } catch (error) {
+                console.warn('Fetch error:', error);
+                showError(`Unable to connect to widget server (${API_BASE_URL}). Please try again later.`);
+            } finally {
+                isFetching = false;
+            }
+        }
+
+        // Render widget cards
+        function renderWidgets() {
+            loadingState.classList.add('hidden');
+
+            if (allWidgets.length === 0) {
+                widgetGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            widgetGrid.classList.remove('hidden');
+            widgetGrid.innerHTML = '';
+
+            allWidgets.forEach((widget, index) => {
+                const card = createWidgetCard(widget, index);
+                widgetGrid.appendChild(card);
+            });
+
+            // Setup lazy loading for previews
+            setupLazyLoading();
+
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+        }
+
+        // Render pagination controls
+        function renderPagination() {
+            if (!paginationContainer || !paginationPages) return;
+
+            if (totalPages <= 1) {
+                paginationContainer.classList.add('hidden');
+                return;
+            }
+
+            paginationContainer.classList.remove('hidden');
+            prevPageBtn.disabled = currentPage <= 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+
+            paginationPages.innerHTML = '';
+
+            const maxVisibleButtons = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+
+            if (endPage - startPage + 1 < maxVisibleButtons) {
+                startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+            }
+
+            if (startPage > 1) {
+                paginationPages.appendChild(createPageButton(1));
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1.5 text-white/50 text-xs';
+                    dots.textContent = '...';
+                    paginationPages.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationPages.appendChild(createPageButton(i));
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1.5 text-white/50 text-xs';
+                    dots.textContent = '...';
+                    paginationPages.appendChild(dots);
+                }
+                paginationPages.appendChild(createPageButton(totalPages));
+            }
+        }
+
+        // Create individual page number button
+        function createPageButton(pageNum) {
+            const btn = document.createElement('button');
+            const isActive = pageNum === currentPage;
+            btn.className = `pagination-btn w-9 h-9 rounded-xl text-sm font-semibold flex items-center justify-center transition ${isActive ? 'active' : ''}`;
+            btn.textContent = pageNum;
+            btn.setAttribute('aria-label', `Page ${pageNum}`);
+            if (isActive) {
+                btn.setAttribute('aria-current', 'page');
+            }
+            btn.addEventListener('click', () => {
+                if (pageNum !== currentPage && !isFetching) {
+                    fetchWidgets(pageNum);
+                }
+            });
+            return btn;
+        }
+
+        // Create widget card element
+        function createWidgetCard(widget, index) {
+            const card = document.createElement('div');
+            card.className = 'glass-card rounded-xl overflow-hidden';
+            card.setAttribute('data-aos', 'fade-up');
+            card.setAttribute('data-aos-delay', (index % 6) * 50);
+
+            const isFeatured = widget.isFeatured ?? widget.is_featured;
+            const labels = widget.labels || [];
+
+            card.innerHTML = `
+        <!-- Preview Container -->
+        <div class="widget-preview-container p-4" data-widget-id="${widget.id}" style="height: 140px;">
+          <div class="widget-preview-placeholder h-full flex items-center justify-center">
+            <span>Loading preview...</span>
+          </div>
+        </div>
+        
+        <!-- Card Content -->
+        <div class="p-4 pt-0">
+          <!-- Title Row -->
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h3 class="font-semibold text-lg truncate flex-1" title="${widget.title || 'Untitled'}">
+              ${widget.title || 'Untitled Widget'}
+            </h3>
+            ${isFeatured ? '<span class="featured-badge">★ Featured</span>' : ''}
+          </div>
+          
+          <!-- Description -->
+          <p class="text-white/60 text-sm mb-3 line-clamp-2">
+            ${widget.description || 'No description available'}
+          </p>
+          
+          <!-- Labels -->
+          <div class="flex flex-wrap gap-1 mb-4">
+            ${labels.slice(0, 3).map(label => `<span class="label-pill">${label}</span>`).join('')}
+            ${labels.length > 3 ? `<span class="label-pill">+${labels.length - 3}</span>` : ''}
+          </div>
+          
+          <!-- Actions -->
+          <div class="flex gap-2">
+            <button class="action-btn action-btn-primary flex-1" onclick="openWidgetModal('${widget.id}')">
+              <i class="fas fa-eye mr-1"></i> View
+            </button>
+          </div>
+        </div>
+      `;
+
+            return card;
+        }
+
+        // Setup lazy loading with Intersection Observer
+        function setupLazyLoading() {
+            const previewContainers = document.querySelectorAll('.widget-preview-container[data-widget-id]');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const container = entry.target;
+                        const widgetId = container.dataset.widgetId;
+
+                        if (!container.classList.contains('loaded')) {
+                            loadWidgetPreview(container, widgetId);
+                        }
+
+                        observer.unobserve(container);
+                    }
+                });
+            }, {
+                rootMargin: '100px',
+                threshold: 0.1
+            });
+
+            previewContainers.forEach(container => observer.observe(container));
+        }
+
+        // Load widget preview into iframe
+        function loadWidgetPreview(container, widgetId) {
+            const widget = allWidgets.find(w => w.id === widgetId);
+            if (!widget) return;
+
+            let widgetCode = widget.widget || {};
+            if (typeof widgetCode === 'string') {
+                try {
+                    widgetCode = JSON.parse(widgetCode);
+                } catch (e) {
+                    widgetCode = { html: '', css: '', js: '' };
+                }
+            }
+
+            const html = widgetCode.html || '';
+            const css = widgetCode.css || '';
+            const js = widgetCode.js || '';
+
+            const iframe = document.createElement('iframe');
+            iframe.sandbox = 'allow-scripts allow-pointer-lock';
+            iframe.style.cssText = 'width: 100%; height: 100%; border: none;';
+            iframe.title = `Widget: ${widget.title || 'Untitled'}`;
+
+            iframe.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              html, body {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: transparent;
+                width: 100%;
+                height: 100%;
+              }
+              body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              .widget-scale-wrapper {
+                transform: scale(0.65);
+                transform-origin: center center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              ${css}
+            </style>
+          </head>
+          <body>
+            <div class="widget-scale-wrapper">
+              ${html}
+            </div>
+            <script>${js}<\/script>
+          </body>
+        </html>
+      `;
+
+            iframe.onload = () => {
+                container.classList.add('loaded');
+            };
+
+            container.appendChild(iframe);
+        }
+
+        // Open widget detail modal
+        function openWidgetModal(widgetId) {
+            selectedWidget = allWidgets.find(w => w.id === widgetId);
+            if (!selectedWidget) return;
+
+            document.getElementById('modal-title').textContent = selectedWidget.title || 'Untitled Widget';
+            document.getElementById('modal-description').textContent = selectedWidget.description || 'No description';
+            document.getElementById('modal-author').textContent = selectedWidget.authorName || selectedWidget.created_by || selectedWidget.createdBy || 'Community';
+
+            // Labels
+            const labelsContainer = document.getElementById('modal-labels');
+            labelsContainer.innerHTML = (selectedWidget.labels || [])
+                .map(label => `<span class="label-pill">${label}</span>`)
+                .join('');
+
+            // Widget ID
+            document.getElementById('modal-widget-id').textContent = selectedWidget.id;
+
+            // Preview - reuse the same function as card grid
+            const previewContainer = document.getElementById('modal-preview');
+            previewContainer.innerHTML = '';
+            previewContainer.classList.remove('loaded');
+            loadWidgetPreview(previewContainer, selectedWidget.id);
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            selectedWidget = null;
+        }
+
+        // Show error message
+        function showError(message) {
+            loadingState.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            emptyState.innerHTML = `
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3 class="text-xl font-semibold mb-2">Error</h3>
+        <p>${message}</p>
+      `;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Pagination buttons
+            if (prevPageBtn) {
+                prevPageBtn.addEventListener('click', () => {
+                    if (currentPage > 1 && !isFetching) {
+                        fetchWidgets(currentPage - 1);
+                    }
+                });
+            }
+
+            if (nextPageBtn) {
+                nextPageBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages && !isFetching) {
+                        fetchWidgets(currentPage + 1);
+                    }
+                });
+            }
+
+            // Modal close
+            modalClose.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (modal.classList.contains('active')) {
+                        closeModal();
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
