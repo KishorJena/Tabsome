@@ -1,72 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Generated sitemap for Tabsome -->
+  <!-- Official Sitemap for Tabsome - AI New Tab, Opera-Style Speed Dials & Custom Widgets -->
 
   <url>
     <loc>https://tabsome.github.io/</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
 
   <url>
-    <loc>https://tabsome.github.io/index.html</loc>
-    <changefreq>daily</changefreq>
+    <loc>https://tabsome.github.io/speed-dials.html</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://tabsome.github.io/roadmap.html</loc>
+    <loc>https://tabsome.github.io/library.html</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://tabsome.github.io/changelogs.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
-  </url>
-
-  <url>
-    <loc>https://tabsome.github.io/logo-demo.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
+    <priority>0.90</priority>
   </url>
 
   <url>
     <loc>https://tabsome.github.io/widgets.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://tabsome.github.io/privacy.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.30</priority>
-  </url>
-
-  <url>
-    <loc>https://tabsome.github.io/support.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.40</priority>
-  </url>
-
-
-  <url>
-    <loc>https://tabsome.github.io/speed-dials.html</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://tabsome.github.io/library.html</loc>
+    <loc>https://tabsome.github.io/roadmap.html</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.75</priority>
   </url>
 
   <url>
-    <loc>https://tabsome.github.io/google910f3ff4c619f3cc.html</loc>
+    <loc>https://tabsome.github.io/changelogs.html</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <url>
+    <loc>https://tabsome.github.io/support.html</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+  </url>
+
+  <url>
+    <loc>https://tabsome.github.io/contact.html</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+  </url>
+
+  <url>
+    <loc>https://tabsome.github.io/privacy.html</loc>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.10</priority>
+    <priority>0.40</priority>
   </url>
 
 </urlset>
