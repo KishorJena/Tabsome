@@ -8,9 +8,9 @@
 
   <!-- SEO Meta Tags -->
   <meta name="description"
-    content="Transform your Chrome tab into a sleek dashboard with AI widgets, speed dials, and interactive tools. Create custom widgets without coding.">
+    content="Transform your new tab into a sleek dashboard with AI widgets, speed dials, and interactive tools. Compatible with Chrome, Edge, Brave, and all Chromium browsers.">
   <meta name="keywords"
-    content="chrome extension, new tab, speed dials, AI widgets, opera like speed dials, browser customization, productivity, chrome dashboard, custom widgets, AI bar, browser tools, chrome addon, tab customization, AI-powered browser, smart dashboard, browser enhancement, best new tab replacement for chrome">
+    content="chrome extension, edge extension, brave extension, chromium new tab, new tab, speed dials, AI widgets, opera like speed dials, browser customization, productivity, chrome dashboard, custom widgets, AI bar, browser tools, chrome addon, tab customization, AI-powered browser, smart dashboard, browser enhancement, best new tab replacement for chrome">
   <meta name="author" content="Kishor Jena">
   <meta name="robots" content="index, follow">
 
@@ -277,6 +277,109 @@
       position: relative;
       z-index: 20;
     }
+
+    /* Primary Browser CTA Button */
+    .browser-install-cta {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4), 0 8px 10px -6px rgba(37, 99, 235, 0.3);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .browser-install-cta:hover {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border-color: #ffffff;
+      box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.6), 0 10px 12px -5px rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    /* Browser Compatibility Pills */
+    .browser-pill {
+      background: rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      text-decoration: none;
+      color: inherit;
+    }
+    .browser-pill:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Feature Highlights (Clean Informational Row, Non-CTA) */
+    .hero-features-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2.25rem;
+      user-select: none;
+    }
+    .hero-feature-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.015em;
+    }
+    .hero-feature-item svg,
+    .hero-feature-item i {
+      color: #ffffff !important;
+      font-size: 0.95rem;
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-feature-divider {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      display: inline-block;
+    }
+    @media (max-width: 640px) {
+      .hero-features-row {
+        gap: 1rem;
+      }
+      .hero-feature-divider {
+        display: none;
+      }
+    }
+
+    /* Delimiter Header for Browser Section */
+    .compatible-delimiter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2.25rem;
+      margin-bottom: 0.875rem;
+    }
+    .compatible-delimiter-line {
+      height: 1px;
+      width: 40px;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25));
+    }
+    .compatible-delimiter-line.line-right {
+      background: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.25));
+    }
+    .compatible-delimiter-text {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 
@@ -370,14 +473,13 @@
   <section class="pt-40 pb-12 mb-12 text-center section-container" id="hero">
     <div class="max-w-4xl mx-auto px-6 content-layer" data-aos="fade-up">
       <h2 class="text-4xl md:text-6xl font-bold mb-4 gradient-text">Make Your New Tab Awesome</h2>
-      <p class="text-lg md:text-xl text-white mb-8">
-        Transform your boring Chrome tab into a sleek, smart dashboard with AI-powered features and stunning speed
-        dials.
+      <p class="text-lg md:text-xl text-white mb-8 max-w-3xl mx-auto leading-relaxed">
+        Transform your new tab into a sleek, smart dashboard with AI-powered features and stunning speed dials. Works seamlessly on Chrome, Edge, Brave, and all Chromium browsers.
       </p>
-      <!-- Feature Badges Row -->
-      <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-4 mb-8">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
-          <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+      <!-- Feature Highlights (Pure Informational Display, Non-CTA) -->
+      <div class="hero-features-row">
+        <div class="hero-feature-item">
+          <svg fill="currentColor" viewBox="0 0 24 24">
             <rect x="2" y="2" width="9" height="9" rx="2.5" />
             <rect x="13" y="2" width="9" height="9" rx="2.5" />
             <rect x="2" y="13" width="9" height="9" rx="2.5" />
@@ -385,16 +487,19 @@
           </svg>
           <span>Speed Dials</span>
         </div>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
-          <i class="fas fa-book-bookmark text-amber-400"></i>
+        <span class="hero-feature-divider"></span>
+        <div class="hero-feature-item">
+          <i class="fas fa-book-bookmark"></i>
           <span>Library</span>
         </div>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
-          <i class="fas fa-puzzle-piece text-purple-400"></i>
+        <span class="hero-feature-divider"></span>
+        <div class="hero-feature-item">
+          <i class="fas fa-puzzle-piece"></i>
           <span>Widgets</span>
         </div>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border border-white/15 text-sm sm:text-base font-medium text-white shadow-sm" style="background-color: rgba(55, 71, 79, 0.75);">
-          <i class="fas fa-robot text-green-400"></i>
+        <span class="hero-feature-divider"></span>
+        <div class="hero-feature-item">
+          <i class="fas fa-robot"></i>
           <span>AI Bar</span>
         </div>
       </div>
@@ -402,10 +507,60 @@
       <!-- Primary CTA -->
       <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
         target="_blank" rel="noopener noreferrer"
-        class="bg-blue-600 hover:bg-blue-500 text-white border-2 border-white/60 hover:border-white font-semibold px-8 py-4 rounded-xl text-lg shadow-lg shadow-blue-900/30 hover:shadow-blue-600/40 transition transform hover:scale-105 inline-flex items-center gap-2">
-        <i class="fab fa-chrome"></i>
-        <span>Add to Chrome</span>
+        class="browser-install-cta font-semibold px-8 py-4 rounded-xl text-lg inline-flex items-center gap-2.5">
+        <img src="assets/images/browsers/chrome.png" alt="Browser" class="browser-cta-logo w-5 h-5 object-contain">
+        <span class="browser-cta-label">Add to Chrome</span>
       </a>
+
+      <!-- Supported Chromium Browsers Row -->
+      <div>
+        <!-- Natural Visual Delimiter Label -->
+        <div class="compatible-delimiter">
+          <span class="compatible-delimiter-line"></span>
+          <span class="compatible-delimiter-text">Compatible with</span>
+          <span class="compatible-delimiter-line line-right"></span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs sm:text-sm">
+          <!-- Chrome Badge -->
+          <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" title="Install Tabsome for Chrome" class="browser-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-white/90 shadow-sm hover:text-white cursor-pointer">
+            <img src="assets/images/browsers/chrome.png" alt="Chrome" class="w-4 h-4 object-contain">
+            <span class="font-medium">Chrome</span>
+          </a>
+          <!-- Edge Badge -->
+          <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" title="Install Tabsome for Edge" class="browser-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-white/90 shadow-sm hover:text-white cursor-pointer">
+            <img src="assets/images/browsers/edge.png" alt="Edge" class="w-4 h-4 object-contain">
+            <span class="font-medium">Edge</span>
+          </a>
+          <!-- Brave Badge -->
+          <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" title="Install Tabsome for Brave" class="browser-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-white/90 shadow-sm hover:text-white cursor-pointer">
+            <img src="assets/images/browsers/brave.png" alt="Brave" class="w-4 h-4 object-contain">
+            <span class="font-medium">Brave</span>
+          </a>
+          <!-- Opera Badge -->
+          <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" title="Install Tabsome for Opera" class="browser-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-white/90 shadow-sm hover:text-white cursor-pointer">
+            <img src="assets/images/browsers/opera.png" alt="Opera" class="w-4 h-4 object-contain">
+            <span class="font-medium">Opera</span>
+          </a>
+          <!-- Vivaldi Badge -->
+          <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" title="Install Tabsome for Vivaldi" class="browser-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-white/90 shadow-sm hover:text-white cursor-pointer">
+            <img src="assets/images/browsers/vivaldi.png" alt="Vivaldi" class="w-4 h-4 object-contain">
+            <span class="font-medium">Vivaldi</span>
+          </a>
+          <!-- Arc Badge -->
+          <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf" target="_blank" rel="noopener noreferrer" title="Install Tabsome for Arc" class="browser-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-white/90 shadow-sm hover:text-white cursor-pointer">
+            <img src="assets/images/browsers/arc.webp" alt="Arc" class="w-4 h-4 rounded-full object-cover">
+            <span class="font-medium">Arc</span>
+          </a>
+          <!-- Firefox Badge (Coming Soon) -->
+          <div class="browser-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/80 shadow-sm cursor-default select-none pointer-events-none" title="Firefox support coming soon">
+            <img src="assets/images/browsers/firefox.png" alt="Firefox" class="w-4 h-4 object-contain opacity-80">
+            <span class="font-medium text-white/80">Firefox</span>
+            <span class="inline-flex items-center gap-1 ml-0.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/10 text-white/70 border border-white/10 leading-none whitespace-nowrap">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Coming Soon
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -504,17 +659,17 @@
   <!-- CTA -->
   <section id="download" class="py-20 text-center section-container">
     <div class="content-layer" data-aos="fade-up">
-      <h3 class="text-3xl font-bold mb-6 gradient-text">Ready to Make Chrome Awesome?</h3>
+      <h3 class="text-3xl font-bold mb-6 gradient-text">Ready to Make Your Browser Awesome?</h3>
       <p class="text-lg text-white mb-8 max-w-2xl mx-auto">
-        Add Tabsome to your browser and turn every new tab into something truly personal.
+        Add Tabsome to Chrome, Edge, Brave, or any Chromium browser and turn every new tab into something truly personal.
       </p>
       <!-- Primary CTA -->
       <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
         target="_blank" rel="noopener noreferrer"
-        class="bg-blue-600 hover:bg-blue-500 text-white border-2 border-white/60 hover:border-white font-semibold px-8 py-4 rounded-xl text-lg shadow-lg shadow-blue-900/30 hover:shadow-blue-600/40 transition transform hover:scale-105 inline-flex items-center gap-2"
+        class="browser-install-cta font-semibold px-8 py-4 rounded-xl text-lg inline-flex items-center gap-2.5"
         data-aos="zoom-in">
-        <i class="fab fa-chrome"></i>
-        <span>Add to Chrome</span>
+        <img src="assets/images/browsers/chrome.png" alt="Browser" class="browser-cta-logo w-5 h-5 object-contain">
+        <span class="browser-cta-label">Add to Chrome</span>
       </a>
     </div>
   </section>
@@ -640,12 +795,114 @@
       });
     }
 
-    // Initialize parallax when DOM is loaded
+    // Dynamic Browser Detection & CTA Personalization
+    const compatibleBrowsers = {
+      chrome: { name: 'Chrome', icon: 'assets/images/browsers/chrome.png' },
+      edge: { name: 'Edge', icon: 'assets/images/browsers/edge.png' },
+      brave: { name: 'Brave', icon: 'assets/images/browsers/brave.png' },
+      opera: { name: 'Opera', icon: 'assets/images/browsers/opera.png' },
+      vivaldi: { name: 'Vivaldi', icon: 'assets/images/browsers/vivaldi.png' },
+      arc: { name: 'Arc', icon: 'assets/images/browsers/arc.webp', isCover: true }
+    };
+
+    async function detectCompatibleBrowser() {
+      const ua = navigator.userAgent;
+
+      // Incompatible / Not yet supported: Firefox, Safari
+      if (/\b(Firefox|FxiOS)\//i.test(ua)) {
+        return null;
+      }
+      if (/Safari/i.test(ua) && !/Chrome|CriOS/i.test(ua)) {
+        return null;
+      }
+
+      // Brave Detection (asynchronous API)
+      if (navigator.brave && typeof navigator.brave.isBrave === 'function') {
+        try {
+          if (await navigator.brave.isBrave()) {
+            return 'brave';
+          }
+        } catch (e) {}
+      }
+
+      // UserAgentData Brands
+      const brands = (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands))
+        ? navigator.userAgentData.brands.map(b => b.brand.toLowerCase())
+        : [];
+
+      // Microsoft Edge
+      if (/\bEdg\//i.test(ua) || brands.some(b => b.includes('edge'))) {
+        return 'edge';
+      }
+
+      // Opera
+      if (/\b(OPR|Opera)\//i.test(ua) || brands.some(b => b.includes('opera'))) {
+        return 'opera';
+      }
+
+      // Vivaldi
+      if (/\bVivaldi\//i.test(ua) || brands.some(b => b.includes('vivaldi'))) {
+        return 'vivaldi';
+      }
+
+      // Arc Browser
+      const isArc = (typeof window !== 'undefined' && (
+        getComputedStyle(document.documentElement).getPropertyValue('--arc-palette-title') !== '' ||
+        getComputedStyle(document.body || document.documentElement).getPropertyValue('--arc-background-color') !== '' ||
+        /\bArc\//i.test(ua)
+      ));
+      if (isArc) {
+        return 'arc';
+      }
+
+      // Google Chrome / Chromium
+      if (/\b(Chrome|CriOS)\//i.test(ua) || brands.some(b => b.includes('chrome') || b.includes('chromium'))) {
+        return 'chrome';
+      }
+
+      return null;
+    }
+
+    async function initBrowserCTA() {
+      const detected = await detectCompatibleBrowser();
+      const ctaButtons = document.querySelectorAll('.browser-install-cta');
+
+      if (detected && compatibleBrowsers[detected]) {
+        const config = compatibleBrowsers[detected];
+        ctaButtons.forEach(btn => {
+          btn.classList.remove('hidden');
+          btn.style.display = 'inline-flex';
+          const logo = btn.querySelector('.browser-cta-logo');
+          const label = btn.querySelector('.browser-cta-label');
+          if (logo) {
+            logo.src = config.icon;
+            logo.alt = config.name;
+            if (config.isCover) {
+              logo.className = 'browser-cta-logo w-5 h-5 rounded-full object-cover';
+            } else {
+              logo.className = 'browser-cta-logo w-5 h-5 object-contain';
+            }
+          }
+          if (label) {
+            label.textContent = `Add to ${config.name}`;
+          }
+        });
+      } else {
+        // Incompatible / undetected browser: do not show the Add to button
+        ctaButtons.forEach(btn => {
+          btn.classList.add('hidden');
+          btn.style.display = 'none';
+        });
+      }
+    }
+
+    // Initialize parallax and browser CTA when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
       if (window.TabsomeAuth) {
         TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
       }
       initParallax();
+      initBrowserCTA();
     });
 
     // Refresh ScrollTrigger on window resize
