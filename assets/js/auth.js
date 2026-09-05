@@ -65,7 +65,7 @@
             loginUrl.hash = window.location.hash;
             window.location.replace(loginUrl.href);
         }
-    } catch (e) {}
+    } catch (e) { }
 
     function getSupabaseClient() {
         if (supabaseClient) {
@@ -95,7 +95,7 @@
                 isRecoveryFlow = true;
                 try {
                     sessionStorage.setItem('tabsome_recovery_flow', Date.now().toString());
-                } catch (e) {}
+                } catch (e) { }
             }
 
             if (event === 'SIGNED_OUT' || !session) {
@@ -133,14 +133,14 @@
                 } else {
                     sessionStorage.removeItem('tabsome_recovery_flow');
                 }
-            } catch (e) {}
+            } catch (e) { }
         },
 
         clearRecoveryFlow() {
             isRecoveryFlow = false;
             try {
                 sessionStorage.removeItem('tabsome_recovery_flow');
-            } catch (e) {}
+            } catch (e) { }
         },
 
         async init(forceRevalidate = false) {
@@ -295,6 +295,41 @@
                 console.error('Auth sign in error');
                 alert('Sign in error: ' + (error.message || 'Unable to sign in with Google.'));
             }
+        },
+
+        async signInWithMicrosoft(returnUrl) {
+            const client = getSupabaseClient();
+            if (!client) {
+                alert('Authentication service is currently unavailable.');
+                return;
+            }
+
+            // Clean target redirect and resolve relative paths to absolute URL
+            let redirectTo = returnUrl || window.location.href.split('#')[0];
+            if (redirectTo && !redirectTo.startsWith('http://') && !redirectTo.startsWith('https://')) {
+                try {
+                    redirectTo = new URL(redirectTo, window.location.href).href;
+                } catch (e) {
+                    redirectTo = window.location.href.split('#')[0];
+                }
+            }
+
+            const { error } = await client.auth.signInWithOAuth({
+                provider: 'azure',
+                options: {
+                    redirectTo,
+                    scopes: 'email'
+                }
+            });
+
+            if (error) {
+                console.error('Auth Microsoft sign in error:', error);
+                alert('Sign in error: ' + (error.message || 'Unable to sign in with Microsoft.'));
+            }
+        },
+
+        async signInWithAzure(returnUrl) {
+            return this.signInWithMicrosoft(returnUrl);
         },
 
         /**

@@ -8,9 +8,9 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Sign in to Tabsome with Google or email. Access and sync your personalized new tab dashboard, Opera-style speed dials, custom AI widgets, and visual pinboards across all your browsers.">
+        content="Sign in to Tabsome with Google, Microsoft or email. Access and sync your personalized new tab dashboard, Opera-style speed dials, custom AI widgets, and visual pinboards across all your browsers.">
     <meta name="keywords"
-        content="tabsome login, tabsome sign in, google sign in, tabsome account, new tab dashboard, speed dials sync, email login">
+        content="tabsome login, tabsome sign in, google sign in, microsoft sign in, azure ad login, tabsome account, new tab dashboard, speed dials sync, email login">
     <meta name="author" content="Kishor Jena">
     <meta name="robots" content="index, follow">
 
@@ -118,10 +118,10 @@
             display: none !important;
         }
 
-        /* Card Container Width Constraint */
+        /* Card Container Width Constraint - Generous breathing room */
         .auth-card-wrapper {
             width: 100%;
-            max-width: 440px;
+            max-width: 490px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -140,76 +140,104 @@
             }
         }
 
-        /* Modern Google Button Style */
-        .btn-google-modern {
+        /* Modern Sleek Dark Google, Microsoft & Email OAuth Button Styles */
+        .btn-oauth-modern,
+        .btn-google-modern,
+        .btn-microsoft-modern,
+        .btn-email-modern {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
             width: 100%;
-            height: 46px;
-            background-color: #ffffff !important;
-            color: #1f2937 !important;
-            border: 1px solid #dadce0;
-            border-radius: 12px;
-            font-size: 15px;
+            height: 48px;
+            background-color: rgba(30, 41, 59, 0.75) !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            font-size: 14.5px;
             font-weight: 600;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             letter-spacing: -0.01em;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
-            transition: all 0.18s ease-in-out;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
             user-select: none;
             outline: none;
             text-decoration: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        .btn-google-modern:hover {
-            background-color: #f8f9fa !important;
-            border-color: #c2c7d0;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
-            transform: translateY(-1px);
+        .btn-oauth-modern:hover,
+        .btn-google-modern:hover,
+        .btn-microsoft-modern:hover,
+        .btn-email-modern:hover {
+            background-color: rgba(51, 65, 85, 0.9) !important;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-1.5px);
+            color: #ffffff !important;
         }
 
-        .btn-google-modern:active {
-            background-color: #f1f3f4 !important;
+        .btn-oauth-modern:active,
+        .btn-google-modern:active,
+        .btn-microsoft-modern:active,
+        .btn-email-modern:active {
+            background-color: rgba(30, 41, 59, 0.95) !important;
             transform: scale(0.99) translateY(0);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-google-modern span {
-            color: #1f2937 !important;
-            font-size: 15px;
+        .btn-oauth-modern span,
+        .btn-google-modern span,
+        .btn-microsoft-modern span,
+        .btn-email-modern span {
+            color: #f8fafc !important;
+            font-size: 14.5px;
             font-weight: 600;
         }
 
-        /* Form Input Styles */
+        /* Expandable Email Container Animation */
+        .email-expand-container {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-8px);
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.28s ease,
+                        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .email-expand-container.is-expanded {
+            max-height: 800px;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .chevron-rotate {
+            transform: rotate(180deg);
+        }
+
+        /* Form Input Styles - Natural Start/Left Alignment */
         .form-input-container {
             position: relative;
             width: 100%;
         }
 
-        .form-input-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.45);
-            font-size: 14px;
-            pointer-events: none;
-            transition: color 0.15s ease;
-        }
-
         .form-input {
             width: 100%;
-            height: 44px;
+            height: 48px;
             background: rgba(15, 23, 42, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 12px;
-            padding: 0 42px 0 38px;
+            border-radius: 14px;
+            padding: 0 44px 0 16px;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 14.5px;
             font-family: inherit;
+            text-align: left;
             transition: all 0.2s ease;
             outline: none;
             box-sizing: border-box;
@@ -217,62 +245,59 @@
 
         .form-input::placeholder {
             color: rgba(255, 255, 255, 0.35);
+            text-align: left;
         }
 
         .form-input:focus {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             border-color: #c084fc;
-            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.2);
-        }
-
-        .form-input:focus+.form-input-icon,
-        .form-input-container:focus-within .form-input-icon {
-            color: #c084fc;
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.25), 0 0 20px rgba(192, 132, 252, 0.15);
         }
 
         .password-toggle-btn {
             position: absolute;
-            right: 12px;
+            right: 14px;
             top: 50%;
             transform: translateY(-50%);
             background: transparent;
             border: none;
             color: rgba(255, 255, 255, 0.45);
             cursor: pointer;
-            padding: 4px 6px;
+            padding: 6px;
             font-size: 14px;
             transition: color 0.15s ease;
+            z-index: 2;
         }
 
         .password-toggle-btn:hover {
             color: #ffffff;
         }
 
-        /* Primary Submit Button */
+        /* Primary Submit Button - Modern Sleek Gradient */
         .btn-primary-submit {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             width: 100%;
-            height: 44px;
+            height: 48px;
             background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
             color: #ffffff !important;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             user-select: none;
             outline: none;
         }
 
         .btn-primary-submit:hover {
-            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
-            transform: translateY(-1px);
-            filter: brightness(1.05);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            transform: translateY(-1.5px);
+            filter: brightness(1.06);
         }
 
         .btn-primary-submit:active {
@@ -280,6 +305,10 @@
         }
 
         .btn-primary-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
             opacity: 0.7;
             cursor: not-allowed;
             transform: none !important;
@@ -329,7 +358,7 @@
         <div class="auth-card-wrapper" data-aos="fade-up" data-aos-duration="600">
 
             <!-- Authentication Card -->
-            <div class="glass-card rounded-3xl p-7 sm:p-9 relative overflow-hidden text-center">
+            <div class="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden text-center">
 
                 <!-- Top Logo Badge -->
                 <div class="mb-6">
@@ -365,11 +394,12 @@
                 </div>
 
                 <!-- Main Auth Action Area -->
-                <div id="authActionsContainer" class="space-y-4 text-left">
+                <div id="authActionsContainer" class="space-y-4 text-center">
 
-                    <!-- Google Sign In Button (Visible in Sign In and Sign Up modes) -->
-                    <div id="googleSection">
-                        <button id="googleLoginBtn" type="button" class="btn-google-modern">
+                    <!-- 3 Primary Sign In Methods (Google, Microsoft, Email) -->
+                    <div id="methodsSection" class="space-y-3">
+                        <!-- 1. Google -->
+                        <button id="googleLoginBtn" type="button" class="btn-oauth-modern btn-google-modern">
                             <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                                 <path fill="#4285F4"
                                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -381,120 +411,138 @@
                                     d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                             </svg>
                             <span id="googleLoginText">Continue with Google</span>
-                            <i id="googleLoginSpinner" class="fas fa-spinner fa-spin text-purple-600 ml-1" style="display: none;"></i>
+                            <i id="googleLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1" style="display: none;"></i>
                         </button>
 
-                        <!-- Divider -->
-                        <div class="relative my-4">
-                            <div class="absolute inset-0 flex items-center">
-                                <div class="w-full border-t border-white/10"></div>
+                        <!-- 2. Microsoft -->
+                        <button id="microsoftLoginBtn" type="button" class="btn-oauth-modern btn-microsoft-modern">
+                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 21 21">
+                                <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                                <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                                <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                                <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+                            </svg>
+                            <span id="microsoftLoginText">Continue with Microsoft</span>
+                            <i id="microsoftLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1" style="display: none;"></i>
+                        </button>
+
+                        <!-- 3. Email Toggle Button -->
+                        <button id="toggleEmailBtn" type="button" class="btn-oauth-modern btn-email-modern" aria-expanded="false">
+                            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-purple-400">
+                                <i class="fas fa-envelope text-[15px]"></i>
                             </div>
-                            <div class="relative flex justify-center text-xs">
-                                <span class="px-2.5 py-0.5 bg-slate-900/90 text-gray-400 font-medium rounded-full border border-white/10 text-[11px]">
-                                    or continue with email
-                                </span>
-                            </div>
-                        </div>
+                            <span id="emailLoginBtnText">Continue with Email</span>
+                            <i id="emailChevronIcon" class="fas fa-chevron-down text-xs text-gray-400 ml-1 transition-transform duration-300"></i>
+                        </button>
                     </div>
 
                     <!-- Feedback Alert (Error or Success) -->
-                    <div id="authAlertBox" class="hidden p-3 rounded-xl text-xs leading-relaxed border transition-all"></div>
+                    <div id="authAlertBox" class="hidden p-3.5 rounded-2xl text-xs leading-relaxed border transition-all text-center"></div>
 
-                    <!-- 1. SIGN IN FORM -->
-                    <form id="signInForm" class="space-y-3.5" autocomplete="on">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">Email address</label>
-                            <div class="form-input-container">
-                                <i class="fas fa-envelope form-input-icon"></i>
-                                <input id="signInEmail" type="email" class="form-input" placeholder="you@example.com"
-                                    required autocomplete="email" />
+                    <!-- Expandable Email Form Container -->
+                    <div id="emailExpandContainer" class="email-expand-container">
+                        <div class="pt-2">
+                            <div class="relative my-4 pt-1">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-white/10"></div>
+                                </div>
+                                <div class="relative flex justify-center text-xs">
+                                    <span class="px-3 py-0.5 bg-slate-900/90 text-gray-400 font-medium rounded-full border border-white/10 text-[11px] backdrop-blur-md">
+                                        enter your email details
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div>
-                            <div class="flex items-center justify-between mb-1.5">
-                                <label class="block text-xs font-medium text-gray-300">Password</label>
-                                <button type="button" id="toForgotBtn" class="text-xs text-pink-300 hover:text-white transition cursor-pointer">
-                                    Forgot password?
+                            <!-- 1. SIGN IN FORM -->
+                            <form id="signInForm" class="space-y-4 text-left" autocomplete="on">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email address</label>
+                                    <div class="form-input-container">
+                                        <input id="signInEmail" type="email" class="form-input" placeholder="you@example.com"
+                                            required autocomplete="email" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-1.5">
+                                        <label class="block text-xs font-medium text-gray-300 text-left">Password</label>
+                                        <button type="button" id="toForgotBtn" class="text-xs text-pink-300 hover:text-white transition cursor-pointer">
+                                            Forgot password?
+                                        </button>
+                                    </div>
+                                    <div class="form-input-container">
+                                        <input id="signInPassword" type="password" class="form-input" placeholder="••••••••"
+                                            required autocomplete="current-password" />
+                                        <button type="button" class="password-toggle-btn" data-target="signInPassword" title="Toggle password visibility">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button id="signInSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                                    <span id="signInSubmitText">Sign In</span>
+                                    <i id="signInSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
                                 </button>
-                            </div>
-                            <div class="form-input-container">
-                                <i class="fas fa-lock form-input-icon"></i>
-                                <input id="signInPassword" type="password" class="form-input" placeholder="••••••••"
-                                    required autocomplete="current-password" />
-                                <button type="button" class="password-toggle-btn" data-target="signInPassword" title="Toggle password visibility">
-                                    <i class="far fa-eye"></i>
+                            </form>
+
+                            <!-- 2. SIGN UP FORM -->
+                            <form id="signUpForm" class="space-y-4 text-left hidden" autocomplete="on">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Full Name <span class="text-gray-400 font-normal">(optional)</span></label>
+                                    <div class="form-input-container">
+                                        <input id="signUpName" type="text" class="form-input" placeholder="Alex Johnson"
+                                            autocomplete="name" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email address</label>
+                                    <div class="form-input-container">
+                                        <input id="signUpEmail" type="email" class="form-input" placeholder="you@example.com"
+                                            required autocomplete="email" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Password</label>
+                                    <div class="form-input-container">
+                                        <input id="signUpPassword" type="password" class="form-input" placeholder="At least 6 characters"
+                                            required minlength="6" autocomplete="new-password" />
+                                        <button type="button" class="password-toggle-btn" data-target="signUpPassword" title="Toggle password visibility">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button id="signUpSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                                    <span id="signUpSubmitText">Create Account</span>
+                                    <i id="signUpSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
                                 </button>
-                            </div>
+                            </form>
                         </div>
+                    </div>
 
-                        <button id="signInSubmitBtn" type="submit" class="btn-primary-submit mt-1">
-                            <span id="signInSubmitText">Sign In</span>
-                            <i id="signInSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
-                        </button>
-                    </form>
-
-                    <!-- 2. SIGN UP FORM -->
-                    <form id="signUpForm" class="space-y-3.5 hidden" autocomplete="on">
+                    <!-- 3. FORGOT PASSWORD FORM (Standalone View) -->
+                    <form id="forgotPasswordForm" class="space-y-4 text-left hidden" autocomplete="on">
                         <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">Full Name <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email address</label>
                             <div class="form-input-container">
-                                <i class="fas fa-user form-input-icon"></i>
-                                <input id="signUpName" type="text" class="form-input" placeholder="Alex Johnson"
-                                    autocomplete="name" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">Email address</label>
-                            <div class="form-input-container">
-                                <i class="fas fa-envelope form-input-icon"></i>
-                                <input id="signUpEmail" type="email" class="form-input" placeholder="you@example.com"
-                                    required autocomplete="email" />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">Password</label>
-                            <div class="form-input-container">
-                                <i class="fas fa-lock form-input-icon"></i>
-                                <input id="signUpPassword" type="password" class="form-input" placeholder="At least 6 characters"
-                                    required minlength="6" autocomplete="new-password" />
-                                <button type="button" class="password-toggle-btn" data-target="signUpPassword" title="Toggle password visibility">
-                                    <i class="far fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <button id="signUpSubmitBtn" type="submit" class="btn-primary-submit mt-1">
-                            <span id="signUpSubmitText">Create Account</span>
-                            <i id="signUpSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
-                        </button>
-                    </form>
-
-                    <!-- 3. FORGOT PASSWORD FORM -->
-                    <form id="forgotPasswordForm" class="space-y-3.5 hidden" autocomplete="on">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">Email address</label>
-                            <div class="form-input-container">
-                                <i class="fas fa-envelope form-input-icon"></i>
                                 <input id="forgotEmail" type="email" class="form-input" placeholder="you@example.com"
                                     required autocomplete="email" />
                             </div>
                         </div>
 
-                        <button id="forgotSubmitBtn" type="submit" class="btn-primary-submit mt-1">
+                        <button id="forgotSubmitBtn" type="submit" class="btn-primary-submit mt-2">
                             <span id="forgotSubmitText">Send Reset Link</span>
                             <i id="forgotSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
                         </button>
                     </form>
 
-                    <!-- 4. PASSWORD RECOVERY FORM (Activated when clicking reset link in email) -->
-                    <form id="recoveryForm" class="space-y-3.5 hidden" autocomplete="off">
+                    <!-- 4. PASSWORD RECOVERY FORM (Standalone View) -->
+                    <form id="recoveryForm" class="space-y-4 text-left hidden" autocomplete="off">
                         <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">New Password</label>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">New Password</label>
                             <div class="form-input-container">
-                                <i class="fas fa-lock form-input-icon"></i>
                                 <input id="newPassword" type="password" class="form-input" placeholder="At least 6 characters"
                                     required minlength="6" autocomplete="new-password" />
                                 <button type="button" class="password-toggle-btn" data-target="newPassword" title="Toggle password visibility">
@@ -504,9 +552,8 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5">Confirm New Password</label>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Confirm New Password</label>
                             <div class="form-input-container">
-                                <i class="fas fa-check-double form-input-icon"></i>
                                 <input id="confirmPassword" type="password" class="form-input" placeholder="Repeat new password"
                                     required minlength="6" autocomplete="new-password" />
                                 <button type="button" class="password-toggle-btn" data-target="confirmPassword" title="Toggle password visibility">
@@ -515,7 +562,7 @@
                             </div>
                         </div>
 
-                        <button id="recoverySubmitBtn" type="submit" class="btn-primary-submit mt-1">
+                        <button id="recoverySubmitBtn" type="submit" class="btn-primary-submit mt-2">
                             <span id="recoverySubmitText">Update Password</span>
                             <i id="recoverySubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
                         </button>
@@ -613,7 +660,12 @@
             const authAlertBox = document.getElementById('authAlertBox');
 
             // Sections & Forms
-            const googleSection = document.getElementById('googleSection');
+            const methodsSection = document.getElementById('methodsSection') || document.getElementById('googleSection');
+            const googleSection = methodsSection;
+            const toggleEmailBtn = document.getElementById('toggleEmailBtn');
+            const emailLoginBtnText = document.getElementById('emailLoginBtnText');
+            const emailChevronIcon = document.getElementById('emailChevronIcon');
+            const emailExpandContainer = document.getElementById('emailExpandContainer');
             const signInForm = document.getElementById('signInForm');
             const signUpForm = document.getElementById('signUpForm');
             const forgotPasswordForm = document.getElementById('forgotPasswordForm');
@@ -632,10 +684,42 @@
             const backToSignInFromForgotBtn = document.getElementById('backToSignInFromForgotBtn');
             const backToSignInFromRecoveryBtn = document.getElementById('backToSignInFromRecoveryBtn');
 
-            // Google Button Elements
+            // Google & Microsoft Button Elements
             const googleLoginBtn = document.getElementById('googleLoginBtn');
             const googleLoginText = document.getElementById('googleLoginText');
             const googleLoginSpinner = document.getElementById('googleLoginSpinner');
+            const microsoftLoginBtn = document.getElementById('microsoftLoginBtn');
+            const microsoftLoginText = document.getElementById('microsoftLoginText');
+            const microsoftLoginSpinner = document.getElementById('microsoftLoginSpinner');
+
+            // Expandable Email UI State
+            let isEmailExpanded = false;
+
+            function updateEmailExpandState(expanded) {
+                isEmailExpanded = !!expanded;
+                if (isEmailExpanded) {
+                    if (emailExpandContainer) emailExpandContainer.classList.add('is-expanded');
+                    if (emailChevronIcon) emailChevronIcon.classList.add('chevron-rotate');
+                    if (toggleEmailBtn) toggleEmailBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    if (emailExpandContainer) emailExpandContainer.classList.remove('is-expanded');
+                    if (emailChevronIcon) emailChevronIcon.classList.remove('chevron-rotate');
+                    if (toggleEmailBtn) toggleEmailBtn.setAttribute('aria-expanded', 'false');
+                }
+            }
+
+            if (toggleEmailBtn) {
+                toggleEmailBtn.addEventListener('click', () => {
+                    updateEmailExpandState(!isEmailExpanded);
+                    if (isEmailExpanded) {
+                        setTimeout(() => {
+                            const isSignUp = signUpForm && !signUpForm.classList.contains('hidden');
+                            const targetInput = isSignUp ? document.getElementById('signUpName') || document.getElementById('signUpEmail') : document.getElementById('signInEmail');
+                            if (targetInput) targetInput.focus();
+                        }, 250);
+                    }
+                });
+            }
 
             // Authenticated State Elements
             const alreadyLoggedInNotice = document.getElementById('alreadyLoggedInNotice');
@@ -673,19 +757,19 @@
                 immediateRedirectBtn.setAttribute('href', targetRedirectUrl);
             }
 
-            // Alert Helper
+            // Alert Helper - Centered Banner
             function showAlert(message, type = 'error') {
                 if (!authAlertBox) return;
                 authAlertBox.classList.remove('hidden');
                 if (type === 'error') {
-                    authAlertBox.className = 'p-3 rounded-xl text-xs leading-relaxed border bg-rose-500/20 border-rose-500/30 text-rose-200 text-left flex items-start gap-2.5';
-                    authAlertBox.innerHTML = `<i class="fas fa-circle-exclamation text-rose-400 mt-0.5 flex-shrink-0"></i><div>${message}</div>`;
+                    authAlertBox.className = 'p-3.5 rounded-2xl text-xs leading-relaxed border bg-rose-500/20 border-rose-500/30 text-rose-200 text-center flex items-center justify-center gap-2.5';
+                    authAlertBox.innerHTML = `<i class="fas fa-circle-exclamation text-rose-400 flex-shrink-0"></i><span>${message}</span>`;
                 } else if (type === 'success') {
-                    authAlertBox.className = 'p-3 rounded-xl text-xs leading-relaxed border bg-emerald-500/20 border-emerald-500/30 text-emerald-200 text-left flex items-start gap-2.5';
-                    authAlertBox.innerHTML = `<i class="fas fa-circle-check text-emerald-400 mt-0.5 flex-shrink-0"></i><div>${message}</div>`;
+                    authAlertBox.className = 'p-3.5 rounded-2xl text-xs leading-relaxed border bg-emerald-500/20 border-emerald-500/30 text-emerald-200 text-center flex items-center justify-center gap-2.5';
+                    authAlertBox.innerHTML = `<i class="fas fa-circle-check text-emerald-400 flex-shrink-0"></i><span>${message}</span>`;
                 } else {
-                    authAlertBox.className = 'p-3 rounded-xl text-xs leading-relaxed border bg-purple-500/20 border-purple-500/30 text-purple-200 text-left flex items-start gap-2.5';
-                    authAlertBox.innerHTML = `<i class="fas fa-circle-info text-purple-400 mt-0.5 flex-shrink-0"></i><div>${message}</div>`;
+                    authAlertBox.className = 'p-3.5 rounded-2xl text-xs leading-relaxed border bg-purple-500/20 border-purple-500/30 text-purple-200 text-center flex items-center justify-center gap-2.5';
+                    authAlertBox.innerHTML = `<i class="fas fa-circle-info text-purple-400 flex-shrink-0"></i><span>${message}</span>`;
                 }
             }
 
@@ -741,31 +825,35 @@
                 if (mode === 'signup') {
                     cardTitle.textContent = 'Create an Account';
                     cardSubtitle.textContent = 'Sign up to start saving speed dials, pinboards, and custom AI widgets.';
-                    googleSection.classList.remove('hidden');
+                    methodsSection.classList.remove('hidden');
                     signUpForm.classList.remove('hidden');
                     signUpFooter.classList.remove('hidden');
+                    if (emailLoginBtnText) emailLoginBtnText.textContent = 'Sign up with Email';
                 } else if (mode === 'forgot') {
                     cardTitle.textContent = 'Reset Password';
                     cardSubtitle.textContent = "Enter your email address and we'll send you a password reset link.";
-                    googleSection.classList.add('hidden');
+                    methodsSection.classList.add('hidden');
                     forgotPasswordForm.classList.remove('hidden');
                     forgotFooter.classList.remove('hidden');
+                    updateEmailExpandState(false);
                     if (window.checkForgotCooldown) {
                         window.checkForgotCooldown();
                     }
                 } else if (mode === 'recovery') {
                     cardTitle.textContent = 'Set New Password';
                     cardSubtitle.textContent = 'Please enter your new password below.';
-                    googleSection.classList.add('hidden');
+                    methodsSection.classList.add('hidden');
                     recoveryForm.classList.remove('hidden');
                     recoveryFooter.classList.remove('hidden');
+                    updateEmailExpandState(false);
                 } else {
                     // Default 'signin'
                     cardTitle.textContent = 'Welcome to Tabsome';
                     cardSubtitle.textContent = 'Sign in to sync your speed dials, pinboards, and custom AI widgets across all your devices.';
-                    googleSection.classList.remove('hidden');
+                    methodsSection.classList.remove('hidden');
                     signInForm.classList.remove('hidden');
                     signInFooter.classList.remove('hidden');
+                    if (emailLoginBtnText) emailLoginBtnText.textContent = 'Continue with Email';
                 }
             }
 
@@ -817,6 +905,10 @@
                     clearAlert();
                     googleLoginBtn.disabled = true;
                     googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    if (microsoftLoginBtn) {
+                        microsoftLoginBtn.disabled = true;
+                        microsoftLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
                     if (googleLoginText) googleLoginText.textContent = 'Connecting to Google...';
                     if (googleLoginSpinner) googleLoginSpinner.style.display = 'inline-block';
 
@@ -826,9 +918,43 @@
                         console.error('Google login error:', err);
                         googleLoginBtn.disabled = false;
                         googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        if (microsoftLoginBtn) {
+                            microsoftLoginBtn.disabled = false;
+                            microsoftLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
                         if (googleLoginText) googleLoginText.textContent = 'Continue with Google';
                         if (googleLoginSpinner) googleLoginSpinner.style.display = 'none';
                         showAlert('Failed to initiate Google sign-in. Please try again.', 'error');
+                    }
+                });
+            }
+
+            // 1b. Handle Microsoft Login Click
+            if (microsoftLoginBtn && window.TabsomeAuth) {
+                microsoftLoginBtn.addEventListener('click', async () => {
+                    clearAlert();
+                    microsoftLoginBtn.disabled = true;
+                    microsoftLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    if (googleLoginBtn) {
+                        googleLoginBtn.disabled = true;
+                        googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Connecting to Microsoft...';
+                    if (microsoftLoginSpinner) microsoftLoginSpinner.style.display = 'inline-block';
+
+                    try {
+                        await TabsomeAuth.signInWithMicrosoft(targetRedirectUrl);
+                    } catch (err) {
+                        console.error('Microsoft login error:', err);
+                        microsoftLoginBtn.disabled = false;
+                        microsoftLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        if (googleLoginBtn) {
+                            googleLoginBtn.disabled = false;
+                            googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        if (microsoftLoginText) microsoftLoginText.textContent = 'Continue with Microsoft';
+                        if (microsoftLoginSpinner) microsoftLoginSpinner.style.display = 'none';
+                        showAlert('Failed to initiate Microsoft sign-in. Please try again.', 'error');
                     }
                 });
             }
