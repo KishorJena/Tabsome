@@ -205,8 +205,8 @@
             overflow: hidden;
             transform: translateY(-8px);
             transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                        opacity 0.28s ease,
-                        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+                opacity 0.28s ease,
+                transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
         }
 
@@ -309,9 +309,10 @@
             cursor: not-allowed;
             transform: none !important;
         }
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none !important;
+
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
         }
     </style>
 </head>
@@ -367,17 +368,21 @@
                         <img src="assets/logo-white.png" alt="Tabsome"
                             class="w-8 h-8 drop-shadow transition-transform duration-300 group-hover:scale-110">
                     </div>
-                    <h1 id="cardTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font">
+                    <h1 id="cardTitle"
+                        class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font">
                         Welcome to Tabsome
                     </h1>
-                    <p id="cardSubtitle" class="text-xs sm:text-sm text-gray-300 mt-1.5 leading-relaxed max-w-sm mx-auto">
-                        Sign in to sync your speed dials, pinboards, and custom AI widgets across all your devices.
+                    <p id="cardSubtitle"
+                        class="text-xs sm:text-sm text-gray-300 mt-1.5 leading-relaxed max-w-sm mx-auto">
+                        Sign in to use Tabsome features.
                     </p>
                 </div>
 
                 <!-- Already Authenticated Notice (Hidden by default) -->
-                <div id="alreadyLoggedInNotice" class="hidden mb-6 p-4 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-center">
-                    <div class="w-10 h-10 rounded-full bg-purple-600/40 mx-auto flex items-center justify-center text-purple-300 mb-2">
+                <div id="alreadyLoggedInNotice"
+                    class="hidden mb-6 p-4 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-center">
+                    <div
+                        class="w-10 h-10 rounded-full bg-purple-600/40 mx-auto flex items-center justify-center text-purple-300 mb-2">
                         <i class="fas fa-check"></i>
                     </div>
                     <p class="text-sm font-semibold text-white">You are already signed in!</p>
@@ -387,7 +392,8 @@
                         <span id="redirectStatusText">Redirecting to your destination...</span>
                     </div>
                     <div class="mt-3 pt-3 border-t border-purple-500/20">
-                        <a id="immediateRedirectBtn" href="account.html" class="text-xs text-white underline hover:text-pink-300">
+                        <a id="immediateRedirectBtn" href="account.html"
+                            class="text-xs text-white underline hover:text-pink-300">
                             Click here if not redirected automatically
                         </a>
                     </div>
@@ -411,7 +417,8 @@
                                     d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                             </svg>
                             <span id="googleLoginText">Continue with Google</span>
-                            <i id="googleLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1" style="display: none;"></i>
+                            <i id="googleLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1"
+                                style="display: none;"></i>
                         </button>
 
                         <!-- 2. Microsoft -->
@@ -423,21 +430,26 @@
                                 <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
                             </svg>
                             <span id="microsoftLoginText">Continue with Microsoft</span>
-                            <i id="microsoftLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1" style="display: none;"></i>
+                            <i id="microsoftLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1"
+                                style="display: none;"></i>
                         </button>
 
                         <!-- 3. Email Toggle Button -->
-                        <button id="toggleEmailBtn" type="button" class="btn-oauth-modern btn-email-modern" aria-expanded="false">
+                        <button id="toggleEmailBtn" type="button" class="btn-oauth-modern btn-email-modern"
+                            aria-expanded="false">
                             <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-purple-400">
                                 <i class="fas fa-envelope text-[15px]"></i>
                             </div>
                             <span id="emailLoginBtnText">Continue with Email</span>
-                            <i id="emailChevronIcon" class="fas fa-chevron-down text-xs text-gray-400 ml-1 transition-transform duration-300"></i>
+                            <i id="emailChevronIcon"
+                                class="fas fa-chevron-down text-xs text-gray-400 ml-1 transition-transform duration-300"></i>
                         </button>
                     </div>
 
                     <!-- Feedback Alert (Error or Success) -->
-                    <div id="authAlertBox" class="hidden p-3.5 rounded-2xl text-xs leading-relaxed border transition-all text-center"></div>
+                    <div id="authAlertBox"
+                        class="hidden p-3.5 rounded-2xl text-xs leading-relaxed border transition-all text-center">
+                    </div>
 
                     <!-- Expandable Email Form Container -->
                     <div id="emailExpandContainer" class="email-expand-container">
@@ -447,7 +459,8 @@
                                     <div class="w-full border-t border-white/10"></div>
                                 </div>
                                 <div class="relative flex justify-center text-xs">
-                                    <span class="px-3 py-0.5 bg-slate-900/90 text-gray-400 font-medium rounded-full border border-white/10 text-[11px] backdrop-blur-md">
+                                    <span
+                                        class="px-3 py-0.5 bg-slate-900/90 text-gray-400 font-medium rounded-full border border-white/10 text-[11px] backdrop-blur-md">
                                         enter your email details
                                     </span>
                                 </div>
@@ -456,24 +469,28 @@
                             <!-- 1. SIGN IN FORM -->
                             <form id="signInForm" class="space-y-4 text-left" autocomplete="on">
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email address</label>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email
+                                        address</label>
                                     <div class="form-input-container">
-                                        <input id="signInEmail" type="email" class="form-input" placeholder="you@example.com"
-                                            required autocomplete="email" />
+                                        <input id="signInEmail" type="email" class="form-input"
+                                            placeholder="you@example.com" required autocomplete="email" />
                                     </div>
                                 </div>
 
                                 <div>
                                     <div class="flex items-center justify-between mb-1.5">
-                                        <label class="block text-xs font-medium text-gray-300 text-left">Password</label>
-                                        <button type="button" id="toForgotBtn" class="text-xs text-pink-300 hover:text-white transition cursor-pointer">
+                                        <label
+                                            class="block text-xs font-medium text-gray-300 text-left">Password</label>
+                                        <button type="button" id="toForgotBtn"
+                                            class="text-xs text-pink-300 hover:text-white transition cursor-pointer">
                                             Forgot password?
                                         </button>
                                     </div>
                                     <div class="form-input-container">
-                                        <input id="signInPassword" type="password" class="form-input" placeholder="••••••••"
-                                            required autocomplete="current-password" />
-                                        <button type="button" class="password-toggle-btn" data-target="signInPassword" title="Toggle password visibility">
+                                        <input id="signInPassword" type="password" class="form-input"
+                                            placeholder="••••••••" required autocomplete="current-password" />
+                                        <button type="button" class="password-toggle-btn" data-target="signInPassword"
+                                            title="Toggle password visibility">
                                             <i class="far fa-eye"></i>
                                         </button>
                                     </div>
@@ -481,14 +498,16 @@
 
                                 <button id="signInSubmitBtn" type="submit" class="btn-primary-submit mt-2">
                                     <span id="signInSubmitText">Sign In</span>
-                                    <i id="signInSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
+                                    <i id="signInSubmitSpinner" class="fas fa-spinner fa-spin"
+                                        style="display: none;"></i>
                                 </button>
                             </form>
 
                             <!-- 2. SIGN UP FORM -->
                             <form id="signUpForm" class="space-y-4 text-left hidden" autocomplete="on">
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Full Name <span class="text-gray-400 font-normal">(optional)</span></label>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Full Name
+                                        <span class="text-gray-400 font-normal">(optional)</span></label>
                                     <div class="form-input-container">
                                         <input id="signUpName" type="text" class="form-input" placeholder="Alex Johnson"
                                             autocomplete="name" />
@@ -496,19 +515,23 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email address</label>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email
+                                        address</label>
                                     <div class="form-input-container">
-                                        <input id="signUpEmail" type="email" class="form-input" placeholder="you@example.com"
-                                            required autocomplete="email" />
+                                        <input id="signUpEmail" type="email" class="form-input"
+                                            placeholder="you@example.com" required autocomplete="email" />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Password</label>
+                                    <label
+                                        class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Password</label>
                                     <div class="form-input-container">
-                                        <input id="signUpPassword" type="password" class="form-input" placeholder="At least 6 characters"
-                                            required minlength="6" autocomplete="new-password" />
-                                        <button type="button" class="password-toggle-btn" data-target="signUpPassword" title="Toggle password visibility">
+                                        <input id="signUpPassword" type="password" class="form-input"
+                                            placeholder="At least 6 characters" required minlength="6"
+                                            autocomplete="new-password" />
+                                        <button type="button" class="password-toggle-btn" data-target="signUpPassword"
+                                            title="Toggle password visibility">
                                             <i class="far fa-eye"></i>
                                         </button>
                                     </div>
@@ -516,7 +539,8 @@
 
                                 <button id="signUpSubmitBtn" type="submit" class="btn-primary-submit mt-2">
                                     <span id="signUpSubmitText">Create Account</span>
-                                    <i id="signUpSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
+                                    <i id="signUpSubmitSpinner" class="fas fa-spinner fa-spin"
+                                        style="display: none;"></i>
                                 </button>
                             </form>
                         </div>
@@ -525,7 +549,8 @@
                     <!-- 3. FORGOT PASSWORD FORM (Standalone View) -->
                     <form id="forgotPasswordForm" class="space-y-4 text-left hidden" autocomplete="on">
                         <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email address</label>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email
+                                address</label>
                             <div class="form-input-container">
                                 <input id="forgotEmail" type="email" class="form-input" placeholder="you@example.com"
                                     required autocomplete="email" />
@@ -543,20 +568,25 @@
                         <div>
                             <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">New Password</label>
                             <div class="form-input-container">
-                                <input id="newPassword" type="password" class="form-input" placeholder="At least 6 characters"
-                                    required minlength="6" autocomplete="new-password" />
-                                <button type="button" class="password-toggle-btn" data-target="newPassword" title="Toggle password visibility">
+                                <input id="newPassword" type="password" class="form-input"
+                                    placeholder="At least 6 characters" required minlength="6"
+                                    autocomplete="new-password" />
+                                <button type="button" class="password-toggle-btn" data-target="newPassword"
+                                    title="Toggle password visibility">
                                     <i class="far fa-eye"></i>
                                 </button>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Confirm New Password</label>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Confirm New
+                                Password</label>
                             <div class="form-input-container">
-                                <input id="confirmPassword" type="password" class="form-input" placeholder="Repeat new password"
-                                    required minlength="6" autocomplete="new-password" />
-                                <button type="button" class="password-toggle-btn" data-target="confirmPassword" title="Toggle password visibility">
+                                <input id="confirmPassword" type="password" class="form-input"
+                                    placeholder="Repeat new password" required minlength="6"
+                                    autocomplete="new-password" />
+                                <button type="button" class="password-toggle-btn" data-target="confirmPassword"
+                                    title="Toggle password visibility">
                                     <i class="far fa-eye"></i>
                                 </button>
                             </div>
@@ -573,7 +603,8 @@
                         <!-- In Sign In Mode -->
                         <div id="signInFooter">
                             <span>Don't have an account?</span>
-                            <button type="button" id="toSignUpBtn" class="font-semibold text-pink-300 hover:text-white transition ml-1 cursor-pointer">
+                            <button type="button" id="toSignUpBtn"
+                                class="font-semibold text-pink-300 hover:text-white transition ml-1 cursor-pointer">
                                 Sign up
                             </button>
                         </div>
@@ -581,14 +612,16 @@
                         <!-- In Sign Up Mode -->
                         <div id="signUpFooter" class="hidden">
                             <span>Already have an account?</span>
-                            <button type="button" id="toSignInBtn" class="font-semibold text-pink-300 hover:text-white transition ml-1 cursor-pointer">
+                            <button type="button" id="toSignInBtn"
+                                class="font-semibold text-pink-300 hover:text-white transition ml-1 cursor-pointer">
                                 Sign in
                             </button>
                         </div>
 
                         <!-- In Forgot Password Mode -->
                         <div id="forgotFooter" class="hidden">
-                            <button type="button" id="backToSignInFromForgotBtn" class="font-medium text-gray-300 hover:text-white transition inline-flex items-center gap-1.5 cursor-pointer">
+                            <button type="button" id="backToSignInFromForgotBtn"
+                                class="font-medium text-gray-300 hover:text-white transition inline-flex items-center gap-1.5 cursor-pointer">
                                 <i class="fas fa-arrow-left text-[11px]"></i>
                                 <span>Back to Sign In</span>
                             </button>
@@ -596,7 +629,8 @@
 
                         <!-- In Password Recovery Mode -->
                         <div id="recoveryFooter" class="hidden">
-                            <button type="button" id="backToSignInFromRecoveryBtn" class="font-medium text-gray-300 hover:text-white transition inline-flex items-center gap-1.5 cursor-pointer">
+                            <button type="button" id="backToSignInFromRecoveryBtn"
+                                class="font-medium text-gray-300 hover:text-white transition inline-flex items-center gap-1.5 cursor-pointer">
                                 <i class="fas fa-arrow-left text-[11px]"></i>
                                 <span>Back to Sign In</span>
                             </button>
@@ -607,7 +641,8 @@
                     <div class="pt-2 text-center">
                         <p class="text-[11px] text-gray-400 leading-normal">
                             By continuing, you agree to Tabsome's
-                            <a href="privacy.html" class="text-pink-300 hover:text-white underline transition">Privacy Policy</a>.
+                            <a href="privacy.html" class="text-pink-300 hover:text-white underline transition">Privacy
+                                Policy</a>.
                         </p>
                     </div>
 
@@ -617,7 +652,8 @@
 
             <!-- Footer Return Link -->
             <div class="text-center mt-6">
-                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white transition">
+                <a href="index.html"
+                    class="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white transition">
                     <i class="fas fa-arrow-left text-[10px]"></i>
                     <span>Return to Homepage</span>
                 </a>
@@ -824,7 +860,7 @@
 
                 if (mode === 'signup') {
                     cardTitle.textContent = 'Create an Account';
-                    cardSubtitle.textContent = 'Sign up to start saving speed dials, pinboards, and custom AI widgets.';
+                    cardSubtitle.textContent = 'Sign up to use Tabsome features';
                     methodsSection.classList.remove('hidden');
                     signUpForm.classList.remove('hidden');
                     signUpFooter.classList.remove('hidden');
@@ -849,7 +885,7 @@
                 } else {
                     // Default 'signin'
                     cardTitle.textContent = 'Welcome to Tabsome';
-                    cardSubtitle.textContent = 'Sign in to sync your speed dials, pinboards, and custom AI widgets across all your devices.';
+                    cardSubtitle.textContent = 'Sign in to use Tabsome features';
                     methodsSection.classList.remove('hidden');
                     signInForm.classList.remove('hidden');
                     signInFooter.classList.remove('hidden');
@@ -869,7 +905,7 @@
                     }
                     try {
                         sessionStorage.removeItem('tabsome_recovery_flow');
-                    } catch (e) {}
+                    } catch (e) { }
                     clearAlert();
                     setMode('signin');
                 });
@@ -1216,7 +1252,7 @@
                         }
                         try {
                             sessionStorage.removeItem('tabsome_recovery_flow');
-                        } catch (e) {}
+                        } catch (e) { }
 
                         showAlert('Your password has been updated successfully! Redirecting to your account...', 'success');
                         setTimeout(() => {
