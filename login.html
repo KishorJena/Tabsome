@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Sign in to Tabsome with Google, Microsoft or email. Access and sync your personalized new tab dashboard, speed dials, library, widgets, and AI features across all your browsers.">
+    <meta name="keywords"
+        content="tabsome login, tabsome sign in, google sign in, microsoft sign in, azure ad login, tabsome account, new tab dashboard, speed dials, library, widgets, ai, email login">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+    <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/assets/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="/assets/favicon-128x128.png" sizes="128x128">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sign In – Tabsome">
+    <meta property="og:description"
+        content="Sign in to Tabsome to access and sync your speed dials, library, widgets, and AI features across devices.">
+    <meta property="og:image" content="https://tabsome.github.io/assets/social-preview.png">
+    <meta property="og:url" content="https://tabsome.github.io/login.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sign In – Tabsome">
+    <meta name="twitter:description"
+        content="Sign in to Tabsome to access and sync your speed dials, library, widgets, and AI features across devices.">
+    <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Supabase & Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image:
+                linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(17, 24, 39, 0.55) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .heading-font {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(24px) saturate(140%);
+            -webkit-backdrop-filter: blur(24px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(236, 72, 153, 0.15) 40%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(0.9) translate(-10px, -10px);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(1.1) translate(10px, 10px);
+                opacity: 0.9;
+            }
+        }
+
+        /* Card Container Width Constraint */
+        .auth-card-wrapper {
+            width: 100%;
+            max-width: 490px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Modern Sleek Dark Google, Microsoft & Email OAuth Button Styles */
+        .btn-oauth-modern,
+        .btn-google-modern,
+        .btn-microsoft-modern,
+        .btn-email-modern {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            height: 48px;
+            background-color: rgba(30, 41, 59, 0.75) !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            font-size: 14.5px;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: -0.01em;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            text-decoration: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .btn-oauth-modern:hover,
+        .btn-google-modern:hover,
+        .btn-microsoft-modern:hover,
+        .btn-email-modern:hover {
+            background-color: rgba(51, 65, 85, 0.9) !important;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-1.5px);
+            color: #ffffff !important;
+        }
+
+        .btn-oauth-modern:active,
+        .btn-google-modern:active,
+        .btn-microsoft-modern:active,
+        .btn-email-modern:active {
+            background-color: rgba(30, 41, 59, 0.95) !important;
+            transform: scale(0.99) translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-oauth-modern span,
+        .btn-google-modern span,
+        .btn-microsoft-modern span,
+        .btn-email-modern span {
+            color: #f8fafc !important;
+            font-size: 14.5px;
+            font-weight: 600;
+        }
+
+        /* Expandable Email Container Animation */
+        .email-expand-container {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-8px);
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.28s ease,
+                transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .email-expand-container.is-expanded {
+            max-height: 800px;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .chevron-rotate {
+            transform: rotate(180deg);
+        }
+
+        /* Form Input Styles */
+        .form-input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 14px;
+            padding: 0 44px 0 16px;
+            color: #ffffff;
+            font-size: 14.5px;
+            font-family: inherit;
+            text-align: left;
+            transition: all 0.2s ease;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+            text-align: left;
+        }
+
+        .form-input:focus {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: #c084fc;
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.25), 0 0 20px rgba(192, 132, 252, 0.15);
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.45);
+            cursor: pointer;
+            padding: 6px;
+            font-size: 14px;
+            transition: color 0.15s ease;
+            z-index: 2;
+        }
+
+        .password-toggle-btn:hover {
+            color: #ffffff;
+        }
+
+        /* Primary Submit Button - Modern Sleek Gradient */
+        .btn-primary-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            outline: none;
+        }
+
+        .btn-primary-submit:hover {
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            transform: translateY(-1.5px);
+            filter: brightness(1.06);
+        }
+
+        .btn-primary-submit:active {
+            transform: scale(0.99) translateY(0);
+        }
+
+        .btn-primary-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen relative overflow-x-hidden">
+
+    <!-- Ambient Glow effects -->
+    <div class="ambient-glow top-10 -left-20"></div>
+    <div class="ambient-glow bottom-10 -right-20" style="animation-delay: -4s;"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed w-full backdrop-blur-md z-50"
+        style="background-color: rgba(30, 41, 59, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3 group" title="Return to Tabsome Home">
+                <img src="assets/logo-white.png" alt="Tabsome Logo"
+                    class="w-8 h-8 transition-transform group-hover:rotate-6">
+                <span class="text-2xl font-bold tracking-tight heading-font">Tabsome</span>
+            </a>
+            <nav class="space-x-8 hidden md:flex items-center font-medium">
+                <a href="widgets.html" class="hover:text-pink-300 transition text-sm">Widgets</a>
+                <a href="roadmap.html" class="hover:text-pink-300 transition text-sm">Roadmap</a>
+                <a href="changelogs.html" class="hover:text-pink-300 transition text-sm">Changelogs</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Authentication Section -->
+    <main class="flex-grow flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 relative z-10">
+        <div class="auth-card-wrapper" data-aos="fade-up" data-aos-duration="600">
+
+            <!-- Authentication Card -->
+            <div class="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden text-center">
+
+                <!-- Top Logo Badge -->
+                <div class="mb-6">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-500/30 to-pink-500/30 border border-white/20 flex items-center justify-center mx-auto mb-3.5 shadow-inner group">
+                        <img src="assets/logo-white.png" alt="Tabsome"
+                            class="w-8 h-8 drop-shadow transition-transform duration-300 group-hover:scale-110">
+                    </div>
+                    <h1 id="cardTitle"
+                        class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font">
+                        Welcome to Tabsome
+                    </h1>
+                    <p id="cardSubtitle"
+                        class="text-xs sm:text-sm text-gray-300 mt-1.5 leading-relaxed max-w-sm mx-auto">
+                        Sign in to use Tabsome features.
+                    </p>
+                </div>
+
+                <!-- Already Authenticated Notice (Hidden by default) -->
+                <div id="alreadyLoggedInNotice"
+                    class="hidden mb-6 p-4 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-center">
+                    <div
+                        class="w-10 h-10 rounded-full bg-purple-600/40 mx-auto flex items-center justify-center text-purple-300 mb-2">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-white">You are already signed in!</p>
+                    <p id="loggedInUserDetails" class="text-xs text-purple-200 mt-0.5 truncate"></p>
+                    <div class="mt-3 flex items-center justify-center gap-2 text-xs text-pink-300">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span id="redirectStatusText">Redirecting to your destination...</span>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-purple-500/20">
+                        <a id="immediateRedirectBtn" href="account.html"
+                            class="text-xs text-white underline hover:text-pink-300">
+                            Click here if not redirected automatically
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Main Auth Action Area -->
+                <div id="authActionsContainer" class="space-y-4 text-center">
+
+                    <!-- 3 Primary Sign In Methods (Google, Microsoft, Email) -->
+                    <div id="methodsSection" class="space-y-3">
+                        <!-- 1. Google -->
+                        <button id="googleLoginBtn" type="button" class="btn-oauth-modern btn-google-modern">
+                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+                                <path fill="#4285F4"
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853"
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05"
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335"
+                                    d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            <span id="googleLoginText">Continue with Google</span>
+                            <i id="googleLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1"
+                                style="display: none;"></i>
+                        </button>
+
+                        <!-- 2. Microsoft -->
+                        <button id="microsoftLoginBtn" type="button" class="btn-oauth-modern btn-microsoft-modern">
+                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 21 21">
+                                <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                                <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                                <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                                <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+                            </svg>
+                            <span id="microsoftLoginText">Continue with Microsoft</span>
+                            <i id="microsoftLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1"
+                                style="display: none;"></i>
+                        </button>
+
+                        <!-- 3. Email Toggle Button -->
+                        <button id="toggleEmailBtn" type="button" class="btn-oauth-modern btn-email-modern"
+                            aria-expanded="false">
+                            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-purple-400">
+                                <i class="fas fa-envelope text-[15px]"></i>
+                            </div>
+                            <span id="emailLoginBtnText">Continue with Email</span>
+                            <i id="emailChevronIcon"
+                                class="fas fa-chevron-down text-xs text-gray-400 ml-1 transition-transform duration-300"></i>
+                        </button>
+                    </div>
+
+                    <!-- Feedback Alert (Error or Success) -->
+                    <div id="authAlertBox"
+                        class="hidden p-3.5 rounded-2xl text-xs leading-relaxed border transition-all text-center">
+                    </div>
+
+                    <!-- Expandable Email Form Container -->
+                    <div id="emailExpandContainer" class="email-expand-container">
+                        <div class="pt-2">
+                            <div class="relative my-4 pt-1">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-white/10"></div>
+                                </div>
+                                <div class="relative flex justify-center text-xs">
+                                    <span
+                                        class="px-3 py-0.5 bg-slate-900/90 text-gray-400 font-medium rounded-full border border-white/10 text-[11px] backdrop-blur-md">
+                                        Enter Your Credentials
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- 1. SIGN IN FORM -->
+                            <form id="signInForm" class="space-y-4 text-left" autocomplete="on">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email
+                                        address</label>
+                                    <div class="form-input-container">
+                                        <input id="signInEmail" type="email" class="form-input"
+                                            placeholder="you@example.com" required autocomplete="email" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-1.5">
+                                        <label
+                                            class="block text-xs font-medium text-gray-300 text-left">Password</label>
+                                        <button type="button" id="toForgotBtn"
+                                            class="text-xs text-pink-300 hover:text-white transition cursor-pointer">
+                                            Forgot password?
+                                        </button>
+                                    </div>
+                                    <div class="form-input-container">
+                                        <input id="signInPassword" type="password" class="form-input"
+                                            placeholder="••••••••" required autocomplete="current-password" />
+                                        <button type="button" class="password-toggle-btn" data-target="signInPassword"
+                                            title="Toggle password visibility">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button id="signInSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                                    <span id="signInSubmitText">Sign In</span>
+                                    <i id="signInSubmitSpinner" class="fas fa-spinner fa-spin"
+                                        style="display: none;"></i>
+                                </button>
+                            </form>
+
+                            <!-- 2. SIGN UP FORM -->
+                            <form id="signUpForm" class="space-y-4 text-left hidden" autocomplete="on">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Full Name
+                                        <span class="text-gray-400 font-normal">(optional)</span></label>
+                                    <div class="form-input-container">
+                                        <input id="signUpName" type="text" class="form-input" placeholder="Alex Morgan"
+                                            autocomplete="name" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email
+                                        address</label>
+                                    <div class="form-input-container">
+                                        <input id="signUpEmail" type="email" class="form-input"
+                                            placeholder="you@example.com" required autocomplete="email" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Password</label>
+                                    <div class="form-input-container">
+                                        <input id="signUpPassword" type="password" class="form-input"
+                                            placeholder="At least 6 characters" required minlength="6"
+                                            autocomplete="new-password" />
+                                        <button type="button" class="password-toggle-btn" data-target="signUpPassword"
+                                            title="Toggle password visibility">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button id="signUpSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                                    <span id="signUpSubmitText">Create Account</span>
+                                    <i id="signUpSubmitSpinner" class="fas fa-spinner fa-spin"
+                                        style="display: none;"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- 3. FORGOT PASSWORD FORM (Standalone View) -->
+                    <form id="forgotPasswordForm" class="space-y-4 text-left hidden" autocomplete="on">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Email
+                                address</label>
+                            <div class="form-input-container">
+                                <input id="forgotEmail" type="email" class="form-input" placeholder="you@example.com"
+                                    required autocomplete="email" />
+                            </div>
+                        </div>
+
+                        <button id="forgotSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                            <span id="forgotSubmitText">Send Reset Link</span>
+                            <i id="forgotSubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
+                        </button>
+                    </form>
+
+                    <!-- 4. PASSWORD RECOVERY FORM (Standalone View) -->
+                    <form id="recoveryForm" class="space-y-4 text-left hidden" autocomplete="off">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">New Password</label>
+                            <div class="form-input-container">
+                                <input id="newPassword" type="password" class="form-input"
+                                    placeholder="At least 6 characters" required minlength="6"
+                                    autocomplete="new-password" />
+                                <button type="button" class="password-toggle-btn" data-target="newPassword"
+                                    title="Toggle password visibility">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-gray-300 mb-1.5 text-left">Confirm New
+                                Password</label>
+                            <div class="form-input-container">
+                                <input id="confirmPassword" type="password" class="form-input"
+                                    placeholder="Repeat new password" required minlength="6"
+                                    autocomplete="new-password" />
+                                <button type="button" class="password-toggle-btn" data-target="confirmPassword"
+                                    title="Toggle password visibility">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="recoverySubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                            <span id="recoverySubmitText">Update Password</span>
+                            <i id="recoverySubmitSpinner" class="fas fa-spinner fa-spin" style="display: none;"></i>
+                        </button>
+                    </form>
+
+                    <!-- Mode Toggle Footers -->
+                    <div class="pt-2 text-center text-xs text-gray-300">
+                        <!-- In Sign In Mode -->
+                        <div id="signInFooter">
+                            <span>Don't have an account?</span>
+                            <button type="button" id="toSignUpBtn"
+                                class="font-semibold text-pink-300 hover:text-white transition ml-1 cursor-pointer">
+                                Sign up
+                            </button>
+                        </div>
+
+                        <!-- In Sign Up Mode -->
+                        <div id="signUpFooter" class="hidden">
+                            <span>Already have an account?</span>
+                            <button type="button" id="toSignInBtn"
+                                class="font-semibold text-pink-300 hover:text-white transition ml-1 cursor-pointer">
+                                Sign in
+                            </button>
+                        </div>
+
+                        <!-- In Forgot Password Mode -->
+                        <div id="forgotFooter" class="hidden">
+                            <button type="button" id="backToSignInFromForgotBtn"
+                                class="font-medium text-gray-300 hover:text-white transition inline-flex items-center gap-1.5 cursor-pointer">
+                                <i class="fas fa-arrow-left text-[11px]"></i>
+                                <span>Back to Sign In</span>
+                            </button>
+                        </div>
+
+                        <!-- In Password Recovery Mode -->
+                        <div id="recoveryFooter" class="hidden">
+                            <button type="button" id="backToSignInFromRecoveryBtn"
+                                class="font-medium text-gray-300 hover:text-white transition inline-flex items-center gap-1.5 cursor-pointer">
+                                <i class="fas fa-arrow-left text-[11px]"></i>
+                                <span>Back to Sign In</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Reassurance -->
+                    <div class="pt-2 text-center">
+                        <p class="text-[11px] text-gray-400 leading-normal">
+                            By continuing, you agree to Tabsome's
+                            <a href="privacy.html" class="text-pink-300 hover:text-white underline transition">Privacy
+                                Policy</a>.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-300 text-sm border-t border-white/10 mt-auto"
+        style="background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(12px);">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+            <div class="flex items-center space-x-2">
+                <img src="assets/logo-white.png" alt="Tabsome Logo" class="w-5 h-5 opacity-80">
+                <span class="font-semibold text-white">Tabsome</span>
+                <span class="text-gray-400">&copy; 2025 Tabsome. All rights reserved.</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a>
+                <span>•</span>
+                <a href="support.html" class="hover:text-white transition-colors">Support</a>
+                <span>•</span>
+                <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // UI References
+            const cardTitle = document.getElementById('cardTitle');
+            const cardSubtitle = document.getElementById('cardSubtitle');
+            const authAlertBox = document.getElementById('authAlertBox');
+            const methodsSection = document.getElementById('methodsSection');
+            const toggleEmailBtn = document.getElementById('toggleEmailBtn');
+            const emailChevronIcon = document.getElementById('emailChevronIcon');
+            const emailExpandContainer = document.getElementById('emailExpandContainer');
+            const signInForm = document.getElementById('signInForm');
+            const signUpForm = document.getElementById('signUpForm');
+            const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+            const recoveryForm = document.getElementById('recoveryForm');
+
+            // Footers
+            const signInFooter = document.getElementById('signInFooter');
+            const signUpFooter = document.getElementById('signUpFooter');
+            const forgotFooter = document.getElementById('forgotFooter');
+            const recoveryFooter = document.getElementById('recoveryFooter');
+
+            // Toggle Mode Buttons
+            const toSignUpBtn = document.getElementById('toSignUpBtn');
+            const toSignInBtn = document.getElementById('toSignInBtn');
+            const toForgotBtn = document.getElementById('toForgotBtn');
+            const backToSignInFromForgotBtn = document.getElementById('backToSignInFromForgotBtn');
+            const backToSignInFromRecoveryBtn = document.getElementById('backToSignInFromRecoveryBtn');
+
+            // Google & Microsoft Button Elements
+            const googleLoginBtn = document.getElementById('googleLoginBtn');
+            const googleLoginText = document.getElementById('googleLoginText');
+            const googleLoginSpinner = document.getElementById('googleLoginSpinner');
+            const microsoftLoginBtn = document.getElementById('microsoftLoginBtn');
+            const microsoftLoginText = document.getElementById('microsoftLoginText');
+            const microsoftLoginSpinner = document.getElementById('microsoftLoginSpinner');
+
+            // Expandable Email UI State
+            let isEmailExpanded = false;
+
+            function updateEmailExpandState(expanded) {
+                isEmailExpanded = !!expanded;
+                if (isEmailExpanded) {
+                    if (emailExpandContainer) emailExpandContainer.classList.add('is-expanded');
+                    if (emailChevronIcon) emailChevronIcon.classList.add('chevron-rotate');
+                    if (toggleEmailBtn) toggleEmailBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    if (emailExpandContainer) emailExpandContainer.classList.remove('is-expanded');
+                    if (emailChevronIcon) emailChevronIcon.classList.remove('chevron-rotate');
+                    if (toggleEmailBtn) toggleEmailBtn.setAttribute('aria-expanded', 'false');
+                }
+            }
+
+            if (toggleEmailBtn) {
+                toggleEmailBtn.addEventListener('click', () => {
+                    updateEmailExpandState(!isEmailExpanded);
+                    if (isEmailExpanded) {
+                        setTimeout(() => {
+                            const isSignUp = signUpForm && !signUpForm.classList.contains('hidden');
+                            const targetInput = isSignUp ? document.getElementById('signUpName') || document.getElementById('signUpEmail') : document.getElementById('signInEmail');
+                            if (targetInput) targetInput.focus();
+                        }, 250);
+                    }
+                });
+            }
+
+            // Authenticated State Elements
+            const alreadyLoggedInNotice = document.getElementById('alreadyLoggedInNotice');
+            const authActionsContainer = document.getElementById('authActionsContainer');
+            const loggedInUserDetails = document.getElementById('loggedInUserDetails');
+            const immediateRedirectBtn = document.getElementById('immediateRedirectBtn');
+
+            // Parse redirect target safely
+            function getSafeRedirectUrl() {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    const rawRedirect = params.get('redirect');
+                    if (!rawRedirect) return 'account.html';
+
+                    if (rawRedirect.includes('login.html') || rawRedirect === 'login') {
+                        return 'account.html';
+                    }
+
+                    if (!rawRedirect.startsWith('http://') && !rawRedirect.startsWith('https://')) {
+                        return rawRedirect;
+                    }
+
+                    const parsed = new URL(rawRedirect);
+                    if (parsed.origin === window.location.origin) {
+                        return rawRedirect;
+                    }
+                } catch (e) {
+                    console.warn('Redirect URL parsing error:', e);
+                }
+                return 'account.html';
+            }
+
+            const targetRedirectUrl = getSafeRedirectUrl();
+            if (immediateRedirectBtn) {
+                immediateRedirectBtn.setAttribute('href', targetRedirectUrl);
+            }
+
+            // Alert Helper
+            function showAlert(message, type = 'error') {
+                if (!authAlertBox) return;
+                authAlertBox.classList.remove('hidden');
+                if (type === 'error') {
+                    authAlertBox.className = 'p-3.5 rounded-2xl text-xs leading-relaxed border bg-rose-500/20 border-rose-500/30 text-rose-200 text-center flex items-center justify-center gap-2.5';
+                    authAlertBox.innerHTML = `<i class="fas fa-circle-exclamation text-rose-400 flex-shrink-0"></i><span>${message}</span>`;
+                } else if (type === 'success') {
+                    authAlertBox.className = 'p-3.5 rounded-2xl text-xs leading-relaxed border bg-emerald-500/20 border-emerald-500/30 text-emerald-200 text-center flex items-center justify-center gap-2.5';
+                    authAlertBox.innerHTML = `<i class="fas fa-circle-check text-emerald-400 flex-shrink-0"></i><span>${message}</span>`;
+                } else {
+                    authAlertBox.className = 'p-3.5 rounded-2xl text-xs leading-relaxed border bg-purple-500/20 border-purple-500/30 text-purple-200 text-center flex items-center justify-center gap-2.5';
+                    authAlertBox.innerHTML = `<i class="fas fa-circle-info text-purple-400 flex-shrink-0"></i><span>${message}</span>`;
+                }
+            }
+
+            function clearAlert() {
+                if (authAlertBox) {
+                    authAlertBox.classList.add('hidden');
+                    authAlertBox.innerHTML = '';
+                }
+            }
+
+            // Password show/hide toggle buttons
+            document.querySelectorAll('.password-toggle-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = btn.getAttribute('data-target');
+                    const input = document.getElementById(targetId);
+                    if (!input) return;
+
+                    const icon = btn.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        if (icon) {
+                            icon.classList.remove('fa-eye');
+                            icon.classList.add('fa-eye-slash');
+                        }
+                    } else {
+                        input.type = 'password';
+                        if (icon) {
+                            icon.classList.remove('fa-eye-slash');
+                            icon.classList.add('fa-eye');
+                        }
+                    }
+                });
+            });
+
+            // State Machine for Form Modes: 'signin' | 'signup' | 'forgot' | 'recovery'
+            function setMode(mode) {
+                clearAlert();
+
+                // Reset forms visibility
+                signInForm.classList.add('hidden');
+                signUpForm.classList.add('hidden');
+                forgotPasswordForm.classList.add('hidden');
+                recoveryForm.classList.add('hidden');
+
+                // Reset footers visibility
+                signInFooter.classList.add('hidden');
+                signUpFooter.classList.add('hidden');
+                forgotFooter.classList.add('hidden');
+                recoveryFooter.classList.add('hidden');
+
+                if (mode === 'signin') {
+                    cardTitle.textContent = 'Welcome to Tabsome';
+                    cardSubtitle.textContent = 'Sign in to use Tabsome features.';
+                    methodsSection.classList.remove('hidden');
+                    if (emailExpandContainer) emailExpandContainer.classList.remove('hidden');
+                    signInForm.classList.remove('hidden');
+                    signInFooter.classList.remove('hidden');
+
+                    if (googleLoginText) googleLoginText.textContent = 'Continue with Google';
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Continue with Microsoft';
+                    const emailBtnText = document.getElementById('emailLoginBtnText');
+                    if (emailBtnText) emailBtnText.textContent = 'Continue with Email';
+
+                } else if (mode === 'signup') {
+                    cardTitle.textContent = 'Create Your Account';
+                    cardSubtitle.textContent = 'Sign up to sync your speed dials & library.';
+                    methodsSection.classList.remove('hidden');
+                    if (emailExpandContainer) emailExpandContainer.classList.remove('hidden');
+                    signUpForm.classList.remove('hidden');
+                    signUpFooter.classList.remove('hidden');
+
+                    if (googleLoginText) googleLoginText.textContent = 'Sign up with Google';
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Sign up with Microsoft';
+                    const emailBtnText = document.getElementById('emailLoginBtnText');
+                    if (emailBtnText) emailBtnText.textContent = 'Sign up with Email';
+                    updateEmailExpandState(true);
+
+                } else if (mode === 'forgot') {
+                    cardTitle.textContent = 'Reset Your Password';
+                    cardSubtitle.textContent = 'Enter your account email to receive a password reset link.';
+                    methodsSection.classList.add('hidden');
+                    if (emailExpandContainer) emailExpandContainer.classList.add('hidden');
+                    forgotPasswordForm.classList.remove('hidden');
+                    forgotFooter.classList.remove('hidden');
+
+                    if (window.checkForgotCooldown) {
+                        window.checkForgotCooldown();
+                    }
+
+                } else if (mode === 'recovery') {
+                    cardTitle.textContent = 'Set New Password';
+                    cardSubtitle.textContent = 'Enter a new secure password for your account.';
+                    methodsSection.classList.add('hidden');
+                    if (emailExpandContainer) emailExpandContainer.classList.add('hidden');
+                    recoveryForm.classList.remove('hidden');
+                    recoveryFooter.classList.remove('hidden');
+                }
+            }
+
+            // Mode Navigation Events
+            if (toSignUpBtn) {
+                toSignUpBtn.addEventListener('click', () => setMode('signup'));
+            }
+            if (toSignInBtn) {
+                toSignInBtn.addEventListener('click', () => setMode('signin'));
+            }
+            if (toForgotBtn) {
+                toForgotBtn.addEventListener('click', () => setMode('forgot'));
+            }
+            if (backToSignInFromForgotBtn) {
+                backToSignInFromForgotBtn.addEventListener('click', () => setMode('signin'));
+            }
+            if (backToSignInFromRecoveryBtn) {
+                backToSignInFromRecoveryBtn.addEventListener('click', () => setMode('signin'));
+            }
+
+            // 1a. Handle Google Login Click
+            if (googleLoginBtn && window.TabsomeAuth) {
+                googleLoginBtn.addEventListener('click', async () => {
+                    clearAlert();
+                    googleLoginBtn.disabled = true;
+                    googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    if (microsoftLoginBtn) {
+                        microsoftLoginBtn.disabled = true;
+                        microsoftLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
+                    if (googleLoginText) googleLoginText.textContent = 'Connecting to Google...';
+                    if (googleLoginSpinner) googleLoginSpinner.style.display = 'inline-block';
+
+                    try {
+                        await TabsomeAuth.signInWithGoogle(targetRedirectUrl);
+                    } catch (err) {
+                        console.error('Google login error:', err);
+                        googleLoginBtn.disabled = false;
+                        googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        if (microsoftLoginBtn) {
+                            microsoftLoginBtn.disabled = false;
+                            microsoftLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        if (googleLoginText) googleLoginText.textContent = 'Continue with Google';
+                        if (googleLoginSpinner) googleLoginSpinner.style.display = 'none';
+                        showAlert('Failed to initiate Google sign-in. Please try again.', 'error');
+                    }
+                });
+            }
+
+            // 1b. Handle Microsoft Login Click
+            if (microsoftLoginBtn && window.TabsomeAuth) {
+                microsoftLoginBtn.addEventListener('click', async () => {
+                    clearAlert();
+                    microsoftLoginBtn.disabled = true;
+                    microsoftLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    if (googleLoginBtn) {
+                        googleLoginBtn.disabled = true;
+                        googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Connecting to Microsoft...';
+                    if (microsoftLoginSpinner) microsoftLoginSpinner.style.display = 'inline-block';
+
+                    try {
+                        await TabsomeAuth.signInWithMicrosoft(targetRedirectUrl);
+                    } catch (err) {
+                        console.error('Microsoft login error:', err);
+                        microsoftLoginBtn.disabled = false;
+                        microsoftLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        if (googleLoginBtn) {
+                            googleLoginBtn.disabled = false;
+                            googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        if (microsoftLoginText) microsoftLoginText.textContent = 'Continue with Microsoft';
+                        if (microsoftLoginSpinner) microsoftLoginSpinner.style.display = 'none';
+                        showAlert('Failed to initiate Microsoft sign-in. Please try again.', 'error');
+                    }
+                });
+            }
+
+            // 2. Handle Email Sign In Form Submit
+            if (signInForm && window.TabsomeAuth) {
+                const signInEmail = document.getElementById('signInEmail');
+                const signInPassword = document.getElementById('signInPassword');
+                const signInSubmitBtn = document.getElementById('signInSubmitBtn');
+                const signInSubmitText = document.getElementById('signInSubmitText');
+                const signInSubmitSpinner = document.getElementById('signInSubmitSpinner');
+
+                signInForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    clearAlert();
+
+                    const email = signInEmail.value.trim();
+                    const password = signInPassword.value;
+
+                    if (!email || !password) {
+                        showAlert('Please enter both email and password.', 'error');
+                        return;
+                    }
+
+                    signInSubmitBtn.disabled = true;
+                    signInSubmitText.textContent = 'Signing in...';
+                    signInSubmitSpinner.style.display = 'inline-block';
+
+                    const { user, session, error } = await TabsomeAuth.signInWithPassword(email, password);
+
+                    signInSubmitBtn.disabled = false;
+                    signInSubmitText.textContent = 'Sign In';
+                    signInSubmitSpinner.style.display = 'none';
+
+                    if (error) {
+                        console.error('Sign in error:', error);
+                        showAlert(error.message || 'Invalid email or password. Please check your credentials.', 'error');
+                    } else if (user) {
+                        showAlert('Signed in successfully! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = targetRedirectUrl;
+                        }, 700);
+                    }
+                });
+            }
+
+            // 3. Handle Email Sign Up Form Submit
+            if (signUpForm && window.TabsomeAuth) {
+                const signUpName = document.getElementById('signUpName');
+                const signUpEmail = document.getElementById('signUpEmail');
+                const signUpPassword = document.getElementById('signUpPassword');
+                const signUpSubmitBtn = document.getElementById('signUpSubmitBtn');
+                const signUpSubmitText = document.getElementById('signUpSubmitText');
+                const signUpSubmitSpinner = document.getElementById('signUpSubmitSpinner');
+
+                signUpForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    clearAlert();
+
+                    const name = signUpName.value.trim();
+                    const email = signUpEmail.value.trim();
+                    const password = signUpPassword.value;
+
+                    if (!email || !password) {
+                        showAlert('Please fill in all required fields.', 'error');
+                        return;
+                    }
+
+                    if (password.length < 6) {
+                        showAlert('Password must be at least 6 characters.', 'error');
+                        return;
+                    }
+
+                    signUpSubmitBtn.disabled = true;
+                    signUpSubmitText.textContent = 'Creating account...';
+                    signUpSubmitSpinner.style.display = 'inline-block';
+
+                    const { user, session, error, needsConfirmation } = await TabsomeAuth.signUpWithPassword(email, password, name);
+
+                    signUpSubmitBtn.disabled = false;
+                    signUpSubmitText.textContent = 'Create Account';
+                    signUpSubmitSpinner.style.display = 'none';
+
+                    if (error) {
+                        console.error('Sign up error:', error);
+                        showAlert(error.message || 'Could not create account. Please try again.', 'error');
+                    } else if (needsConfirmation) {
+                        showAlert('Account created! Please check your email to confirm your account before signing in.', 'success');
+                        signUpForm.reset();
+                    } else if (user) {
+                        showAlert('Account created successfully! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = targetRedirectUrl;
+                        }, 700);
+                    }
+                });
+            }
+
+            // 4. Handle Forgot Password Form Submit & 1-Minute Cooldown Timer
+            if (forgotPasswordForm && window.TabsomeAuth) {
+                const forgotEmail = document.getElementById('forgotEmail');
+                const forgotSubmitBtn = document.getElementById('forgotSubmitBtn');
+                const forgotSubmitText = document.getElementById('forgotSubmitText');
+                const forgotSubmitSpinner = document.getElementById('forgotSubmitSpinner');
+                const FORGOT_COOLDOWN_KEY = 'tabsome_forgot_password_cooldown_until';
+                let cooldownTimerId = null;
+
+                function updateCooldownUI() {
+                    const cooldownUntil = parseInt(localStorage.getItem(FORGOT_COOLDOWN_KEY) || '0', 10);
+                    const now = Date.now();
+                    const remainingSeconds = Math.ceil((cooldownUntil - now) / 1000);
+
+                    if (remainingSeconds > 0) {
+                        forgotSubmitBtn.disabled = true;
+                        forgotSubmitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+                        forgotSubmitText.textContent = `Wait ${remainingSeconds}s before resending`;
+                        return true;
+                    } else {
+                        forgotSubmitBtn.disabled = false;
+                        forgotSubmitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                        forgotSubmitText.textContent = 'Send Reset Link';
+                        return false;
+                    }
+                }
+
+                function startCooldown(seconds = 60) {
+                    const cooldownUntil = Date.now() + (seconds * 1000);
+                    localStorage.setItem(FORGOT_COOLDOWN_KEY, cooldownUntil.toString());
+                    if (cooldownTimerId) clearInterval(cooldownTimerId);
+                    updateCooldownUI();
+                    cooldownTimerId = setInterval(() => {
+                        const active = updateCooldownUI();
+                        if (!active) {
+                            clearInterval(cooldownTimerId);
+                            cooldownTimerId = null;
+                        }
+                    }, 1000);
+                }
+
+                window.checkForgotCooldown = function () {
+                    const cooldownUntil = parseInt(localStorage.getItem(FORGOT_COOLDOWN_KEY) || '0', 10);
+                    if (cooldownUntil > Date.now()) {
+                        if (cooldownTimerId) clearInterval(cooldownTimerId);
+                        updateCooldownUI();
+                        cooldownTimerId = setInterval(() => {
+                            const active = updateCooldownUI();
+                            if (!active) {
+                                clearInterval(cooldownTimerId);
+                                cooldownTimerId = null;
+                            }
+                        }, 1000);
+                    } else {
+                        updateCooldownUI();
+                    }
+                };
+
+                // Check cooldown on load
+                window.checkForgotCooldown();
+
+                forgotPasswordForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    clearAlert();
+
+                    // Block submission if cooldown timer is active
+                    const cooldownUntil = parseInt(localStorage.getItem(FORGOT_COOLDOWN_KEY) || '0', 10);
+                    const now = Date.now();
+                    const remainingSeconds = Math.ceil((cooldownUntil - now) / 1000);
+                    if (remainingSeconds > 0) {
+                        showAlert(`Please wait ${remainingSeconds}s before requesting another reset link.`, 'error');
+                        updateCooldownUI();
+                        return;
+                    }
+
+                    const email = forgotEmail.value.trim();
+                    if (!email) {
+                        showAlert('Please enter your email address.', 'error');
+                        return;
+                    }
+
+                    forgotSubmitBtn.disabled = true;
+                    forgotSubmitText.textContent = 'Sending link...';
+                    forgotSubmitSpinner.style.display = 'inline-block';
+
+                    // Reset redirect link to return to this login page
+                    const resetReturnUrl = window.location.origin + window.location.pathname;
+                    const { error } = await TabsomeAuth.resetPasswordForEmail(email, resetReturnUrl);
+
+                    forgotSubmitSpinner.style.display = 'none';
+
+                    if (error) {
+                        console.error('Password reset error:', error);
+                        const errMsg = error.message || '';
+                        if (errMsg.toLowerCase().includes('rate limit') || errMsg.toLowerCase().includes('security') || errMsg.toLowerCase().includes('seconds')) {
+                            showAlert(errMsg, 'error');
+                            startCooldown(60);
+                        } else {
+                            showAlert(errMsg || 'Unable to send password reset email. Please try again.', 'error');
+                            forgotSubmitBtn.disabled = false;
+                            forgotSubmitText.textContent = 'Send Reset Link';
+                        }
+                    } else {
+                        showAlert('If an account exists with this email, you will receive a password reset link shortly. Please check your inbox.', 'success');
+                        startCooldown(60);
+                    }
+                });
+            }
+
+            // 5. Handle Recovery Form Submit (Update Password)
+            if (recoveryForm && window.TabsomeAuth) {
+                const newPassword = document.getElementById('newPassword');
+                const confirmPassword = document.getElementById('confirmPassword');
+                const recoverySubmitBtn = document.getElementById('recoverySubmitBtn');
+                const recoverySubmitText = document.getElementById('recoverySubmitText');
+                const recoverySubmitSpinner = document.getElementById('recoverySubmitSpinner');
+
+                recoveryForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    clearAlert();
+
+                    const pass1 = newPassword.value;
+                    const pass2 = confirmPassword.value;
+
+                    if (!pass1 || !pass2) {
+                        showAlert('Please enter and confirm your new password.', 'error');
+                        return;
+                    }
+
+                    if (pass1 !== pass2) {
+                        showAlert('Passwords do not match. Please try again.', 'error');
+                        return;
+                    }
+
+                    if (pass1.length < 6) {
+                        showAlert('Password must be at least 6 characters.', 'error');
+                        return;
+                    }
+
+                    recoverySubmitBtn.disabled = true;
+                    recoverySubmitText.textContent = 'Updating password...';
+                    recoverySubmitSpinner.style.display = 'inline-block';
+
+                    const { error } = await TabsomeAuth.updatePassword(pass1);
+
+                    recoverySubmitBtn.disabled = false;
+                    recoverySubmitText.textContent = 'Update Password';
+                    recoverySubmitSpinner.style.display = 'none';
+
+                    if (error) {
+                        console.error('Password update error:', error);
+                        showAlert(error.message || 'Unable to update password. Please try again.', 'error');
+                    } else {
+                        // Clear the recovery flag once password has been successfully updated
+                        if (window.TabsomeAuth && TabsomeAuth.clearRecoveryFlow) {
+                            TabsomeAuth.clearRecoveryFlow();
+                        }
+                        try {
+                            sessionStorage.removeItem('tabsome_recovery_flow');
+                        } catch (e) { }
+
+                        showAlert('Your password has been updated successfully! Redirecting to your account...', 'success');
+                        setTimeout(() => {
+                            window.location.href = targetRedirectUrl;
+                        }, 1200);
+                    }
+                });
+            }
+
+            // 6. Listen for existing session or Auth state changes
+            if (window.TabsomeAuth) {
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+
+                TabsomeAuth.onAuthStateChange((user, session, event) => {
+                    const isRecoveryActive = event === 'PASSWORD_RECOVERY' ||
+                        (window.TabsomeAuth && window.TabsomeAuth.isRecoveryFlow) ||
+                        sessionStorage.getItem('tabsome_recovery_flow') !== null;
+
+                    if (isRecoveryActive) {
+                        setMode('recovery');
+                        if (alreadyLoggedInNotice) alreadyLoggedInNotice.classList.add('hidden');
+                        if (authActionsContainer) authActionsContainer.classList.remove('hidden');
+                        return; // NEVER REDIRECT TO ACCOUNT WHEN IN RECOVERY MODE
+                    }
+
+                    // If already authenticated and not in recovery mode
+                    if (user) {
+                        const meta = user.user_metadata || {};
+                        const name = meta.full_name || meta.name || user.email || 'User';
+                        const email = user.email || '';
+
+                        if (loggedInUserDetails) {
+                            loggedInUserDetails.textContent = `${name} (${email})`;
+                        }
+
+                        if (alreadyLoggedInNotice) alreadyLoggedInNotice.classList.remove('hidden');
+                        if (authActionsContainer) authActionsContainer.classList.add('hidden');
+
+                        setTimeout(() => {
+                            window.location.href = targetRedirectUrl;
+                        }, 900);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

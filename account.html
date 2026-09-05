@@ -143,6 +143,37 @@
                 transform: scale(1.02);
             }
         }
+
+        .btn-modern-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 48px;
+            padding: 0 32px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .btn-modern-cta:hover {
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            transform: translateY(-1.5px);
+            filter: brightness(1.06);
+        }
+
+        .btn-modern-cta:active {
+            transform: scale(0.98) translateY(0);
+        }
     </style>
 </head>
 
@@ -191,113 +222,125 @@
             <!-- Main Interactive Status Card -->
             <div class="glass-card rounded-3xl p-6 sm:p-10 mb-10" data-aos="fade-up" data-aos-delay="100">
 
-                <!-- Dynamic Auth Profile Status -->
-                <div id="accountUserSection" class="border-b border-white/10 pb-8 mb-8">
-                    <!-- Default Loading / Logged Out Skeleton -->
-                    <div id="accountUserStateLoggedOut"
-                        class="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-                        <div class="flex items-center gap-4">
-                            <div
-                                class="w-14 h-14 rounded-full bg-gradient-to-tr from-purple-600/40 to-pink-600/40 border border-white/15 flex items-center justify-center text-2xl text-pink-300 shadow-inner flex-shrink-0">
-                                <i class="fas fa-user-astronaut"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-lg font-bold text-white">Sign In to Link Your Account</h2>
-                                <p class="text-xs sm:text-sm text-gray-300 mt-0.5">
-                                    Sign in with your Google account to get early access when the portal goes live.
-                                </p>
-                            </div>
-                        </div>
-                        <button id="accountSignInBtn" type="button"
-                            class="inline-flex items-center gap-2.5 bg-white text-gray-900 hover:bg-gray-100 font-semibold px-5 py-2.5 rounded-xl transition shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer text-sm flex-shrink-0">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24">
-                                <path fill="#EA4335"
-                                    d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                                <path fill="#4285F4"
-                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                                <path fill="#FBBC05"
-                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                                <path fill="#34A853"
-                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            </svg>
-                            <span>Sign in with Google</span>
-                        </button>
-                    </div>
+                <!-- Dynamic Auth Profile Section -->
+                <div id="accountUserSection">
 
-                    <!-- Logged In Template (Initially hidden, revealed dynamically by auth.js) -->
-                    <div id="accountUserStateLoggedIn"
-                        class="hidden flex-col sm:flex-row items-center justify-between gap-6">
-                        <div class="flex items-center gap-4 min-w-0">
-                            <div id="accountAvatarContainer"
-                                class="w-14 h-14 rounded-full overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
-                                <i class="fas fa-user text-2xl text-purple-200"></i>
-                            </div>
-                            <div class="min-w-0">
-                                <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer
-                                </h2>
-                                <p id="accountUserEmail" class="text-xs sm:text-sm text-gray-300 truncate mt-0.5">
-                                    user@example.com</p>
-                            </div>
+                    <!-- State 1: Sign In Required Card (Conditionally rendered when user is not logged in) -->
+                    <div id="accountUserStateLoggedOut" class="py-4 text-center">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500/30 to-pink-500/30 border border-white/20 flex items-center justify-center mx-auto mb-5 shadow-inner">
+                            <i class="fas fa-user-astronaut text-2xl text-pink-300"></i>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font mb-2.5">
+                            Sign In Required
+                        </h2>
+                        <p class="text-sm text-gray-300 max-w-md mx-auto mb-6 leading-relaxed">
+                            Sign in to access your account.
+                        </p>
+
+                        <!-- Primary Sign In Action -->
+                        <div class="flex items-center justify-center">
+                            <a id="accountSignInBtn" href="login.html?redirect=account.html"
+                                class="btn-modern-cta">
+                                <i class="fas fa-right-to-bracket text-sm"></i>
+                                <span>Sign In / Sign Up</span>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Quick Navigation Access to Speed Dials & Cloud Library -->
-                    <div class="mt-6 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        <a href="speed-dials.html"
-                            class="feature-card p-4 rounded-2xl flex items-center justify-between group hover:border-purple-400/50 transition">
-                            <div class="flex items-center gap-3.5">
-                                <div
-                                    class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition flex-shrink-0">
-                                    <svg class="w-5 h-5 text-purple-300 flex-shrink-0" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <rect x="2" y="2" width="9" height="9" rx="2.5" />
-                                        <rect x="13" y="2" width="9" height="9" rx="2.5" />
-                                        <rect x="2" y="13" width="9" height="9" rx="2.5" />
-                                        <rect x="13" y="13" width="9" height="9" rx="2.5" />
-                                    </svg>
+                    <!-- State 2: Existing UI Setup for Logged In User (Conditionally rendered when signed in) -->
+                    <div id="accountUserStateLoggedIn" class="hidden">
+                        <!-- Profile Header Row -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-white/10">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div id="accountAvatarContainer"
+                                    class="w-14 h-14 rounded-full overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
+                                    <i class="fas fa-user text-2xl text-purple-200"></i>
                                 </div>
-                                <div>
+                                <div class="min-w-0 text-left">
+                                    <div class="flex items-center gap-2.5">
+                                        <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer</h2>
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[11px] font-medium text-emerald-300">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                            Active
+                                        </span>
+                                    </div>
+                                    <p id="accountUserEmail" class="text-xs sm:text-sm text-gray-300 truncate mt-0.5">
+                                        user@example.com</p>
+                                </div>
+                            </div>
+
+                            <!-- Logged In Action: Sign Out -->
+                            <div class="flex items-center gap-3">
+                                <button id="accountSignOutBtn" type="button"
+                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-rose-500/20 border border-white/15 hover:border-rose-500/30 text-xs font-medium text-gray-200 hover:text-rose-200 transition shadow-sm cursor-pointer">
+                                    <i class="fas fa-arrow-right-from-bracket text-gray-400"></i>
+                                    <span>Sign Out</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick Navigation Access to Speed Dials & Cloud Library -->
+                        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            <a href="speed-dials.html"
+                                class="feature-card p-4 rounded-2xl flex items-center justify-between group hover:border-purple-400/50 transition">
+                                <div class="flex items-center gap-3.5">
                                     <div
-                                        class="text-sm font-semibold text-white group-hover:text-purple-200 transition">
-                                        Speed Dials (Cloud)</div>
-                                    <div class="text-xs text-gray-300">View your speed dials</div>
+                                        class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition flex-shrink-0">
+                                        <svg class="w-5 h-5 text-purple-300 flex-shrink-0" fill="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <rect x="2" y="2" width="9" height="9" rx="2.5" />
+                                            <rect x="13" y="2" width="9" height="9" rx="2.5" />
+                                            <rect x="2" y="13" width="9" height="9" rx="2.5" />
+                                            <rect x="13" y="13" width="9" height="9" rx="2.5" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="text-sm font-semibold text-white group-hover:text-purple-200 transition">
+                                            Speed Dials (Cloud)</div>
+                                        <div class="text-xs text-gray-300">View your speed dials</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <i
-                                class="fas fa-arrow-right text-xs text-white/40 group-hover:text-white group-hover:translate-x-1 transition mr-1"></i>
-                        </a>
+                                <i
+                                    class="fas fa-arrow-right text-xs text-white/40 group-hover:text-white group-hover:translate-x-1 transition mr-1"></i>
+                            </a>
 
-                        <a href="library.html"
-                            class="feature-card p-4 rounded-2xl flex items-center justify-between group hover:border-pink-400/50 transition">
-                            <div class="flex items-center gap-3.5">
-                                <div
-                                    class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center text-lg border border-pink-500/30 group-hover:scale-110 transition flex-shrink-0">
-                                    <i class="fas fa-book-bookmark"></i>
+                            <a href="library.html"
+                                class="feature-card p-4 rounded-2xl flex items-center justify-between group hover:border-pink-400/50 transition">
+                                <div class="flex items-center gap-3.5">
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center text-lg border border-pink-500/30 group-hover:scale-110 transition flex-shrink-0">
+                                        <i class="fas fa-book-bookmark"></i>
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="text-sm font-semibold text-white group-hover:text-pink-200 transition">
+                                            Library (Cloud)</div>
+                                        <div class="text-xs text-gray-300">View your synced library content</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="text-sm font-semibold text-white group-hover:text-pink-200 transition">
-                                        Library (Cloud)</div>
-                                    <div class="text-xs text-gray-300">View your synced library content</div>
-                                </div>
-                            </div>
-                            <i
-                                class="fas fa-arrow-right text-xs text-white/40 group-hover:text-white group-hover:translate-x-1 transition mr-1"></i>
-                        </a>
-                    </div>
-                </div>
+                                <i
+                                    class="fas fa-arrow-right text-xs text-white/40 group-hover:text-white group-hover:translate-x-1 transition mr-1"></i>
+                            </a>
+                        </div>
 
-                <!-- Action Footer Inside Card -->
-                <div
-                    class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="text-xs text-gray-300 flex items-center gap-2">
-                        <i class="fas fa-lightbulb text-yellow-300"></i>
-                        <span>We'll be adding more features soon, do you have any suggestions?</span>
+                        <!-- Action Footer Inside Card (Only for logged in dashboard) -->
+                        <div
+                            class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="text-xs text-gray-300 flex items-center gap-2">
+                                <i class="fas fa-lightbulb text-yellow-300"></i>
+                                <span>We'll be adding more features soon, do you have any suggestions?</span>
+                            </div>
+                            <a href="contact.html"
+                                class="text-xs font-semibold text-pink-300 hover:text-pink-200 transition underline underline-offset-4 flex items-center gap-1">
+                                <span>Send feedback</span>
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        </div>
                     </div>
-                    <a href="contact.html"
-                        class="text-xs font-semibold text-pink-300 hover:text-pink-200 transition underline underline-offset-4 flex items-center gap-1">
-                        <span>Send feedback</span>
-                        <i class="fas fa-arrow-right text-[10px]"></i>
-                    </a>
+
                 </div>
 
             </div>
@@ -335,11 +378,11 @@
                 // Initialize Navbar Auth
                 TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
 
-                // Connect Account section signIn button
-                const accountSignInBtn = document.getElementById('accountSignInBtn');
-                if (accountSignInBtn) {
-                    accountSignInBtn.addEventListener('click', () => {
-                        TabsomeAuth.signInWithGoogle();
+                // Connect Account Sign Out button
+                const accountSignOutBtn = document.getElementById('accountSignOutBtn');
+                if (accountSignOutBtn) {
+                    accountSignOutBtn.addEventListener('click', () => {
+                        TabsomeAuth.signOut();
                     });
                 }
 

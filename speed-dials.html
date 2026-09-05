@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -172,6 +172,42 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.4);
         }
+
+        .heading-font {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        .btn-modern-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 48px;
+            padding: 0 32px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .btn-modern-cta:hover {
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            transform: translateY(-1.5px);
+            filter: brightness(1.06);
+            color: #ffffff !important;
+        }
+
+        .btn-modern-cta:active {
+            transform: scale(0.98) translateY(0);
+        }
     </style>
 </head>
 
@@ -312,30 +348,24 @@
         <!-- Unauthenticated Prompt -->
         <div id="unauthPrompt" class="hidden text-center py-16 px-4">
             <div
-                class="glass-card max-w-md mx-auto rounded-3xl p-8 shadow-2xl border border-white/20 bg-slate-900/80 backdrop-blur-xl">
+                class="glass-card max-w-md mx-auto rounded-3xl p-8 sm:p-10 shadow-2xl border border-white/20 bg-slate-900/80 backdrop-blur-xl">
                 <div
-                    class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/30 to-purple-500/30 border border-pink-400/30 mx-auto flex items-center justify-center text-2xl text-pink-300 mb-5 shadow-inner">
-                    <i class="fas fa-lock"></i>
+                    class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500/30 to-pink-500/30 border border-white/20 flex items-center justify-center mx-auto mb-5 shadow-inner">
+                    <i class="fas fa-user-astronaut text-2xl text-pink-300"></i>
                 </div>
-                <h3 class="text-2xl font-extrabold text-white mb-2">Sign in to view your Speed Dials</h3>
-                <p class="text-xs sm:text-sm text-gray-300 mb-6 leading-relaxed">
-                    Connect your Tabsome account to view and access your synced bookmarks, folders, and speed dials from
-                    anywhere.
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font mb-2.5">
+                    Sign In Required
+                </h2>
+                <p class="text-sm text-gray-300 max-w-md mx-auto mb-6 leading-relaxed">
+                    Sign in to access your account.
                 </p>
-                <button id="unauthSignInBtn"
-                    class="w-full justify-center bg-white text-purple-700 font-bold px-6 py-3 rounded-xl hover:bg-opacity-95 transition transform hover:scale-[1.02] shadow-lg inline-flex items-center gap-3 text-sm cursor-pointer">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24">
-                        <path fill="#EA4335"
-                            d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        <path fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                        <path fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    </svg>
-                    <span>Sign in with Google</span>
-                </button>
+                <div class="flex items-center justify-center">
+                    <a id="unauthSignInBtn" href="login.html?redirect=speed-dials.html"
+                        class="btn-modern-cta">
+                        <i class="fas fa-right-to-bracket text-sm"></i>
+                        <span>Sign In / Sign Up</span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -771,12 +801,6 @@
         }
 
         // Search and Input Event Listeners
-        if (unauthSignInBtn) {
-            unauthSignInBtn.addEventListener('click', () => {
-                if (window.TabsomeAuth) TabsomeAuth.signInWithGoogle();
-            });
-        }
-
         if (dialSearchInput) {
             dialSearchInput.addEventListener('input', (e) => {
                 searchQuery = e.target.value.toLowerCase().trim();
