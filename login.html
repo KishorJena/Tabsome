@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In – Tabsome</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Sign in to Tabsome with Google. Access and sync your personalized new tab dashboard, Opera-style speed dials, custom AI widgets, and visual pinboards across all your browsers.">
+    <meta name="keywords"
+        content="tabsome login, tabsome sign in, google sign in, tabsome account, new tab dashboard, speed dials sync">
+    <meta name="author" content="Kishor Jena">
+    <meta name="robots" content="index, follow">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://tabsome.github.io/favicon.ico">
+    <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/assets/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="/assets/favicon-128x128.png" sizes="128x128">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sign In – Tabsome">
+    <meta property="og:description"
+        content="Sign in to Tabsome to sync your speed dials, widgets, and visual boards across devices.">
+    <meta property="og:image" content="https://tabsome.github.io/assets/social-preview.png">
+    <meta property="og:url" content="https://tabsome.github.io/login.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sign In – Tabsome">
+    <meta name="twitter:description"
+        content="Sign in to Tabsome to sync your speed dials, widgets, and visual boards across devices.">
+    <meta name="twitter:image" content="https://tabsome.github.io/assets/social-preview.png">
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="assets/css/tailwind.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Supabase & Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/auth.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #9333ea;
+            background-image:
+                linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(17, 24, 39, 0.55) 100%),
+                linear-gradient(to right, #ff5757, #8c52ff);
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .heading-font {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        .gradient-text {
+            background-image: linear-gradient(135deg, #ffffff 0%, #f3e8ff 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(24px) saturate(140%);
+            -webkit-backdrop-filter: blur(24px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(236, 72, 153, 0.15) 40%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(0.9) translate(-10px, -10px);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(1.1) translate(10px, 10px);
+                opacity: 0.9;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-white font-sans flex flex-col min-h-screen relative overflow-x-hidden">
+
+    <!-- Ambient Glow effects -->
+    <div class="ambient-glow top-10 -left-20"></div>
+    <div class="ambient-glow bottom-10 -right-20" style="animation-delay: -4s;"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed w-full backdrop-blur-md z-50"
+        style="background-color: rgba(30, 41, 59, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3 group" title="Return to Tabsome Home">
+                <img src="assets/logo-white.png" alt="Tabsome Logo"
+                    class="w-8 h-8 transition-transform group-hover:scale-105">
+                <span class="text-2xl font-bold tracking-tight heading-font">Tabsome</span>
+            </a>
+            <nav class="space-x-7 hidden md:flex items-center font-medium">
+                <a href="index.html#speed-dials" class="hover:text-pink-300 transition text-sm">Speed Dials</a>
+                <a href="index.html#boards" class="hover:text-pink-300 transition text-sm">Boards &amp; Library</a>
+                <a href="widgets.html" class="hover:text-pink-300 transition text-sm">Widgets</a>
+                <a href="roadmap.html" class="hover:text-pink-300 transition text-sm">Roadmap</a>
+                <a href="https://chromewebstore.google.com/detail/tabsome-ai-new-tab-speed/cibcnchlbnblalcpgjaccapodkmjookf"
+                    target="_blank" rel="noopener noreferrer"
+                    class="border border-white/30 hover:border-white px-3.5 py-1.5 rounded-lg text-white hover:bg-white/10 transition text-sm font-medium">
+                    <i class="fab fa-chrome mr-1.5 text-xs"></i>Install
+                </a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <a href="index.html"
+                    class="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-300 hover:text-white px-3 py-1.5 rounded-lg hover:bg-white/10 transition">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span>Back to Home</span>
+                </a>
+                <div id="tabsomeAuthNav" class="inline-flex items-center"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Authentication Section -->
+    <main class="flex-grow flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 relative z-10">
+        <div class="w-full max-w-md mx-auto" data-aos="fade-up" data-aos-duration="600">
+
+            <!-- Authentication Card -->
+            <div class="glass-card rounded-3xl p-7 sm:p-10 relative overflow-hidden">
+
+                <!-- Top Logo Badge -->
+                <div class="text-center mb-6">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500/30 to-pink-500/30 border border-white/20 flex items-center justify-center mx-auto mb-4 shadow-inner group">
+                        <img src="assets/logo-white.png" alt="Tabsome"
+                            class="w-9 h-9 drop-shadow transition-transform duration-300 group-hover:scale-110">
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight heading-font">
+                        Welcome to Tabsome
+                    </h1>
+                    <p class="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed max-w-sm mx-auto">
+                        Sign in to sync your speed dials, pinboards, and custom AI widgets across all your browsers.
+                    </p>
+                </div>
+
+                <!-- Already Authenticated Notice (Hidden by default) -->
+                <div id="alreadyLoggedInNotice" class="hidden mb-6 p-4 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-center">
+                    <div class="w-10 h-10 rounded-full bg-purple-600/40 mx-auto flex items-center justify-center text-purple-300 mb-2">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <p class="text-sm font-semibold text-white">You are already signed in!</p>
+                    <p id="loggedInUserDetails" class="text-xs text-purple-200 mt-0.5 truncate"></p>
+                    <div class="mt-3 flex items-center justify-center gap-2 text-xs text-pink-300">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span id="redirectStatusText">Redirecting to your destination...</span>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-purple-500/20">
+                        <a id="immediateRedirectBtn" href="account.html" class="text-xs text-white underline hover:text-pink-300">
+                            Click here if not redirected automatically
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Auth Action Form / Button Container -->
+                <div id="authActionsContainer" class="space-y-4">
+                    <!-- Google Sign In Button -->
+                    <button id="googleLoginBtn" type="button"
+                        class="w-full flex items-center justify-center gap-3.5 bg-white hover:bg-gray-50 text-gray-900 font-semibold px-5 py-3.5 rounded-2xl transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] cursor-pointer text-sm sm:text-base group border border-white">
+                        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+                            <path fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                            <path fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                            <path fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                            <path fill="#EA4335"
+                                d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                        </svg>
+                        <span id="googleLoginText" class="font-bold text-slate-900 tracking-tight">
+                            Sign in with Google
+                        </span>
+                        <i id="googleLoginSpinner" class="fas fa-spinner fa-spin hidden text-purple-600"></i>
+                    </button>
+
+                    <!-- Feedback Alert (Error or Info) -->
+                    <div id="authAlertBox" class="hidden p-3 rounded-xl text-xs text-center border"></div>
+
+                    <!-- Security & Privacy Reassurance -->
+                    <div class="text-center pt-2">
+                        <p class="text-[11px] text-gray-400 leading-normal">
+                            Fast, passwordless sign-in powered by Supabase Auth.<br class="hidden sm:inline">
+                            By continuing, you agree to Tabsome's
+                            <a href="privacy.html" class="text-pink-300 hover:text-white underline transition">Privacy Policy</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature Highlights Divider -->
+                <div class="relative my-7">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-white/10"></div>
+                    </div>
+                    <div class="relative flex justify-center text-xs">
+                        <span class="px-3 bg-slate-900/80 text-gray-400 font-medium rounded-full border border-white/10">
+                            Why sign in to Tabsome?
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Value Props Grid -->
+                <div class="grid grid-cols-1 gap-2.5 text-left text-xs">
+                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10">
+                        <div class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-bolt text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-white">Instant Multi-Browser Sync</p>
+                            <p class="text-gray-300 text-[11px] mt-0.5">Access your speed dials and layout on Chrome, Brave, Edge &amp; Firefox.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10">
+                        <div class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-wand-magic-sparkles text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-white">Custom AI Widgets</p>
+                            <p class="text-gray-300 text-[11px] mt-0.5">Save and personalize your widgets and dashboard components in the cloud.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10">
+                        <div class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-shield-halved text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-white">Private &amp; Secure</p>
+                            <p class="text-gray-300 text-[11px] mt-0.5">Zero tracking, zero invasive cookies. Your bookmarks remain yours.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Return Link -->
+            <div class="text-center mt-6">
+                <a href="index.html" class="inline-flex items-center gap-1.5 text-xs text-gray-300 hover:text-white transition">
+                    <i class="fas fa-arrow-left text-[10px]"></i>
+                    <span>Return to Homepage</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="w-full border-t border-white/10 py-6 text-xs text-gray-400 text-center relative z-10"
+        style="background-color: rgba(15, 23, 42, 0.75);">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <img src="assets/logo-white.png" alt="Tabsome" class="w-4 h-4 opacity-70">
+                <span>&copy; 2025 Tabsome. All rights reserved.</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="privacy.html" class="hover:text-white transition-colors underline">Privacy Policy</a>
+                <span>•</span>
+                <a href="support.html" class="hover:text-white transition-colors">Support</a>
+                <span>•</span>
+                <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Page Logic -->
+    <script>
+        AOS.init({ duration: 600, once: true });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const googleLoginBtn = document.getElementById('googleLoginBtn');
+            const googleLoginText = document.getElementById('googleLoginText');
+            const googleLoginSpinner = document.getElementById('googleLoginSpinner');
+            const authAlertBox = document.getElementById('authAlertBox');
+            const alreadyLoggedInNotice = document.getElementById('alreadyLoggedInNotice');
+            const authActionsContainer = document.getElementById('authActionsContainer');
+            const loggedInUserDetails = document.getElementById('loggedInUserDetails');
+            const immediateRedirectBtn = document.getElementById('immediateRedirectBtn');
+
+            // Parse redirect target safely
+            function getSafeRedirectUrl() {
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    const rawRedirect = params.get('redirect');
+                    if (!rawRedirect) return 'account.html';
+
+                    // Prevent redirect loops to login.html
+                    if (rawRedirect.includes('login.html') || rawRedirect === 'login') {
+                        return 'account.html';
+                    }
+
+                    // If relative path, accept directly
+                    if (!rawRedirect.startsWith('http://') && !rawRedirect.startsWith('https://')) {
+                        return rawRedirect;
+                    }
+
+                    // If absolute URL, ensure it belongs to the same origin
+                    const parsed = new URL(rawRedirect);
+                    if (parsed.origin === window.location.origin) {
+                        return rawRedirect;
+                    }
+                } catch (e) {
+                    console.warn('Redirect URL parsing error:', e);
+                }
+                return 'account.html';
+            }
+
+            const targetRedirectUrl = getSafeRedirectUrl();
+            if (immediateRedirectBtn) {
+                immediateRedirectBtn.setAttribute('href', targetRedirectUrl);
+            }
+
+            // Check if URL contains auth error parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorDesc = urlParams.get('error_description') || urlParams.get('error');
+            if (errorDesc && authAlertBox) {
+                authAlertBox.className = 'p-3 rounded-xl text-xs text-center border bg-rose-500/20 border-rose-500/30 text-rose-200';
+                authAlertBox.textContent = decodeURIComponent(errorDesc);
+                authAlertBox.classList.remove('hidden');
+            }
+
+            // Handle Google Login Click
+            if (googleLoginBtn && window.TabsomeAuth) {
+                googleLoginBtn.addEventListener('click', async () => {
+                    // Visual loading feedback
+                    googleLoginBtn.disabled = true;
+                    googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    if (googleLoginText) googleLoginText.textContent = 'Connecting to Google...';
+                    if (googleLoginSpinner) googleLoginSpinner.classList.remove('hidden');
+
+                    try {
+                        // Trigger Google OAuth with target redirect URL
+                        await TabsomeAuth.signInWithGoogle(targetRedirectUrl);
+                    } catch (err) {
+                        console.error('Login error:', err);
+                        googleLoginBtn.disabled = false;
+                        googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        if (googleLoginText) googleLoginText.textContent = 'Sign in with Google';
+                        if (googleLoginSpinner) googleLoginSpinner.classList.add('hidden');
+                        if (authAlertBox) {
+                            authAlertBox.className = 'p-3 rounded-xl text-xs text-center border bg-rose-500/20 border-rose-500/30 text-rose-200';
+                            authAlertBox.textContent = 'Failed to initiate Google sign-in. Please try again.';
+                            authAlertBox.classList.remove('hidden');
+                        }
+                    }
+                });
+            }
+
+            // Listen for existing or successful session
+            if (window.TabsomeAuth) {
+                // Initialize Navbar (will display profile if logged in or empty on login page)
+                TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
+
+                TabsomeAuth.onAuthStateChange((user, session, event) => {
+                    if (user) {
+                        // User is authenticated
+                        const meta = user.user_metadata || {};
+                        const name = meta.full_name || meta.name || user.email || 'User';
+                        const email = user.email || '';
+
+                        if (loggedInUserDetails) {
+                            loggedInUserDetails.textContent = `${name} (${email})`;
+                        }
+
+                        if (alreadyLoggedInNotice) alreadyLoggedInNotice.classList.remove('hidden');
+                        if (authActionsContainer) authActionsContainer.classList.add('hidden');
+
+                        // Automatically redirect after brief display
+                        setTimeout(() => {
+                            window.location.href = targetRedirectUrl;
+                        }, 900);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

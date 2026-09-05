@@ -192,8 +192,15 @@
                 return;
             }
 
-            // Remove hash fragments and clean target redirect
-            const redirectTo = returnUrl || window.location.href.split('#')[0];
+            // Clean target redirect and resolve relative paths to absolute URL
+            let redirectTo = returnUrl || window.location.href.split('#')[0];
+            if (redirectTo && !redirectTo.startsWith('http://') && !redirectTo.startsWith('https://')) {
+                try {
+                    redirectTo = new URL(redirectTo, window.location.href).href;
+                } catch (e) {
+                    redirectTo = window.location.href.split('#')[0];
+                }
+            }
 
             const { error } = await client.auth.signInWithOAuth({
                 provider: 'google',
@@ -293,24 +300,37 @@
 
             const render = (user) => {
                 if (!user) {
-                    // Render Sign in with Google Button
-                    container.innerHTML = `
-                        <button id="navSignInGoogleBtn"
-                            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border border-white/20 transition-all duration-200 shadow-sm hover:shadow hover:scale-[1.02] cursor-pointer">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24">
-                                <path fill="#EA4335" d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            </svg>
-                            <span>Sign In</span>
-                        </button>
-                    `;
-
-                    const btn = container.querySelector('#navSignInGoogleBtn');
-                    if (btn) {
-                        btn.addEventListener('click', () => TabsomeAuth.signInWithGoogle());
+                    const isLoginPage = window.location.pathname.endsWith('/login.html') || window.location.pathname.endsWith('/login') || window.location.pathname.endsWith('login.html');
+                    if (isLoginPage) {
+                        container.innerHTML = '';
+                        return;
                     }
+
+                    // Build redirect parameter back to current page
+                    let redirectParam = '';
+                    try {
+                        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+                        const currentSearch = window.location.search || '';
+                        const currentHash = window.location.hash || '';
+                        const fullTarget = currentPath + currentSearch + currentHash;
+                        if (fullTarget && !fullTarget.includes('login.html')) {
+                            redirectParam = '?redirect=' + encodeURIComponent(fullTarget);
+                        }
+                    } catch (e) {
+                        redirectParam = '';
+                    }
+
+                    const loginHref = 'login.html' + redirectParam;
+
+                    // Render Sign In link to dedicated Login Page
+                    container.innerHTML = `
+                        <a href="${loginHref}" id="navSignInBtn"
+                            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg border border-white/20 transition-all duration-200 shadow-sm hover:shadow hover:scale-[1.02] cursor-pointer"
+                            title="Sign In to Tabsome">
+                            <i class="fas fa-right-to-bracket text-xs text-white/80"></i>
+                            <span>Sign In</span>
+                        </a>
+                    `;
                 } else {
                     // Render User Profile Avatar & Dropdown
                     const metadata = user.user_metadata || {};

@@ -65,4 +65,11 @@
     <priority>0.40</priority>
   </url>
 
+  <url>
+    <loc>https://tabsome.github.io/login.html</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
 </urlset>
