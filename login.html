@@ -118,6 +118,68 @@
                 opacity: 0.9;
             }
         }
+
+        /* Ensure hidden elements are strictly hidden regardless of icon library styles */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Desktop Navigation spacing */
+        .nav-links-row {
+            display: none;
+            align-items: center;
+            gap: 1.75rem;
+            font-weight: 500;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links-row {
+                display: flex;
+            }
+        }
+
+        /* Typical Modern Google Button Style */
+        .btn-google-modern {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            height: 46px;
+            background-color: #ffffff !important;
+            color: #1f2937 !important;
+            border: 1px solid #dadce0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: -0.01em;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.18s ease-in-out;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .btn-google-modern:hover {
+            background-color: #f8f9fa !important;
+            border-color: #c2c7d0;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .btn-google-modern:active {
+            background-color: #f1f3f4 !important;
+            transform: scale(0.99) translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-google-modern span {
+            color: #1f2937 !important;
+            font-size: 15px;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -136,7 +198,7 @@
                     class="w-8 h-8 transition-transform group-hover:scale-105">
                 <span class="text-2xl font-bold tracking-tight heading-font">Tabsome</span>
             </a>
-            <nav class="space-x-7 hidden md:flex items-center font-medium">
+            <nav class="nav-links-row">
                 <a href="index.html#speed-dials" class="hover:text-pink-300 transition text-sm">Speed Dials</a>
                 <a href="index.html#boards" class="hover:text-pink-300 transition text-sm">Boards &amp; Library</a>
                 <a href="widgets.html" class="hover:text-pink-300 transition text-sm">Widgets</a>
@@ -159,14 +221,14 @@
     </header>
 
     <!-- Main Authentication Section -->
-    <main class="flex-grow flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 relative z-10">
+    <main class="flex-grow flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 relative z-10">
         <div class="w-full max-w-md mx-auto" data-aos="fade-up" data-aos-duration="600">
 
             <!-- Authentication Card -->
-            <div class="glass-card rounded-3xl p-7 sm:p-10 relative overflow-hidden">
+            <div class="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden text-center">
 
                 <!-- Top Logo Badge -->
-                <div class="text-center mb-6">
+                <div class="mb-7">
                     <div
                         class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500/30 to-pink-500/30 border border-white/20 flex items-center justify-center mx-auto mb-4 shadow-inner group">
                         <img src="assets/logo-white.png" alt="Tabsome"
@@ -176,7 +238,7 @@
                         Welcome to Tabsome
                     </h1>
                     <p class="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed max-w-sm mx-auto">
-                        Sign in to sync your speed dials, pinboards, and custom AI widgets across all your browsers.
+                        Sign in to sync your speed dials, pinboards, and custom AI widgets across all your devices.
                     </p>
                 </div>
 
@@ -200,9 +262,8 @@
 
                 <!-- Auth Action Form / Button Container -->
                 <div id="authActionsContainer" class="space-y-4">
-                    <!-- Google Sign In Button -->
-                    <button id="googleLoginBtn" type="button"
-                        class="w-full flex items-center justify-center gap-3.5 bg-white hover:bg-gray-50 text-gray-900 font-semibold px-5 py-3.5 rounded-2xl transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] cursor-pointer text-sm sm:text-base group border border-white">
+                    <!-- Modern Continue with Google Button -->
+                    <button id="googleLoginBtn" type="button" class="btn-google-modern">
                         <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                             <path fill="#4285F4"
                                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -213,67 +274,20 @@
                             <path fill="#EA4335"
                                 d="M12 5c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                         </svg>
-                        <span id="googleLoginText" class="font-bold text-slate-900 tracking-tight">
-                            Sign in with Google
-                        </span>
-                        <i id="googleLoginSpinner" class="fas fa-spinner fa-spin hidden text-purple-600"></i>
+                        <span id="googleLoginText">Continue with Google</span>
+                        <i id="googleLoginSpinner" class="fas fa-spinner fa-spin text-purple-600 ml-1" style="display: none;"></i>
                     </button>
 
                     <!-- Feedback Alert (Error or Info) -->
                     <div id="authAlertBox" class="hidden p-3 rounded-xl text-xs text-center border"></div>
 
                     <!-- Security & Privacy Reassurance -->
-                    <div class="text-center pt-2">
+                    <div class="pt-3">
                         <p class="text-[11px] text-gray-400 leading-normal">
                             Fast, passwordless sign-in powered by Supabase Auth.<br class="hidden sm:inline">
                             By continuing, you agree to Tabsome's
                             <a href="privacy.html" class="text-pink-300 hover:text-white underline transition">Privacy Policy</a>.
                         </p>
-                    </div>
-                </div>
-
-                <!-- Feature Highlights Divider -->
-                <div class="relative my-7">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-white/10"></div>
-                    </div>
-                    <div class="relative flex justify-center text-xs">
-                        <span class="px-3 bg-slate-900/80 text-gray-400 font-medium rounded-full border border-white/10">
-                            Why sign in to Tabsome?
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Value Props Grid -->
-                <div class="grid grid-cols-1 gap-2.5 text-left text-xs">
-                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10">
-                        <div class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-bolt text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-white">Instant Multi-Browser Sync</p>
-                            <p class="text-gray-300 text-[11px] mt-0.5">Access your speed dials and layout on Chrome, Brave, Edge &amp; Firefox.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10">
-                        <div class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-300 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-wand-magic-sparkles text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-white">Custom AI Widgets</p>
-                            <p class="text-gray-300 text-[11px] mt-0.5">Save and personalize your widgets and dashboard components in the cloud.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 p-2.5 rounded-xl bg-white/5 border border-white/10">
-                        <div class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-shield-halved text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="font-semibold text-white">Private &amp; Secure</p>
-                            <p class="text-gray-300 text-[11px] mt-0.5">Zero tracking, zero invasive cookies. Your bookmarks remain yours.</p>
-                        </div>
                     </div>
                 </div>
 
@@ -374,7 +388,7 @@
                     googleLoginBtn.disabled = true;
                     googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
                     if (googleLoginText) googleLoginText.textContent = 'Connecting to Google...';
-                    if (googleLoginSpinner) googleLoginSpinner.classList.remove('hidden');
+                    if (googleLoginSpinner) googleLoginSpinner.style.display = 'inline-block';
 
                     try {
                         // Trigger Google OAuth with target redirect URL
@@ -383,8 +397,8 @@
                         console.error('Login error:', err);
                         googleLoginBtn.disabled = false;
                         googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
-                        if (googleLoginText) googleLoginText.textContent = 'Sign in with Google';
-                        if (googleLoginSpinner) googleLoginSpinner.classList.add('hidden');
+                        if (googleLoginText) googleLoginText.textContent = 'Continue with Google';
+                        if (googleLoginSpinner) googleLoginSpinner.style.display = 'none';
                         if (authAlertBox) {
                             authAlertBox.className = 'p-3 rounded-xl text-xs text-center border bg-rose-500/20 border-rose-500/30 text-rose-200';
                             authAlertBox.textContent = 'Failed to initiate Google sign-in. Please try again.';
