@@ -29,6 +29,44 @@
         });
     }
 
+    // Immediate early detection of recovery tokens BEFORE Supabase parses & wipes the hash
+    function checkRecoveryState() {
+        try {
+            const rawHash = window.location.hash || '';
+            const rawSearch = window.location.search || '';
+            if (rawHash.includes('type=recovery') || rawSearch.includes('type=recovery')) {
+                sessionStorage.setItem('tabsome_recovery_flow', Date.now().toString());
+                return true;
+            }
+            const stored = sessionStorage.getItem('tabsome_recovery_flow');
+            if (stored) {
+                const ts = parseInt(stored, 10);
+                // Valid for 15 minutes max
+                if (isNaN(ts) || (Date.now() - ts < 15 * 60 * 1000)) {
+                    return true;
+                } else {
+                    sessionStorage.removeItem('tabsome_recovery_flow');
+                }
+            }
+        } catch (e) {
+            // ignore storage/url errors
+        }
+        return false;
+    }
+
+    let isRecoveryFlow = checkRecoveryState();
+
+    // If recovery token arrived on any page other than login.html, forward immediately with hash/query preserved
+    try {
+        const isLogin = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/login') || window.location.pathname.endsWith('/login/');
+        if (isRecoveryFlow && !isLogin) {
+            const loginUrl = new URL('login.html', window.location.href);
+            loginUrl.search = window.location.search;
+            loginUrl.hash = window.location.hash;
+            window.location.replace(loginUrl.href);
+        }
+    } catch (e) {}
+
     function getSupabaseClient() {
         if (supabaseClient) {
             return supabaseClient;
@@ -48,15 +86,24 @@
             }
         });
 
-        // Listen immediately to Supabase auth events (OAuth redirect callback, token refresh, etc.)
+        // Listen immediately to Supabase auth events (OAuth redirect callback, token refresh, recovery, etc.)
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             currentSession = session || null;
             currentUser = session?.user || null;
 
+            if (event === 'PASSWORD_RECOVERY') {
+                isRecoveryFlow = true;
+                try {
+                    sessionStorage.setItem('tabsome_recovery_flow', Date.now().toString());
+                } catch (e) {}
+            }
+
             if (event === 'SIGNED_OUT' || !session) {
                 notifyListeners(null, null, 'SIGNED_OUT');
-            } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
-                notifyListeners(currentUser, currentSession, event);
+            } else {
+                const isRecovery = isRecoveryFlow || checkRecoveryState() || event === 'PASSWORD_RECOVERY';
+                const effectiveEvent = isRecovery ? 'PASSWORD_RECOVERY' : event;
+                notifyListeners(currentUser, currentSession, effectiveEvent);
             }
         });
 
@@ -74,7 +121,37 @@
             return getSupabaseClient();
         },
 
+        get isRecoveryFlow() {
+            return isRecoveryFlow || checkRecoveryState();
+        },
+
+        set isRecoveryFlow(val) {
+            isRecoveryFlow = !!val;
+            try {
+                if (val) {
+                    sessionStorage.setItem('tabsome_recovery_flow', Date.now().toString());
+                } else {
+                    sessionStorage.removeItem('tabsome_recovery_flow');
+                }
+            } catch (e) {}
+        },
+
+        clearRecoveryFlow() {
+            isRecoveryFlow = false;
+            try {
+                sessionStorage.removeItem('tabsome_recovery_flow');
+            } catch (e) {}
+        },
+
         async init(forceRevalidate = false) {
+            // If landing on any other page during recovery flow, forward directly to login.html
+            if (this.isRecoveryFlow) {
+                const isLogin = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/login') || window.location.pathname.endsWith('/login/');
+                if (!isLogin) {
+                    window.location.replace('login.html' + window.location.search + window.location.hash);
+                    return { user: null, session: null };
+                }
+            }
             if (isInitialized && !forceRevalidate) {
                 return { user: currentUser, session: currentSession };
             }
@@ -109,7 +186,9 @@
                         notifyListeners(null, null, 'SIGNED_OUT');
                     } else {
                         currentUser = userData.user;
-                        notifyListeners(currentUser, currentSession, 'INITIAL_USER');
+                        const isRecovery = this.isRecoveryFlow || checkRecoveryState();
+                        const effectiveEvent = isRecovery ? 'PASSWORD_RECOVERY' : 'INITIAL_USER';
+                        notifyListeners(currentUser, currentSession, effectiveEvent);
                     }
                 } else {
                     notifyListeners(null, null, 'INITIAL_ANON');
@@ -218,6 +297,130 @@
             }
         },
 
+        /**
+         * Sign in with Email and Password
+         */
+        async signInWithPassword(email, password) {
+            const client = getSupabaseClient();
+            if (!client) {
+                return { user: null, session: null, error: new Error('Authentication service is currently unavailable.') };
+            }
+
+            try {
+                const { data, error } = await client.auth.signInWithPassword({
+                    email: (email || '').trim(),
+                    password: password || ''
+                });
+
+                if (error) {
+                    return { user: null, session: null, error };
+                }
+
+                currentSession = data.session;
+                currentUser = data.user;
+                notifyListeners(currentUser, currentSession, 'SIGNED_IN');
+                return { user: currentUser, session: currentSession, error: null };
+            } catch (err) {
+                return { user: null, session: null, error: err };
+            }
+        },
+
+        /**
+         * Sign up with Email, Password and optional Full Name
+         */
+        async signUpWithPassword(email, password, fullName = '') {
+            const client = getSupabaseClient();
+            if (!client) {
+                return { user: null, session: null, error: new Error('Authentication service is currently unavailable.') };
+            }
+
+            try {
+                const options = {};
+                if (fullName && fullName.trim()) {
+                    options.data = {
+                        full_name: fullName.trim()
+                    };
+                }
+
+                const { data, error } = await client.auth.signUp({
+                    email: (email || '').trim(),
+                    password: password || '',
+                    options
+                });
+
+                if (error) {
+                    return { user: null, session: null, error, needsConfirmation: false };
+                }
+
+                currentSession = data.session || null;
+                currentUser = data.user || null;
+                const needsConfirmation = !currentSession && !!currentUser;
+
+                if (currentSession) {
+                    notifyListeners(currentUser, currentSession, 'SIGNED_IN');
+                }
+
+                return { user: currentUser, session: currentSession, error: null, needsConfirmation };
+            } catch (err) {
+                return { user: null, session: null, error: err, needsConfirmation: false };
+            }
+        },
+
+        /**
+         * Send Password Reset Email
+         */
+        async resetPasswordForEmail(email, returnUrl) {
+            const client = getSupabaseClient();
+            if (!client) {
+                return { error: new Error('Authentication service is currently unavailable.') };
+            }
+
+            let redirectTo = returnUrl;
+            if (!redirectTo) {
+                try {
+                    redirectTo = new URL('login.html', window.location.href).href.split('#')[0].split('?')[0];
+                } catch (e) {
+                    redirectTo = window.location.origin + '/login.html';
+                }
+            } else if (!redirectTo.startsWith('http://') && !redirectTo.startsWith('https://')) {
+                try {
+                    redirectTo = new URL(redirectTo, window.location.href).href.split('#')[0].split('?')[0];
+                } catch (e) {
+                    redirectTo = window.location.origin + '/login.html';
+                }
+            }
+
+            try {
+                const { data, error } = await client.auth.resetPasswordForEmail((email || '').trim(), {
+                    redirectTo
+                });
+
+                return { data, error };
+            } catch (err) {
+                return { data: null, error: err };
+            }
+        },
+
+        /**
+         * Update password for authenticated user (e.g. following password recovery link)
+         */
+        async updatePassword(newPassword) {
+            const client = getSupabaseClient();
+            if (!client) {
+                return { error: new Error('Authentication service is currently unavailable.') };
+            }
+
+            try {
+                const { data, error } = await client.auth.updateUser({
+                    password: newPassword
+                });
+
+                return { data, error };
+            } catch (err) {
+                return { data: null, error: err };
+            }
+        },
+
         async clearSessionAndNotify() {
             currentUser = null;
             currentSession = null;
@@ -249,7 +452,15 @@
             if (typeof callback === 'function') {
                 authListeners.push(callback);
                 // Call immediately with current state
-                callback(currentUser, currentSession, currentUser ? 'INITIAL_USER' : (isInitialized ? 'INITIAL_ANON' : 'PENDING'));
+                let initialEvent = 'PENDING';
+                if (this.isRecoveryFlow) {
+                    initialEvent = 'PASSWORD_RECOVERY';
+                } else if (currentUser) {
+                    initialEvent = 'INITIAL_USER';
+                } else if (isInitialized) {
+                    initialEvent = 'INITIAL_ANON';
+                }
+                callback(currentUser, currentSession, initialEvent);
             }
             return () => {
                 authListeners = authListeners.filter(cb => cb !== callback);
