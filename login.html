@@ -750,6 +750,9 @@
                     googleSection.classList.add('hidden');
                     forgotPasswordForm.classList.remove('hidden');
                     forgotFooter.classList.remove('hidden');
+                    if (window.checkForgotCooldown) {
+                        window.checkForgotCooldown();
+                    }
                 } else if (mode === 'recovery') {
                     cardTitle.textContent = 'Set New Password';
                     cardSubtitle.textContent = 'Please enter your new password below.';
@@ -924,16 +927,84 @@
                 });
             }
 
-            // 4. Handle Forgot Password Form Submit
+            // 4. Handle Forgot Password Form Submit & 1-Minute Cooldown Timer
             if (forgotPasswordForm && window.TabsomeAuth) {
                 const forgotEmail = document.getElementById('forgotEmail');
                 const forgotSubmitBtn = document.getElementById('forgotSubmitBtn');
                 const forgotSubmitText = document.getElementById('forgotSubmitText');
                 const forgotSubmitSpinner = document.getElementById('forgotSubmitSpinner');
+                const FORGOT_COOLDOWN_KEY = 'tabsome_forgot_password_cooldown_until';
+                let cooldownTimerId = null;
+
+                function updateCooldownUI() {
+                    const cooldownUntil = parseInt(localStorage.getItem(FORGOT_COOLDOWN_KEY) || '0', 10);
+                    const now = Date.now();
+                    const remainingSeconds = Math.ceil((cooldownUntil - now) / 1000);
+
+                    if (remainingSeconds > 0) {
+                        forgotSubmitBtn.disabled = true;
+                        forgotSubmitText.innerHTML = `<i class="fas fa-clock mr-2 opacity-80"></i> Resend in ${remainingSeconds}s`;
+                        forgotSubmitSpinner.style.display = 'none';
+                        return true;
+                    } else {
+                        if (cooldownTimerId) {
+                            clearInterval(cooldownTimerId);
+                            cooldownTimerId = null;
+                        }
+                        localStorage.removeItem(FORGOT_COOLDOWN_KEY);
+                        forgotSubmitBtn.disabled = false;
+                        forgotSubmitText.textContent = 'Send Reset Link';
+                        return false;
+                    }
+                }
+
+                function startCooldown(seconds = 60) {
+                    if (cooldownTimerId) clearInterval(cooldownTimerId);
+                    const cooldownUntil = Date.now() + seconds * 1000;
+                    localStorage.setItem(FORGOT_COOLDOWN_KEY, cooldownUntil.toString());
+                    updateCooldownUI();
+                    cooldownTimerId = setInterval(() => {
+                        const active = updateCooldownUI();
+                        if (!active) {
+                            clearInterval(cooldownTimerId);
+                            cooldownTimerId = null;
+                        }
+                    }, 1000);
+                }
+
+                window.checkForgotCooldown = function () {
+                    const cooldownUntil = parseInt(localStorage.getItem(FORGOT_COOLDOWN_KEY) || '0', 10);
+                    if (cooldownUntil > Date.now()) {
+                        if (cooldownTimerId) clearInterval(cooldownTimerId);
+                        updateCooldownUI();
+                        cooldownTimerId = setInterval(() => {
+                            const active = updateCooldownUI();
+                            if (!active) {
+                                clearInterval(cooldownTimerId);
+                                cooldownTimerId = null;
+                            }
+                        }, 1000);
+                    } else {
+                        updateCooldownUI();
+                    }
+                };
+
+                // Check cooldown on load
+                window.checkForgotCooldown();
 
                 forgotPasswordForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     clearAlert();
+
+                    // Block submission if cooldown timer is active
+                    const cooldownUntil = parseInt(localStorage.getItem(FORGOT_COOLDOWN_KEY) || '0', 10);
+                    const now = Date.now();
+                    const remainingSeconds = Math.ceil((cooldownUntil - now) / 1000);
+                    if (remainingSeconds > 0) {
+                        showAlert(`Please wait ${remainingSeconds}s before requesting another reset link.`, 'error');
+                        updateCooldownUI();
+                        return;
+                    }
 
                     const email = forgotEmail.value.trim();
                     if (!email) {
@@ -949,16 +1020,22 @@
                     const resetReturnUrl = window.location.origin + window.location.pathname;
                     const { error } = await TabsomeAuth.resetPasswordForEmail(email, resetReturnUrl);
 
-                    forgotSubmitBtn.disabled = false;
-                    forgotSubmitText.textContent = 'Send Reset Link';
                     forgotSubmitSpinner.style.display = 'none';
 
                     if (error) {
                         console.error('Password reset error:', error);
-                        showAlert(error.message || 'Unable to send password reset email. Please try again.', 'error');
+                        const errMsg = error.message || '';
+                        if (errMsg.toLowerCase().includes('rate limit') || errMsg.toLowerCase().includes('security') || errMsg.toLowerCase().includes('seconds')) {
+                            showAlert(errMsg, 'error');
+                            startCooldown(60);
+                        } else {
+                            showAlert(errMsg || 'Unable to send password reset email. Please try again.', 'error');
+                            forgotSubmitBtn.disabled = false;
+                            forgotSubmitText.textContent = 'Send Reset Link';
+                        }
                     } else {
                         showAlert('If an account exists with this email, you will receive a password reset link shortly. Please check your inbox.', 'success');
-                        forgotPasswordForm.reset();
+                        startCooldown(60);
                     }
                 });
             }
