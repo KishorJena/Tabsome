@@ -251,33 +251,22 @@
                     <!-- State 2: Existing UI Setup for Logged In User (Conditionally rendered when signed in) -->
                     <div id="accountUserStateLoggedIn" class="hidden">
                         <!-- Profile Header Row -->
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-white/10">
-                            <div class="flex items-center gap-4 min-w-0">
-                                <div id="accountAvatarContainer"
-                                    class="w-14 h-14 rounded-full overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
-                                    <i class="fas fa-user text-2xl text-purple-200"></i>
-                                </div>
-                                <div class="min-w-0 text-left">
-                                    <div class="flex items-center gap-2.5">
-                                        <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer</h2>
-                                        <span
-                                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[11px] font-medium text-emerald-300">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                            Active
-                                        </span>
-                                    </div>
-                                    <p id="accountUserEmail" class="text-xs sm:text-sm text-gray-300 truncate mt-0.5">
-                                        user@example.com</p>
-                                </div>
+                        <div class="flex items-center gap-4 pb-6 border-b border-white/10">
+                            <div id="accountAvatarContainer"
+                                class="w-14 h-14 rounded-full overflow-hidden border border-white/25 flex-shrink-0 flex items-center justify-center bg-purple-700/50 shadow-md">
+                                <i class="fas fa-user text-2xl text-purple-200"></i>
                             </div>
-
-                            <!-- Logged In Action: Sign Out -->
-                            <div class="flex items-center gap-3">
-                                <button id="accountSignOutBtn" type="button"
-                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-rose-500/20 border border-white/15 hover:border-rose-500/30 text-xs font-medium text-gray-200 hover:text-rose-200 transition shadow-sm cursor-pointer">
-                                    <i class="fas fa-arrow-right-from-bracket text-gray-400"></i>
-                                    <span>Sign Out</span>
-                                </button>
+                            <div class="min-w-0 text-left">
+                                <div class="flex items-center gap-2.5">
+                                    <h2 id="accountUserName" class="text-lg font-bold text-white truncate">Tabsome Explorer</h2>
+                                    <span
+                                        class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[11px] font-medium text-emerald-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        Active
+                                    </span>
+                                </div>
+                                <p id="accountUserEmail" class="text-xs sm:text-sm text-gray-300 truncate mt-0.5">
+                                    user@example.com</p>
                             </div>
                         </div>
 
@@ -377,14 +366,6 @@
             if (window.TabsomeAuth) {
                 // Initialize Navbar Auth
                 TabsomeAuth.initNavbarAuth('tabsomeAuthNav');
-
-                // Connect Account Sign Out button
-                const accountSignOutBtn = document.getElementById('accountSignOutBtn');
-                if (accountSignOutBtn) {
-                    accountSignOutBtn.addEventListener('click', () => {
-                        TabsomeAuth.signOut();
-                    });
-                }
 
                 // Listen for Auth changes to update the Account page Hero card dynamically
                 TabsomeAuth.onAuthStateChange((user) => {
