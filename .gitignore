@@ -2,3 +2,6 @@ node_modules/
 .DS_Store
 *.log
 docs/
+# Graphify generated artifacts (regenerable, don't bloat the Pages deploy)
+graphify-out/
+.agents/
