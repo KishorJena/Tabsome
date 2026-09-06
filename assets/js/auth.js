@@ -333,6 +333,40 @@
             return this.signInWithMicrosoft(returnUrl);
         },
 
+        async signInWithGithub(returnUrl) {
+            const client = getSupabaseClient();
+            if (!client) {
+                alert('Authentication service is currently unavailable.');
+                return;
+            }
+
+            // Clean target redirect and resolve relative paths to absolute URL
+            let redirectTo = returnUrl || window.location.href.split('#')[0];
+            if (redirectTo && !redirectTo.startsWith('http://') && !redirectTo.startsWith('https://')) {
+                try {
+                    redirectTo = new URL(redirectTo, window.location.href).href;
+                } catch (e) {
+                    redirectTo = window.location.href.split('#')[0];
+                }
+            }
+
+            const { error } = await client.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo
+                }
+            });
+
+            if (error) {
+                console.error('Auth GitHub sign in error:', error);
+                alert('Sign in error: ' + (error.message || 'Unable to sign in with GitHub.'));
+            }
+        },
+
+        async signInWithGitHub(returnUrl) {
+            return this.signInWithGithub(returnUrl);
+        },
+
         /**
          * Sign in with Email and Password
          */

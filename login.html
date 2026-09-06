@@ -8,9 +8,9 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Sign in to Tabsome with Google, Microsoft or email. Access and sync your personalized new tab dashboard, speed dials, library, widgets, and AI features across all your browsers.">
+        content="Sign in to Tabsome with Google, Microsoft, GitHub or email. Access and sync your personalized new tab dashboard, speed dials, library, widgets, and AI features across all your browsers.">
     <meta name="keywords"
-        content="tabsome login, tabsome sign in, google sign in, microsoft sign in, azure ad login, tabsome account, new tab dashboard, speed dials, library, widgets, ai, email login">
+        content="tabsome login, tabsome sign in, google sign in, microsoft sign in, github sign in, azure ad login, tabsome account, new tab dashboard, speed dials, library, widgets, ai, email login">
     <meta name="author" content="Kishor Jena">
     <meta name="robots" content="index, follow">
 
@@ -121,10 +121,11 @@
             margin-right: auto;
         }
 
-        /* Modern Sleek Dark Google, Microsoft & Email OAuth Button Styles */
+        /* Modern Sleek Dark Google, Microsoft, GitHub & Email OAuth Button Styles */
         .btn-oauth-modern,
         .btn-google-modern,
         .btn-microsoft-modern,
+        .btn-github-modern,
         .btn-email-modern {
             display: inline-flex;
             align-items: center;
@@ -153,6 +154,7 @@
         .btn-oauth-modern:hover,
         .btn-google-modern:hover,
         .btn-microsoft-modern:hover,
+        .btn-github-modern:hover,
         .btn-email-modern:hover {
             background-color: rgba(51, 65, 85, 0.9) !important;
             border-color: rgba(255, 255, 255, 0.3);
@@ -164,6 +166,7 @@
         .btn-oauth-modern:active,
         .btn-google-modern:active,
         .btn-microsoft-modern:active,
+        .btn-github-modern:active,
         .btn-email-modern:active {
             background-color: rgba(30, 41, 59, 0.95) !important;
             transform: scale(0.99) translateY(0);
@@ -173,10 +176,81 @@
         .btn-oauth-modern span,
         .btn-google-modern span,
         .btn-microsoft-modern span,
+        .btn-github-modern span,
         .btn-email-modern span {
             color: #f8fafc !important;
             font-size: 14.5px;
             font-weight: 600;
+        }
+
+        /* Compact OAuth Buttons (GitHub, Azure/Microsoft, Email Row) */
+        .btn-oauth-compact {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            width: 100%;
+            height: 46px;
+            padding: 0 8px;
+            background-color: rgba(30, 41, 59, 0.75) !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            font-size: 13.5px;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            letter-spacing: -0.01em;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            text-decoration: none;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            white-space: nowrap;
+        }
+
+        .btn-oauth-compact:hover {
+            background-color: rgba(51, 65, 85, 0.9) !important;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-1.5px);
+            color: #ffffff !important;
+        }
+
+        .btn-oauth-compact:active {
+            background-color: rgba(30, 41, 59, 0.95) !important;
+            transform: scale(0.98) translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-oauth-compact span {
+            color: #f8fafc !important;
+            font-size: 13.5px;
+            font-weight: 600;
+        }
+
+        /* Active highlight for Email when expanded */
+        .btn-email-modern.is-active {
+            background-color: rgba(168, 85, 247, 0.25) !important;
+            border-color: rgba(192, 132, 252, 0.6) !important;
+            box-shadow: 0 0 18px rgba(168, 85, 247, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* 3-Provider Row for GitHub, Microsoft/Azure, Email */
+        .providers-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* Pure White GitHub Logo */
+        .btn-github-modern svg,
+        .btn-github-modern svg path {
+            fill: #ffffff !important;
+            color: #ffffff !important;
         }
 
         /* Expandable Email Container Animation */
@@ -286,9 +360,12 @@
         }
 
         .btn-primary-submit:disabled {
-            opacity: 0.7;
+            opacity: 0.45;
             cursor: not-allowed;
             transform: none !important;
+            box-shadow: none !important;
+            filter: grayscale(35%);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -367,9 +444,9 @@
                 <!-- Main Auth Action Area -->
                 <div id="authActionsContainer" class="space-y-4 text-center">
 
-                    <!-- 3 Primary Sign In Methods (Google, Microsoft, Email) -->
+                    <!-- Primary Sign In Methods -->
                     <div id="methodsSection" class="space-y-3">
-                        <!-- 1. Google -->
+                        <!-- 1. Google (Full-width Primary) -->
                         <button id="googleLoginBtn" type="button" class="btn-oauth-modern btn-google-modern">
                             <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
                                 <path fill="#4285F4"
@@ -386,29 +463,45 @@
                                 style="display: none;"></i>
                         </button>
 
-                        <!-- 2. Microsoft -->
-                        <button id="microsoftLoginBtn" type="button" class="btn-oauth-modern btn-microsoft-modern">
-                            <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 21 21">
-                                <rect x="1" y="1" width="9" height="9" fill="#f25022" />
-                                <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
-                                <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
-                                <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
-                            </svg>
-                            <span id="microsoftLoginText">Continue with Microsoft</span>
-                            <i id="microsoftLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-1"
-                                style="display: none;"></i>
-                        </button>
+                        <!-- 2. Additional Providers Row (GitHub, Microsoft/Azure, Email) -->
+                        <div class="providers-row grid grid-cols-3 gap-2.5">
+                            <!-- GitHub -->
+                            <button id="githubLoginBtn" type="button" class="btn-oauth-compact btn-github-modern"
+                                title="Sign in with GitHub">
+                                <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="#ffffff">
+                                    <path fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                                </svg>
+                                <span id="githubLoginText">GitHub</span>
+                                <i id="githubLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-0.5 text-xs"
+                                    style="display: none;"></i>
+                            </button>
 
-                        <!-- 3. Email Toggle Button -->
-                        <button id="toggleEmailBtn" type="button" class="btn-oauth-modern btn-email-modern"
-                            aria-expanded="false">
-                            <div class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-purple-400">
-                                <i class="fas fa-envelope text-[15px]"></i>
-                            </div>
-                            <span id="emailLoginBtnText">Continue with Email</span>
-                            <i id="emailChevronIcon"
-                                class="fas fa-chevron-down text-xs text-gray-400 ml-1 transition-transform duration-300"></i>
-                        </button>
+                            <!-- Microsoft / Azure -->
+                            <button id="microsoftLoginBtn" type="button" class="btn-oauth-compact btn-microsoft-modern"
+                                title="Sign in with Microsoft / Azure">
+                                <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 21 21">
+                                    <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                                    <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                                    <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                                    <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+                                </svg>
+                                <span id="microsoftLoginText">Microsoft</span>
+                                <i id="microsoftLoginSpinner" class="fas fa-spinner fa-spin text-purple-400 ml-0.5 text-xs"
+                                    style="display: none;"></i>
+                            </button>
+
+                            <!-- Email Toggle Button -->
+                            <button id="toggleEmailBtn" type="button" class="btn-oauth-compact btn-email-modern"
+                                title="Sign in with Email" aria-expanded="false">
+                                <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center text-purple-400">
+                                    <i class="fas fa-envelope text-xs"></i>
+                                </div>
+                                <span id="emailLoginBtnText">Email</span>
+                                <i id="emailChevronIcon"
+                                    class="fas fa-chevron-down text-[10px] text-gray-400 ml-0.5 transition-transform duration-300"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Feedback Alert (Error or Success) -->
@@ -424,9 +517,9 @@
                                     <div class="w-full border-t border-white/10"></div>
                                 </div>
                                 <div class="relative flex justify-center text-xs">
-                                    <span
+                                    <span id="emailFormBadge"
                                         class="px-3 py-0.5 bg-slate-900/90 text-gray-400 font-medium rounded-full border border-white/10 text-[11px] backdrop-blur-md">
-                                        Enter Your Credentials
+                                        Sign in with Email & Password
                                     </span>
                                 </div>
                             </div>
@@ -461,7 +554,7 @@
                                     </div>
                                 </div>
 
-                                <button id="signInSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                                <button id="signInSubmitBtn" type="submit" class="btn-primary-submit mt-2" disabled>
                                     <span id="signInSubmitText">Sign In</span>
                                     <i id="signInSubmitSpinner" class="fas fa-spinner fa-spin"
                                         style="display: none;"></i>
@@ -502,7 +595,7 @@
                                     </div>
                                 </div>
 
-                                <button id="signUpSubmitBtn" type="submit" class="btn-primary-submit mt-2">
+                                <button id="signUpSubmitBtn" type="submit" class="btn-primary-submit mt-2" disabled>
                                     <span id="signUpSubmitText">Create Account</span>
                                     <i id="signUpSubmitSpinner" class="fas fa-spinner fa-spin"
                                         style="display: none;"></i>
@@ -651,6 +744,7 @@
             const toggleEmailBtn = document.getElementById('toggleEmailBtn');
             const emailChevronIcon = document.getElementById('emailChevronIcon');
             const emailExpandContainer = document.getElementById('emailExpandContainer');
+            const emailFormBadge = document.getElementById('emailFormBadge');
             const signInForm = document.getElementById('signInForm');
             const signUpForm = document.getElementById('signUpForm');
             const forgotPasswordForm = document.getElementById('forgotPasswordForm');
@@ -669,13 +763,70 @@
             const backToSignInFromForgotBtn = document.getElementById('backToSignInFromForgotBtn');
             const backToSignInFromRecoveryBtn = document.getElementById('backToSignInFromRecoveryBtn');
 
-            // Google & Microsoft Button Elements
+            // Google, Microsoft & GitHub Button Elements
             const googleLoginBtn = document.getElementById('googleLoginBtn');
             const googleLoginText = document.getElementById('googleLoginText');
             const googleLoginSpinner = document.getElementById('googleLoginSpinner');
             const microsoftLoginBtn = document.getElementById('microsoftLoginBtn');
             const microsoftLoginText = document.getElementById('microsoftLoginText');
             const microsoftLoginSpinner = document.getElementById('microsoftLoginSpinner');
+            const githubLoginBtn = document.getElementById('githubLoginBtn');
+            const githubLoginText = document.getElementById('githubLoginText');
+            const githubLoginSpinner = document.getElementById('githubLoginSpinner');
+
+            // Email Form Elements
+            const signInEmail = document.getElementById('signInEmail');
+            const signInPassword = document.getElementById('signInPassword');
+            const signInSubmitBtn = document.getElementById('signInSubmitBtn');
+            const signInSubmitText = document.getElementById('signInSubmitText');
+            const signInSubmitSpinner = document.getElementById('signInSubmitSpinner');
+
+            const signUpName = document.getElementById('signUpName');
+            const signUpEmail = document.getElementById('signUpEmail');
+            const signUpPassword = document.getElementById('signUpPassword');
+            const signUpSubmitBtn = document.getElementById('signUpSubmitBtn');
+            const signUpSubmitText = document.getElementById('signUpSubmitText');
+            const signUpSubmitSpinner = document.getElementById('signUpSubmitSpinner');
+
+            // Form Input Validation - Only enable submit button when inputs are valid
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            function validateSignInForm() {
+                if (!signInSubmitBtn || !signInEmail || !signInPassword) return;
+                const email = signInEmail.value.trim();
+                const pass = signInPassword.value;
+                const isValid = emailRegex.test(email) && pass.length >= 6;
+                signInSubmitBtn.disabled = !isValid;
+            }
+
+            function validateSignUpForm() {
+                if (!signUpSubmitBtn || !signUpEmail || !signUpPassword) return;
+                const email = signUpEmail.value.trim();
+                const pass = signUpPassword.value;
+                const isValid = emailRegex.test(email) && pass.length >= 6;
+                signUpSubmitBtn.disabled = !isValid;
+            }
+
+            if (signInEmail) {
+                signInEmail.addEventListener('input', validateSignInForm);
+                signInEmail.addEventListener('change', validateSignInForm);
+            }
+            if (signInPassword) {
+                signInPassword.addEventListener('input', validateSignInForm);
+                signInPassword.addEventListener('change', validateSignInForm);
+            }
+            if (signUpEmail) {
+                signUpEmail.addEventListener('input', validateSignUpForm);
+                signUpEmail.addEventListener('change', validateSignUpForm);
+            }
+            if (signUpPassword) {
+                signUpPassword.addEventListener('input', validateSignUpForm);
+                signUpPassword.addEventListener('change', validateSignUpForm);
+            }
+
+            // Initial validation check
+            validateSignInForm();
+            validateSignUpForm();
 
             // Expandable Email UI State
             let isEmailExpanded = false;
@@ -685,11 +836,17 @@
                 if (isEmailExpanded) {
                     if (emailExpandContainer) emailExpandContainer.classList.add('is-expanded');
                     if (emailChevronIcon) emailChevronIcon.classList.add('chevron-rotate');
-                    if (toggleEmailBtn) toggleEmailBtn.setAttribute('aria-expanded', 'true');
+                    if (toggleEmailBtn) {
+                        toggleEmailBtn.setAttribute('aria-expanded', 'true');
+                        toggleEmailBtn.classList.add('is-active');
+                    }
                 } else {
                     if (emailExpandContainer) emailExpandContainer.classList.remove('is-expanded');
                     if (emailChevronIcon) emailChevronIcon.classList.remove('chevron-rotate');
-                    if (toggleEmailBtn) toggleEmailBtn.setAttribute('aria-expanded', 'false');
+                    if (toggleEmailBtn) {
+                        toggleEmailBtn.setAttribute('aria-expanded', 'false');
+                        toggleEmailBtn.classList.remove('is-active');
+                    }
                 }
             }
 
@@ -815,9 +972,11 @@
                     signInFooter.classList.remove('hidden');
 
                     if (googleLoginText) googleLoginText.textContent = 'Continue with Google';
-                    if (microsoftLoginText) microsoftLoginText.textContent = 'Continue with Microsoft';
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Microsoft';
+                    if (githubLoginText) githubLoginText.textContent = 'GitHub';
                     const emailBtnText = document.getElementById('emailLoginBtnText');
-                    if (emailBtnText) emailBtnText.textContent = 'Continue with Email';
+                    if (emailBtnText) emailBtnText.textContent = 'Email';
+                    if (emailFormBadge) emailFormBadge.textContent = 'Sign in with Email & Password';
 
                 } else if (mode === 'signup') {
                     cardTitle.textContent = 'Create Your Account';
@@ -828,10 +987,17 @@
                     signUpFooter.classList.remove('hidden');
 
                     if (googleLoginText) googleLoginText.textContent = 'Sign up with Google';
-                    if (microsoftLoginText) microsoftLoginText.textContent = 'Sign up with Microsoft';
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Microsoft';
+                    if (githubLoginText) githubLoginText.textContent = 'GitHub';
                     const emailBtnText = document.getElementById('emailLoginBtnText');
-                    if (emailBtnText) emailBtnText.textContent = 'Sign up with Email';
-                    updateEmailExpandState(true);
+                    if (emailBtnText) emailBtnText.textContent = 'Email';
+                    if (emailFormBadge) emailFormBadge.textContent = 'Sign up with Email & Password';
+
+                    // If email form was already expanded by user, focus the first sign-up field
+                    if (isEmailExpanded) {
+                        const targetInput = document.getElementById('signUpName') || document.getElementById('signUpEmail');
+                        if (targetInput) targetInput.focus();
+                    }
 
                 } else if (mode === 'forgot') {
                     cardTitle.textContent = 'Reset Your Password';
@@ -882,6 +1048,10 @@
                         microsoftLoginBtn.disabled = true;
                         microsoftLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
                     }
+                    if (githubLoginBtn) {
+                        githubLoginBtn.disabled = true;
+                        githubLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
                     if (googleLoginText) googleLoginText.textContent = 'Connecting to Google...';
                     if (googleLoginSpinner) googleLoginSpinner.style.display = 'inline-block';
 
@@ -895,7 +1065,12 @@
                             microsoftLoginBtn.disabled = false;
                             microsoftLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                         }
-                        if (googleLoginText) googleLoginText.textContent = 'Continue with Google';
+                        if (githubLoginBtn) {
+                            githubLoginBtn.disabled = false;
+                            githubLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        const isSignUp = signUpForm && !signUpForm.classList.contains('hidden');
+                        if (googleLoginText) googleLoginText.textContent = isSignUp ? 'Sign up with Google' : 'Continue with Google';
                         if (googleLoginSpinner) googleLoginSpinner.style.display = 'none';
                         showAlert('Failed to initiate Google sign-in. Please try again.', 'error');
                     }
@@ -912,7 +1087,11 @@
                         googleLoginBtn.disabled = true;
                         googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
                     }
-                    if (microsoftLoginText) microsoftLoginText.textContent = 'Connecting to Microsoft...';
+                    if (githubLoginBtn) {
+                        githubLoginBtn.disabled = true;
+                        githubLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
+                    if (microsoftLoginText) microsoftLoginText.textContent = 'Connecting...';
                     if (microsoftLoginSpinner) microsoftLoginSpinner.style.display = 'inline-block';
 
                     try {
@@ -925,42 +1104,79 @@
                             googleLoginBtn.disabled = false;
                             googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                         }
-                        if (microsoftLoginText) microsoftLoginText.textContent = 'Continue with Microsoft';
+                        if (githubLoginBtn) {
+                            githubLoginBtn.disabled = false;
+                            githubLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        if (microsoftLoginText) microsoftLoginText.textContent = 'Microsoft';
                         if (microsoftLoginSpinner) microsoftLoginSpinner.style.display = 'none';
                         showAlert('Failed to initiate Microsoft sign-in. Please try again.', 'error');
                     }
                 });
             }
 
+            // 1c. Handle GitHub Login Click
+            if (githubLoginBtn && window.TabsomeAuth) {
+                githubLoginBtn.addEventListener('click', async () => {
+                    clearAlert();
+                    githubLoginBtn.disabled = true;
+                    githubLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    if (googleLoginBtn) {
+                        googleLoginBtn.disabled = true;
+                        googleLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
+                    if (microsoftLoginBtn) {
+                        microsoftLoginBtn.disabled = true;
+                        microsoftLoginBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                    }
+                    if (githubLoginText) githubLoginText.textContent = 'Connecting...';
+                    if (githubLoginSpinner) githubLoginSpinner.style.display = 'inline-block';
+
+                    try {
+                        await TabsomeAuth.signInWithGithub(targetRedirectUrl);
+                    } catch (err) {
+                        console.error('GitHub login error:', err);
+                        githubLoginBtn.disabled = false;
+                        githubLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        if (googleLoginBtn) {
+                            googleLoginBtn.disabled = false;
+                            googleLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        if (microsoftLoginBtn) {
+                            microsoftLoginBtn.disabled = false;
+                            microsoftLoginBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                        }
+                        if (githubLoginText) githubLoginText.textContent = 'GitHub';
+                        if (githubLoginSpinner) githubLoginSpinner.style.display = 'none';
+                        showAlert('Failed to initiate GitHub sign-in. Please try again.', 'error');
+                    }
+                });
+            }
+
             // 2. Handle Email Sign In Form Submit
             if (signInForm && window.TabsomeAuth) {
-                const signInEmail = document.getElementById('signInEmail');
-                const signInPassword = document.getElementById('signInPassword');
-                const signInSubmitBtn = document.getElementById('signInSubmitBtn');
-                const signInSubmitText = document.getElementById('signInSubmitText');
-                const signInSubmitSpinner = document.getElementById('signInSubmitSpinner');
-
                 signInForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     clearAlert();
 
-                    const email = signInEmail.value.trim();
-                    const password = signInPassword.value;
+                    const email = signInEmail ? signInEmail.value.trim() : '';
+                    const password = signInPassword ? signInPassword.value : '';
 
-                    if (!email || !password) {
-                        showAlert('Please enter both email and password.', 'error');
+                    if (!email || !password || password.length < 6 || !emailRegex.test(email)) {
+                        showAlert('Please enter a valid email address and password (at least 6 characters).', 'error');
+                        validateSignInForm();
                         return;
                     }
 
-                    signInSubmitBtn.disabled = true;
-                    signInSubmitText.textContent = 'Signing in...';
-                    signInSubmitSpinner.style.display = 'inline-block';
+                    if (signInSubmitBtn) signInSubmitBtn.disabled = true;
+                    if (signInSubmitText) signInSubmitText.textContent = 'Signing in...';
+                    if (signInSubmitSpinner) signInSubmitSpinner.style.display = 'inline-block';
 
                     const { user, session, error } = await TabsomeAuth.signInWithPassword(email, password);
 
-                    signInSubmitBtn.disabled = false;
-                    signInSubmitText.textContent = 'Sign In';
-                    signInSubmitSpinner.style.display = 'none';
+                    if (signInSubmitText) signInSubmitText.textContent = 'Sign In';
+                    if (signInSubmitSpinner) signInSubmitSpinner.style.display = 'none';
+                    validateSignInForm();
 
                     if (error) {
                         console.error('Sign in error:', error);
@@ -976,40 +1192,29 @@
 
             // 3. Handle Email Sign Up Form Submit
             if (signUpForm && window.TabsomeAuth) {
-                const signUpName = document.getElementById('signUpName');
-                const signUpEmail = document.getElementById('signUpEmail');
-                const signUpPassword = document.getElementById('signUpPassword');
-                const signUpSubmitBtn = document.getElementById('signUpSubmitBtn');
-                const signUpSubmitText = document.getElementById('signUpSubmitText');
-                const signUpSubmitSpinner = document.getElementById('signUpSubmitSpinner');
-
                 signUpForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     clearAlert();
 
-                    const name = signUpName.value.trim();
-                    const email = signUpEmail.value.trim();
-                    const password = signUpPassword.value;
+                    const name = signUpName ? signUpName.value.trim() : '';
+                    const email = signUpEmail ? signUpEmail.value.trim() : '';
+                    const password = signUpPassword ? signUpPassword.value : '';
 
-                    if (!email || !password) {
-                        showAlert('Please fill in all required fields.', 'error');
+                    if (!email || !password || password.length < 6 || !emailRegex.test(email)) {
+                        showAlert('Please fill in a valid email address and password (at least 6 characters).', 'error');
+                        validateSignUpForm();
                         return;
                     }
 
-                    if (password.length < 6) {
-                        showAlert('Password must be at least 6 characters.', 'error');
-                        return;
-                    }
-
-                    signUpSubmitBtn.disabled = true;
-                    signUpSubmitText.textContent = 'Creating account...';
-                    signUpSubmitSpinner.style.display = 'inline-block';
+                    if (signUpSubmitBtn) signUpSubmitBtn.disabled = true;
+                    if (signUpSubmitText) signUpSubmitText.textContent = 'Creating account...';
+                    if (signUpSubmitSpinner) signUpSubmitSpinner.style.display = 'inline-block';
 
                     const { user, session, error, needsConfirmation } = await TabsomeAuth.signUpWithPassword(email, password, name);
 
-                    signUpSubmitBtn.disabled = false;
-                    signUpSubmitText.textContent = 'Create Account';
-                    signUpSubmitSpinner.style.display = 'none';
+                    if (signUpSubmitText) signUpSubmitText.textContent = 'Create Account';
+                    if (signUpSubmitSpinner) signUpSubmitSpinner.style.display = 'none';
+                    validateSignUpForm();
 
                     if (error) {
                         console.error('Sign up error:', error);
@@ -1017,6 +1222,7 @@
                     } else if (needsConfirmation) {
                         showAlert('Account created! Please check your email to confirm your account before signing in.', 'success');
                         signUpForm.reset();
+                        validateSignUpForm();
                     } else if (user) {
                         showAlert('Account created successfully! Redirecting...', 'success');
                         setTimeout(() => {
